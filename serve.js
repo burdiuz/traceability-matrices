@@ -1,6 +1,7 @@
 const Koa = require("koa");
 const { readFile } = require("fs/promises");
 const Router = require("@koa/router");
+const { basename } = require("path");
 const { compile } = require("pug");
 const { readCoverage } = require("./reader/reader");
 const { isPopulated } = require("./reader/coverage-records");
@@ -95,19 +96,31 @@ table.project
 `);
 
 /**
- * 
- * @param {import("./reader/coverage-records").Project} param0 
- * @returns 
+ *
+ * @param {import("./reader/coverage-records").Project} param0
+ * @returns
  */
 const buildHorizontalHeaders = ({ files }) => {
   const specs = [];
   const filesRow = [];
   const specsRow = [];
 
-  // [path, specs]
+  console.log(files);
+
+  // [path, records]
   Object.entries(files)
+    .map(([path, records]) => [basename(path, ".json"), records])
     .sort(([path1], [path2]) => (path1 < path2 ? -1 : 1))
-    .forEach(([filePath, fileSpecsObj]) => {
+    .forEach(([fileName, records]) => {
+      const fileSpecsObj = Object.values(records).reduce(
+        (result, specs) =>
+          specs.reduce((result, spec) => {
+            result[spec.titlePath.join("/")] = spec;
+            return result;
+          }, result),
+        {}
+      );
+
       const specList = Object.values(fileSpecsObj);
 
       if (!specList.length) {
@@ -116,9 +129,9 @@ const buildHorizontalHeaders = ({ files }) => {
 
       // add cell for file names row
       filesRow.push({
-        name: filePath.match(/[^\/\\]+$/)[0],
+        name: fileName,
         // TODO remove cypress coverage path part
-        title: filePath,
+        title: fileName,
         colspan: specList.length,
       });
 
@@ -152,10 +165,13 @@ const buildVerticalHeaders = (project) => {
     const childReqs = [];
     const childRows = [];
 
-    Object.values(children)
-      .sort(({ title: a }, { title: b }) => (a < b ? -1 : 1))
-      .forEach((requirement) => {
-        const child = build(requirement, depth);
+    Object.entries(children)
+      .sort(([a], [b]) => (a < b ? -1 : 1))
+      .forEach(([title, children]) => {
+        const child = build(
+          { title, children, specs: project.records[title] || [] },
+          depth
+        );
         childReqs.push(...child.requirements);
         childRows.push(...child.rows);
       });
@@ -289,38 +305,34 @@ const renderProject = (project, state) => {
   return tableHtml;
 };
 
-const calculateProjectStats = ({ requirements, specs, structure }) => {
-  const requirementsCovered = Object.values(requirements).reduce(
-    (reqs, requirement) => (requirement.specs.length ? reqs + 1 : reqs),
-    0
-  );
+/**
+ *
+ * @param {import("./reader/coverage-records").Project} param0
+ * @returns
+ */
+const calculateProjectStats = ({ records }) => {
+  const specs = new Set();
+  const list = Object.values(records);
+  const requirementsTotal = list.length;
+  let requirementsCovered = 0;
 
-  const specsCount = Object.values(specs).length;
-
-  /**
-   * structure is a tree and leaf nodes are final requirements that matter,
-   * not goups or other structural elements.
-   * so we traverse it in width starting from root to count all leaf nodes
-   */
-  let requirementsTotal = 0;
-  const queue = [{ children: structure }];
-  while (queue.length) {
-    const item = queue.shift();
-
-    const children = Object.values(item.children);
-
-    if (children.length) {
-      queue.push(...children);
-    } else {
-      requirementsTotal++;
+  list.forEach((record) => {
+    if (!record.length) {
+      return;
     }
-  }
+
+    requirementsCovered++;
+
+    record.forEach(({ filePath, titlePath }) => {
+      specs.add(`${filePath}:${titlePath.join("/")}`);
+    });
+  });
 
   return {
     covered: requirementsCovered >= requirementsTotal,
     requirementsCovered,
     requirementsTotal,
-    specsCount,
+    specsCount: specs.size,
   };
 };
 
@@ -330,6 +342,7 @@ const calculateProjectStats = ({ requirements, specs, structure }) => {
  */
 const calculateTotals = (state) => {
   const projects = Object.values(state.projects);
+
   const {
     requirementsCovered: covered,
     requirementsTotal: requirements,
@@ -347,29 +360,6 @@ const calculateTotals = (state) => {
     },
     { requirementsCovered: 0, requirementsTotal: 0, specsCount: 0 }
   );
-
-  const requirementsTotal = projects.reduce((count, { structure }) => {
-    const queue = [{ children: structure }];
-
-    /**
-     * structure is a tree and leaf nodes are final requirements that matter,
-     * not goups or other structural elements.
-     * so we traverse it in width starting from root to count all leaf nodes
-     */
-    while (queue.length) {
-      const item = queue.shift();
-
-      const children = Object.values(item.children);
-
-      if (children.length) {
-        queue.push(...children);
-      } else {
-        count++;
-      }
-    }
-
-    return count;
-  }, 0);
 
   const fileCount = state.roots.reduce(
     (total, result) =>

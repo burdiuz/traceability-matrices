@@ -15,111 +15,125 @@ const isStructure = (obj) =>
 
 const isPopulatedStructure = (obj) => isStructure(obj) && isPopulated(obj);
 
-const createNewRecord = (name, structure) => ({
-  title: name,
-  parent: structure,
-  specs: [],
-  children: {},
-  files: {},
-});
+const addEmptyRecords = (structure, records, requirements = []) => {
+  Object.entries(structure).forEach(([name, children]) => {
+    if (isPopulated(children)) {
+      addEmptyRecords(children, records);
+    } else {
+      requirements.push(name);
 
-const buildStructure = (structure, requirements, source, depth = 1) => {
-  if (!isStructure(source)) {
-    return depth;
-  }
+      if (!(name in records)) {
+        records[name] = [];
+      }
+    }
+  });
 
-  Object.entries(source).forEach(([name, value]) => {
-    const record = createNewRecord(name, structure);
+  // appeared to be not needed
+  return requirements;
+};
+const getStructureLeafNodes = (structure, requirements = []) => {
+  Object.entries(structure).forEach(([name, children]) => {
+    if (isPopulated(children)) {
+      getStructureLeafNodes(children, requirements);
+    } else {
+      requirements.push(name);
+    }
+  });
 
-    structure[name] = record;
-    requirements[name] = record;
+  return requirements;
+};
 
+const setSpecsUnique = (records, uniqueSpecs = {}) => {
+  Object.entries(records).forEach(([key, record]) => {
+    const newRecord = record.map((spec) => {
+      const id = spec.titlePath.join("/");
+
+      if (!(id in uniqueSpecs)) {
+        uniqueSpecs[id] = spec;
+      }
+
+      return uniqueSpecs[id];
+    });
+
+    records[key] = Array.from(new Set(newRecord).values());
+  });
+};
+
+const mergeStructure = (source, target) => {
+  Object.entries(source).forEach(([title, children]) => {
+    if (title in target) {
+      mergeStructure(children, target[title]);
+    } else {
+      target[title] = children;
+    }
+  });
+};
+
+const copyProjectRecords = ({ records: source }, { records: target }) => {
+  Object.entries(source).forEach(([requirement, specs]) => {
+    if (requirement in target) {
+      target[requirement] = [...target[requirement], ...specs];
+    } else {
+      target[requirement] = [...specs];
+    }
+  });
+};
+
+const getStructureDepth = (source, depth = 1) => {
+  Object.values(source).forEach((value) => {
     if (isPopulatedStructure(value)) {
-      depth = Math.max(
-        depth,
-        buildStructure(record.children, requirements, value, depth + 1)
-      );
+      depth = Math.max(depth, getStructureDepth(value, depth + 1));
     }
   });
 
   return depth;
 };
 
-const createNewProject = (source) => ({
-  title: source.title,
-  depth: 1,
-  structure: {},
-  requirements: {},
-  files: {},
-  specs: {},
-  source,
-});
-
 const lookupForProjects = (filePath, projectList, globalProjects = {}) => {
+  const specsUnique = {};
   const projects = {};
 
   projectList.forEach((source) => {
-    // init project
-    //const project = projects[source.title] ?? createNewProject(source);
-    const project = createNewProject(source);
+    let global = globalProjects[source.title];
 
-    const { structure, requirements, specs } = project;
-    const file = project.files[filePath] ?? {};
+    setSpecsUnique(source.records, specsUnique);
 
-    project.files[filePath] = file;
-    globalProjects[source.title] = project;
-    projects[source.title] = project;
+    if (global) {
+      mergeStructure(source.structure, global.structure);
+    } else {
+      global = {
+        title: source.title,
+        structure: source.structure,
+        records: {},
+        files: {},
+      };
 
-    // build requirements from structure
-    project.depth = buildStructure(
-      structure,
-      requirements,
-      source.structure,
-      project.depth
-    );
+      globalProjects[source.title] = global;
+    }
 
-    // apply records
-    Object.entries(source.records).forEach(([requirementName, records]) => {
-      let requirement = requirements[requirementName];
+    addEmptyRecords(global.structure, source.records);
 
-      if (!requirement) {
-        requirement = createNewRecord(requirementName, structure);
-        requirements[requirementName] = requirement;
-        structure[requirementName] = requirement;
-      }
+    // delete structure to be able to assign global getter
+    delete source.structure;
 
-      records.forEach(({ title, titlePath }) => {
-        const id = `${filePath}:${titlePath.join(":")}`;
+    copyProjectRecords(source, global);
+    global.depth = getStructureDepth(global.structure);
+    global.files[filePath] = source.records;
+    projects[source.title] = source;
 
-        if (!specs[id]) {
-          const spec = {
-            id,
-            file,
-            title,
-            filePath,
-            titlePath,
-            requirements: [],
-          };
+    // one file projedct also gets files record just to match global project shape for easier processing
+    source.files = { [filePath]: source.records };
 
-          specs[id] = spec;
-          file[id] = spec;
-        }
-
-        const spec = specs[id];
-
-        // we may lookup by requirement ref since they kept same for same name
-        if (!spec.requirements.includes(requirement)) {
-          spec.requirements.push(requirement);
-          requirement.specs.push(spec);
-
-          // Register spec in file for requriements so we can identify files where it was tested
-          if (!requirement.files[filePath]) {
-            requirement.files[filePath] = {};
-          }
-
-          requirement.files[filePath][id] = spec;
-        }
-      });
+    Object.assign(source, {
+      get global() {
+        return global;
+      },
+      get structure() {
+        return global.structure;
+      },
+      get depth() {
+        return global.depth;
+      },
     });
   });
 
@@ -128,11 +142,11 @@ const lookupForProjects = (filePath, projectList, globalProjects = {}) => {
 
 const readRecords = async (filePath, globalProjects) => {
   const records = await readCoverageReportFile(filePath);
-  const specFile = filePath.replace(/\.json$/, "");
+  // const specFile = filePath.replace(/\.json$/, "");
 
-  const projects = lookupForProjects(specFile, records, globalProjects);
+  const projects = lookupForProjects(filePath, records, globalProjects);
 
-  //console.log(projects['Project A'].structure['Grand requirement'].children);
+  //console.log(projects['Project A'].structure['Grand requirement']);
   /*
   console.log(
     projects['Project A'].requirements['PRD Requirement 3'].specs[0]
@@ -146,4 +160,5 @@ const readRecords = async (filePath, globalProjects) => {
 module.exports.readRecords = readRecords;
 module.exports.isPopulated = isPopulated;
 module.exports.isStructure = isStructure;
+module.exports.getStructureLeafNodes = getStructureLeafNodes;
 module.exports.isPopulatedStructure = isPopulatedStructure;

@@ -1,37 +1,45 @@
 const projects = [];
 
-const addRecordToProject = (project, name) => {
+const addRecordToProject = (project, namePath) => {
   const { title, titlePath } = Cypress.currentTest || {};
 
+  let name;
+
+  if (typeof namePath === "string" || namePath.length <= 1) {
+    name = String(namePath);
+  } else {
+    let parent = project.structure;
+
+    namePath.forEach((part) => {
+      name = part;
+
+      if (!parent[part]) {
+        parent[part] = {};
+      }
+
+      parent = parent[part];
+    });
+  }
+
   if (project.records[name]) {
-    project.records[name].push({ title, titlePath: [...titlePath] });
+    project.records[name].push({
+      filePath: Cypress.spec.relative,
+      title,
+      titlePath: [...titlePath],
+    });
   } else {
     project.records[name] = [{ title, titlePath: [...titlePath] }];
   }
 };
 
-// TODO make structure flat
-// TODO protect from initinite loop
-// TODO do not prebuild, build structure for rendering not for storage
-
-/*
-flat structure 
-project = {
-  'req a': {
-    children: ['req b'],
-    specs: [{RECORD HERE}],
-  },
-  'req b': {
-    children: [],
-    specs: [{RECORD HERE}],
-  }
-};
-*/
-
-const initRecord
-
-const applyStructureToProject = (structure, project) => {
-
+const mergeStructure = (source, target) => {
+  Object.entries(source).forEach(([title, children]) => {
+    if (title in target) {
+      mergeStructure(children, target[title]);
+    } else {
+      target[title] = children;
+    }
+  });
 };
 
 export const createProject = (projectTitle) => {
@@ -45,14 +53,13 @@ export const createProject = (projectTitle) => {
 
   const structure = (data, columnHeaders) => {
     if (data) {
-      project.structure = data;
+      mergeStructure(data, project.structure);
     }
 
     if (columnHeaders) {
       project.headers = columnHeaders;
     }
   };
-
 
   const headers = (columnHeaders) => {
     if (columnHeaders) {
@@ -64,24 +71,27 @@ export const createProject = (projectTitle) => {
         project.headers[index] = header;
       },
     };
-  }
+  };
 
-  const trace = (name, chainFn) => {
-    addRecordToProject(project, name);
+  const trace = (nameOrPath, chainFn) => {
+    addRecordToProject(
+      project,
+      typeof nameOrPath === "string" ? [nameOrPath] : nameOrPath
+    );
 
     if (chainFn) {
       chainFn();
     }
   };
 
-  const requirement = (name) => {
+  const requirement = (...namePath) => {
     // TODO skip adding nested calls to records
     const describeFn = (...args) => {
       // last argument should be callback function
       const fn = args.pop();
 
       args.push((...fnArgs) => {
-        addRecordToProject(project, name);
+        addRecordToProject(project, namePath);
 
         return fn(...fnArgs);
       });
@@ -93,7 +103,7 @@ export const createProject = (projectTitle) => {
       const fn = args.pop();
 
       args.push((...fnArgs) => {
-        addRecordToProject(project, name);
+        addRecordToProject(project, namePath);
 
         return fn(...fnArgs);
       });
@@ -108,6 +118,13 @@ export const createProject = (projectTitle) => {
       it: specFn,
       specify: specFn,
       test: specFn,
+      trace: (chainFn) => {
+        addRecordToProject(project, namePath);
+
+        if (chainFn) {
+          chainFn();
+        }
+      },
     };
   };
 

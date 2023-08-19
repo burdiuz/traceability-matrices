@@ -1,46 +1,28 @@
-export type ProjectStructure = Record<string, ProjectStructure>;
-
-export type ProjectRequirement = {
-  title: string;
-  parent: ProjectRequirement;
-  specs: ProjectSpec[];
-  files: Record<string, ProjectFile>;
-  /*
-   * Represents traces structure in the file
-   * trace('Group A', () => {
-   *   trace('Requirement 1');
-   *   trace('Requirement 2');
-   * });
-   */
-  children: Record<string, ProjectRequirement>;
-};
+export type ProjectStructure = Record<string, object>;
 
 export type ProjectSpec = {
-  id: string;
-  file: ProjectFile;
   title: string;
   filePath: string;
-  titlePath: string;
-  requirements: ProjectRequirement[];
+  titlePath: string[];
 };
-
-export type ProjectFile = Record<string, ProjectSpec>;
 
 export type Project = {
   title: string;
-  depth: number;
-  structure: ProjectStructure;
-  requirements: Record<string, ProjectRequirement>;
-  files: Record<string, ProjectFile>;
-  specs: Record<string, ProjectSpec>;
-  source: object;
+  readonly depth: number;
+  readonly structure: ProjectStructure;
+  readonly global: Project;
+  files: Record<string, Project>;
+  records: Record<string, ProjectSpec[]>;
 };
+
+export type GlobalProject = Project;
+
+export declare const getStructureLeafNodes: (
+  structure: ProjectStructure,
+  requirements?: string[]
+) => string[];
 
 export declare const readRecords: (
   filePath: string,
-
-  // it potentially can be optional but better not
-  globalProjects: Record<string, Project>
-) => Promise<Project[]>;
-
-module.exports.readRecords = readRecords;
+  globalProjects: Record<string, GlobalProject>
+) => Promise<Record<string, Project>>;

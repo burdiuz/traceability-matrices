@@ -1,5 +1,5 @@
 {
-  "name": "@actualwave/traceability-matrix",
+  "name": "@actualwave/traceability-matrices",
   "version": "1",
   "types": "dist/acorn.d.ts",
   "bin": {

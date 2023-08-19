@@ -6,7 +6,7 @@ export type FileWithProjects = {
   name: string;
   path: string;
   specName: string;
-  projects: Project[];
+  projects: Record<string, Project>;
 };
 
 export type DirectoryWithProjects = Omit<DirectoryInfo, "files"> & {

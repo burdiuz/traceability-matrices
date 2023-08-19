@@ -1,6 +1,6 @@
 const { resolve, join, basename } = require("path");
 const { readAll } = require("./file-structure");
-const { readRecords } = require("./coverage-records");
+const { readRecords, getStructureLeafNodes } = require("./coverage-records");
 
 const readFiles = async (dirPath, files, projects) => {
   for (let index = 0; index < files.length; index++) {
@@ -48,6 +48,16 @@ const readCoverage = async (paths, projects = {}) => {
 
     await readDirectories(list, projects);
   }
+
+  // generate missing structure pieces from records
+  Object.values(projects).forEach((project) => {
+    const structReqs = getStructureLeafNodes(project.structure);
+    Object.keys(project.records).forEach((req) => {
+      if (structReqs.indexOf(req) < 0) {
+        project.structure[req] = {};
+      }
+    });
+  });
 
   return { roots, projects, files: collectFiles(roots) };
 };
