@@ -1,0 +1,271 @@
+[
+  {
+    "title": "Project A",
+    "structure": {},
+    "records": {
+      "In before each": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should display logo",
+          "titlePath": [
+            "React App",
+            "should display logo"
+          ]
+        },
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement 1": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should display logo",
+          "titlePath": [
+            "React App",
+            "should display logo"
+          ]
+        },
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement 2": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should display logo",
+          "titlePath": [
+            "React App",
+            "should display logo"
+          ]
+        },
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        }
+      ],
+      "PRD Requirement 3": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement 4": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement 5": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "title": "Project B",
+    "structure": {},
+    "records": {
+      "PRD Requirement BEFORE": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement BEFORE EACH": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement A": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        },
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        },
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement B": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement C": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement AFTER EACH": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement AFTER": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ]
+    }
+  }
+]
