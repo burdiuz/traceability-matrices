@@ -45,23 +45,29 @@ const buildStructure = (structure, requirements, source, depth = 1) => {
   return depth;
 };
 
-const lookupForProjects = (filePath, projectList, projects = {}) => {
+const createNewProject = (source) => ({
+  title: source.title,
+  depth: 1,
+  structure: {},
+  requirements: {},
+  files: {},
+  specs: {},
+  source,
+});
+
+const lookupForProjects = (filePath, projectList, globalProjects = {}) => {
+  const projects = {};
+
   projectList.forEach((source) => {
     // init project
-    const project = projects[source.title] ?? {
-      title: source.title,
-      depth: 1,
-      structure: {},
-      requirements: {},
-      files: {},
-      specs: {},
-      source,
-    };
+    //const project = projects[source.title] ?? createNewProject(source);
+    const project = createNewProject(source);
 
     const { structure, requirements, specs } = project;
     const file = project.files[filePath] ?? {};
 
     project.files[filePath] = file;
+    globalProjects[source.title] = project;
     projects[source.title] = project;
 
     // build requirements from structure

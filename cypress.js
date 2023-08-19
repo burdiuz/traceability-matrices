@@ -10,11 +10,34 @@ const addRecordToProject = (project, name) => {
   }
 };
 
+// TODO make structure flat
+// TODO protect from initinite loop
+// TODO do not prebuild, build structure for rendering not for storage
+
+/*
+flat structure 
+project = {
+  'req a': {
+    children: ['req b'],
+    specs: [{RECORD HERE}],
+  },
+  'req b': {
+    children: [],
+    specs: [{RECORD HERE}],
+  }
+};
+*/
+
+const initRecord
+
+const applyStructureToProject = (structure, project) => {
+
+};
+
 export const createProject = (projectTitle) => {
   const project = {
     title: projectTitle,
     headers: [],
-    structure: {},
     records: {},
   };
 

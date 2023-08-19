@@ -46,35 +46,7 @@ const renderFiles = (state) => {
  */
 const renderFile = (file, state) => {
   const list = Object.values(file.projects).map((source) => {
-    const project = {
-      ...source,
-      requirements: { ...source.requirements },
-      specs: { ...source.specs },
-      files: { ...source.files },
-    };
-
-    Object.entries(project.files).forEach(([key, value]) => {
-      if (value.path !== file.path) {
-        delete project.files[key];
-      }
-    });
-
-    Object.entries(project.specs).forEach(([key, value]) => {
-      if (value.filePath !== file.path) {
-        delete project.specs[key];
-      }
-    });
-
-    Object.entries(project.requirements).forEach(([key, value]) => {
-      project.requirements[key] = {
-        ...value,
-        specs: value.specs.filter((spec) => spec.filePath === file.path),
-      };
-    });
-
-    //console.log(project.files);
-
-    return renderProject(project, state);
+    return renderProject(source, state);
   });
 
   return list.join("");
