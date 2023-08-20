@@ -1,7 +1,7 @@
 {
   "name": "@actualwave/traceability-matrices",
   "version": "0.0.3",
-  "types": "dist/acorn.d.ts",
+  "types": "cypress.d.ts",
   "bin": {
     "traceability-matrices": "./cli.js"
   },
@@ -18,6 +18,15 @@
     "coverage report",
     "report generator"
   ],
+  "author": "Oleg Galaburda <burdiuz@gmail.com> (https://actualwave.com/)",
+  "homepage": "https://github.com/burdiuz/traceability-matrices",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/burdiuz/traceability-matrices.git"
+  },
+  "bugs": {
+    "url": "https://github.com/burdiuz/traceability-matrices/issues"
+  },
   "engines": {
     "node": ">=14.0.0"
   },
