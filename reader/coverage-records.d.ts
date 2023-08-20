@@ -22,6 +22,11 @@ export declare const getStructureLeafNodes: (
   requirements?: string[]
 ) => string[];
 
+export declare const addEmptyRecordsFromStructure: (
+  structure: ProjectStructure,
+  records: Record<string, ProjectSpec[]>
+) => void;
+
 export declare const readRecords: (
   filePath: string,
   globalProjects: Record<string, GlobalProject>

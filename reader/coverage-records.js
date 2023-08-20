@@ -15,10 +15,10 @@ const isStructure = (obj) =>
 
 const isPopulatedStructure = (obj) => isStructure(obj) && isPopulated(obj);
 
-const addEmptyRecords = (structure, records, requirements = []) => {
+const addEmptyRecordsFromStructure = (structure, records, requirements = []) => {
   Object.entries(structure).forEach(([name, children]) => {
     if (isPopulated(children)) {
-      addEmptyRecords(children, records);
+      addEmptyRecordsFromStructure(children, records);
     } else {
       requirements.push(name);
 
@@ -111,8 +111,6 @@ const lookupForProjects = (filePath, projectList, globalProjects = {}) => {
       globalProjects[source.title] = global;
     }
 
-    addEmptyRecords(global.structure, source.records);
-
     // delete structure to be able to assign global getter
     delete source.structure;
 
@@ -160,5 +158,6 @@ const readRecords = async (filePath, globalProjects) => {
 module.exports.readRecords = readRecords;
 module.exports.isPopulated = isPopulated;
 module.exports.isStructure = isStructure;
+module.exports.addEmptyRecordsFromStructure = addEmptyRecordsFromStructure;
 module.exports.getStructureLeafNodes = getStructureLeafNodes;
 module.exports.isPopulatedStructure = isPopulatedStructure;

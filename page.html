@@ -46,9 +46,23 @@
       }
 
       div.file {
-        margin-left: 16px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin: 0 0 4px 16px;
         background-color: #ddd;
         padding: 4px;
+      }
+
+      div.file:nth-child(odd) {
+        background-color: #eee;
+      }
+
+      div.file div.file-projects {
+        display: flex;
+        gap: 16px;
+        margin-left: auto;
+        font-size: 80%;
       }
 
       /*

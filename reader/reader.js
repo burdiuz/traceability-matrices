@@ -1,6 +1,10 @@
 const { resolve, join, basename } = require("path");
 const { readAll } = require("./file-structure");
-const { readRecords, getStructureLeafNodes } = require("./coverage-records");
+const {
+  readRecords,
+  getStructureLeafNodes,
+  addEmptyRecordsFromStructure,
+} = require("./coverage-records");
 
 const readFiles = async (dirPath, files, projects) => {
   for (let index = 0; index < files.length; index++) {
@@ -59,7 +63,16 @@ const readCoverage = async (paths, projects = {}) => {
     });
   });
 
-  return { roots, projects, files: collectFiles(roots) };
+  const files = collectFiles(roots);
+
+  // add empty records from requirements found in structure
+  Object.values(files).forEach(({ projects }) =>
+    Object.values(projects).forEach(({ global, records }) =>
+      addEmptyRecordsFromStructure(global.structure, records)
+    )
+  );
+
+  return { roots, projects, files };
 };
 
 module.exports.readCoverage = readCoverage;
