@@ -44,6 +44,36 @@ const collectFiles = (roots) => {
   return files;
 };
 
+/**
+ * Adds empty recorts for requirements found in structure and not presdent in records
+ * Adds requiremnts to structure which were tested(present in records) but aren't presented there.
+ * @param {Record<string, import("./coverage-records").Project>} globalProjects
+ * @param {Record<string, import("./reader").FileWithProjects>} files
+ */
+const normalize = (globalProjects, files) => {
+  // generate missing structure pieces from records
+  Object.values(globalProjects).forEach((project) => {
+    const structReqs = getStructureLeafNodes(project.structure);
+    Object.keys(project.records).forEach((req) => {
+      if (structReqs.indexOf(req) < 0) {
+        project.structure[req] = {};
+      }
+    });
+  });
+
+  // add empty records from structure for global projects
+  Object.values(globalProjects).forEach(({ structure, records }) =>
+    addEmptyRecordsFromStructure(structure, records)
+  );
+
+  // add empty records from requirements found in structure for partial projects
+  Object.values(files).forEach(({ projects }) =>
+    Object.values(projects).forEach(({ global, records }) =>
+      addEmptyRecordsFromStructure(global.structure, records)
+    )
+  );
+};
+
 const readCoverage = async (paths, projects = {}) => {
   const roots = await readAll(paths);
 
@@ -53,24 +83,9 @@ const readCoverage = async (paths, projects = {}) => {
     await readDirectories(list, projects);
   }
 
-  // generate missing structure pieces from records
-  Object.values(projects).forEach((project) => {
-    const structReqs = getStructureLeafNodes(project.structure);
-    Object.keys(project.records).forEach((req) => {
-      if (structReqs.indexOf(req) < 0) {
-        project.structure[req] = {};
-      }
-    });
-  });
-
   const files = collectFiles(roots);
 
-  // add empty records from requirements found in structure
-  Object.values(files).forEach(({ projects }) =>
-    Object.values(projects).forEach(({ global, records }) =>
-      addEmptyRecordsFromStructure(global.structure, records)
-    )
-  );
+  normalize(projects, files);
 
   return { roots, projects, files };
 };
