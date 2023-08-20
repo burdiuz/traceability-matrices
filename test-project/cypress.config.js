@@ -6,7 +6,7 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     env: {
-      TRACE_RECORDS_DATA_DIR: "cypress_trace_records",
+      TRACE_RECORDS_DATA_DIR: "cypress/coverage",
     },
   },
 });

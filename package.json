@@ -1,9 +1,9 @@
 {
   "name": "@actualwave/traceability-matrices",
-  "version": "1",
+  "version": "0.0.1",
   "types": "dist/acorn.d.ts",
   "bin": {
-    "traceability-matrix": "./cli.js"
+    "traceability-matrices": "./cli.js"
   },
   "keywords": [
     "traceability",

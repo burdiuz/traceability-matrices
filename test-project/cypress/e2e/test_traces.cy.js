@@ -1,4 +1,4 @@
-import { createProject } from "./cy_trace";
+import { createProject } from "@actualwave/traceability-matrices/cypress";
 
 const Project1 = createProject("Project A");
 const Project2 = createProject("Project B");

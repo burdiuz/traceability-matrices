@@ -2,6 +2,7 @@
   {
     "title": "Project A",
     "structure": {},
+    "headers": [],
     "records": {
       "In before each": [
         {
@@ -170,6 +171,7 @@
   {
     "title": "Project B",
     "structure": {},
+    "headers": [],
     "records": {
       "PRD Requirement BEFORE": [
         {

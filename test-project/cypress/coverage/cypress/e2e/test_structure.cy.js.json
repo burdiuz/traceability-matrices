@@ -1,0 +1,82 @@
+[
+  {
+    "title": "Project C",
+    "structure": {
+      "Statics": {
+        "Add header text": {},
+        "Path to App.js should be visible": {},
+        "Add welcome text": {}
+      },
+      "Interactive": {
+        "Redirects": {
+          "High Priority": {
+            "Redirect to reactjs.org": {}
+          },
+          "Link with text \"Learn React\"": {}
+        }
+      },
+      "SVG logo preset on the page": {}
+    },
+    "headers": [],
+    "records": {
+      "Add header text": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        }
+      ],
+      "Add welcome text": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        }
+      ],
+      "Path to App.js should be visible": [
+        {
+          "title": "should display entry point path",
+          "titlePath": [
+            "React App",
+            "should display entry point path"
+          ]
+        }
+      ],
+      "SVG logo preset on the page": [
+        {
+          "title": "should display logo",
+          "titlePath": [
+            "React App",
+            "Graphics",
+            "should display logo"
+          ]
+        }
+      ],
+      "Link with text \"Learn React\"": [
+        {
+          "title": "should have a link with proper text",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "should have a link with proper text"
+          ]
+        }
+      ],
+      "Redirect to reactjs.org": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ]
+    }
+  }
+]

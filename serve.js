@@ -1,5 +1,6 @@
 const Koa = require("koa");
 const { readFile } = require("fs/promises");
+const { resolve } = require("path");
 const Router = require("@koa/router");
 const { readCoverage } = require("./reader/reader");
 const { renderFile } = require("./view/file");
@@ -8,13 +9,17 @@ const { renderProject } = require("./view/project");
 const { renderProjects } = require("./view/projects");
 const { calculateTotals } = require("./view/totals");
 
+const inModulePath = (path) => resolve(__dirname, path);
+
 const serve = async (targetDirs, port) => {
   let state = await readCoverage(targetDirs);
 
   const app = new Koa();
   const router = new Router();
 
-  const pageTemplateText = await readFile("./page.html", { encoding: "utf-8" });
+  const pageTemplateText = await readFile(inModulePath("./page.html"), {
+    encoding: "utf-8",
+  });
 
   const pageTemplate = (content) => {
     const totals = calculateTotals(state);

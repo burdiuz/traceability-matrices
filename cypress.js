@@ -45,6 +45,7 @@ const mergeStructure = (source, target) => {
 export const createProject = (projectTitle) => {
   const project = {
     title: projectTitle,
+    structure: {},
     headers: [],
     records: {},
   };
