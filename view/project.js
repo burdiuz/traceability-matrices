@@ -4,9 +4,14 @@ const { isPopulated } = require("../reader/coverage-records");
 
 const projectTableTemplate = compile(`
 table.project
+
+  if projectDescription
+    tr
+      td.project-description(colspan=requirementsDepth + totalSpecCount + 1) !{projectDescription}
+
   //- Header Rows
   tr.file-headers
-    th.project-title(colspan=requirementsDepth, rowspan='2') #{projectTitle}
+    th.project-title(colspan=requirementsDepth, rowspan='2') #{projectTitle} (#{coveredRequirements} / #{totalRequirements})
     th.spec-count(rowspan='2') Spec count
     each file in fileHeaders
       th.file-name(colspan=file.colspan, title=file.title) #{file.name}
@@ -18,9 +23,10 @@ table.project
   each row, index in dataRows
     tr(class=\`result \${row.class}\`)
       each header in dataHeaderRows[index]
-        th(colspan=header.colspan, rowspan=header.rowspan, class=header.class, title=header.title) #{header.name}
+        th(colspan=header.colspan, rowspan=header.rowspan, class=header.class, title=header.title) !{header.name}
       each data in row.cells
         td(title=data.title, class=data.class) #{data.name}
+
   //- Totals
   tr.totals
     td(colspan=requirementsDepth) Project Coverage
@@ -112,7 +118,9 @@ const buildVerticalHeaders = (project) => {
   const build = (requirement, depth) => {
     const cell = {
       name: requirement.title,
-      title: requirement.title,
+
+      // if title contains HTML -- strip tags
+      title: requirement.title.replace(/<\/?[^>]+?>/gi, ''),
       colspan: 1,
       rowspan: 1,
     };
@@ -223,6 +231,7 @@ const renderProject = (project, state) => {
     // +1 for spec counts column
     requirementsDepth: project.depth,
     projectTitle: project.title,
+    projectDescription: project.description,
     fileHeaders: horizontal.filesRow,
     specHeaders: horizontal.specsRow,
     dataRows,

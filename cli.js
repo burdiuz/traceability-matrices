@@ -19,10 +19,6 @@ const parseArgs = () => {
 
     // misshaped argument breaks command line reading
     if (!parsed) {
-      // FIXME for testing purposes, remove before publishing
-      console.error("Oh, come on, useless pile of garbage. Git gud, bitch.");
-      process.exit(1);
-
       break;
     }
 
@@ -73,9 +69,10 @@ switch (command) {
   case "serve":
     {
       /**
-       * serve --target-dir= --port=
+       * serve --target-dir= --port= --https=true
        */
       const port = args.port ? parseInt(String(args.port), 10) : DEFAULT_PORT;
+      const useHttps = String(args.https) === "true";
 
       if (Number.isNaN(port)) {
         exitWithError(`Port value "${args.port}" results to NaN.`);
@@ -83,11 +80,13 @@ switch (command) {
 
       const { serve } = require("./serve.js");
 
-      serve(targetDirs, port);
-
-      import("open").then(({ default: open }) =>
-        open(`http://localhost:${port}`)
-      );
+      serve(targetDirs, port, useHttps).then(() => {
+        import("open").then(({ default: open }) =>
+          open(
+            useHttps ? `https://localhost:${port}` : `http://localhost:${port}`
+          )
+        );
+      });
     }
     break;
   case "generate":
@@ -112,6 +111,11 @@ switch (command) {
       const { generateStatic } = require("./generate-static.js");
 
       generateStatic(targetDirs, outputDir);
+    }
+    break;
+  case "threshold":
+    {
+      // threshold --total=80 --per-project=40
     }
     break;
   case "help":

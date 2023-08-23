@@ -36,5 +36,8 @@
     "koa": "^2.14.2",
     "open": "^9.1.0",
     "pug": "^3.0.2"
+  },
+  "scripts": {
+    "certs": "mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1"
   }
 }

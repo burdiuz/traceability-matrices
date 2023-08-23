@@ -1,4 +1,5 @@
 const Koa = require("koa");
+const https = require("https");
 const { readFile } = require("fs/promises");
 const { resolve } = require("path");
 const Router = require("@koa/router");
@@ -11,7 +12,7 @@ const { calculateTotals } = require("./view/totals");
 
 const inModulePath = (path) => resolve(__dirname, path);
 
-const serve = async (targetDirs, port) => {
+const serve = async (targetDirs, port, useHttps = true) => {
   let state = await readCoverage(targetDirs);
 
   const app = new Koa();
@@ -85,12 +86,32 @@ const serve = async (targetDirs, port) => {
   router.get("/refresh", async (ctx, next) => {
     state = await readCoverage(targetDirs);
 
-    ctx.response.body = `<p>Refresh completed, going back...</p> <script>window.history.back();</script>`;
+    const { referer } = ctx.request.headers;
+
+    // simple going back in history does not refresh the page, ti is taken from cache
+    // so we do a redirect to the referrer page if possible
+    if (referer) {
+      ctx.redirect(referer);
+    } else {
+      ctx.response.body = `<p>Refresh completed, going back...</p> <script>window.history.back();</script>`;
+    }
   });
 
   app.use(router.routes()).use(router.allowedMethods());
 
-  app.listen(port);
+  if (useHttps) {
+    https
+      .createServer(
+        {
+          key: await readFile(resolve(__dirname, "key.pem")),
+          cert: await readFile(resolve(__dirname, "cert.pem")),
+        },
+        app.callback()
+      )
+      .listen(port);
+  } else {
+    app.listen(port);
+  }
 };
 
 module.exports.serve = serve;

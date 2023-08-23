@@ -32,7 +32,25 @@ const addRecordToProject = (project, namePath) => {
   }
 };
 
-const mergeStructure = (source, target) => {
+export const getStructureBranch = (structure, path) => {
+  let index = 0;
+  let parent = structure;
+
+  while (index < path.length) {
+    const name = path[index];
+
+    if (!parent[name]) {
+      return null;
+    }
+
+    parent = parent[name];
+    index++;
+  }
+
+  return parent;
+};
+
+export const mergeStructure = (source, target) => {
   Object.entries(source).forEach(([title, children]) => {
     if (title in target) {
       mergeStructure(children, target[title]);
@@ -42,15 +60,36 @@ const mergeStructure = (source, target) => {
   });
 };
 
-export const createProject = (projectTitle) => {
+export const cloneStructure = (source, target = {}) => {
+  for (let name in source) {
+    if (!target[name]) {
+      target[name] = {};
+    }
+
+    cloneStructure(source[name], target[name]);
+  }
+
+  return target;
+};
+
+export const createProject = (projectTitle, projectDescription = "") => {
   const project = {
     title: projectTitle,
+    description: projectDescription,
     structure: {},
     headers: [],
     records: {},
   };
 
   projects.push(project);
+
+  const clone = (projectTitle, projectDescription) => ({
+    title: projectTitle,
+    description: projectDescription,
+    structure: cloneStructure(project.structure),
+    headers: [],
+    records: {},
+  });
 
   const structure = (data, columnHeaders) => {
     if (data) {
@@ -60,6 +99,58 @@ export const createProject = (projectTitle) => {
     if (columnHeaders) {
       project.headers = columnHeaders;
     }
+
+    function cloneProjectStructure(...path) {
+      const branch = getStructureBranch(project.structure, path);
+      return cloneStructure(branch);
+    }
+
+    return {
+      add: (...path) => {
+        let index = 0;
+        let parent = project.structure;
+
+        while (index < path.length) {
+          const name = path[index];
+
+          if (!parent[name]) {
+            parent[name] = {};
+          }
+
+          parent = parent[name];
+          index++;
+        }
+
+        return parent;
+      },
+      get: (...path) => getStructureBranch(project.structure, path),
+      merge: (struct) => mergeStructure(struct, project.structure),
+      clone: cloneProjectStructure,
+      branch: (path, projectTitle, projectDescription) => {
+        const subProject = createProject(projectTitle, projectDescription);
+
+        subProject.structure(cloneProjectStructure(path));
+
+        return subProject;
+      },
+      narrow: (path, projectTitle, projectDescription) => {
+        const subProject = createProject(projectTitle, projectDescription);
+        subProject.valueOf().headers = project.headers.concat();
+        const sourceStruct = getStructureBranch(project.structure, path);
+
+        if (!sourceStruct) {
+          throw new Error(
+            `Structure path [${
+              path.length ? `"${path.join('", "')}"` : ""
+            }] is not available in "${project.title}"`
+          );
+        }
+
+        cloneStructure(sourceStruct, subProject.structure().add(path));
+
+        return subProject;
+      },
+    };
   };
 
   const headers = (columnHeaders) => {
@@ -68,6 +159,8 @@ export const createProject = (projectTitle) => {
     }
 
     return {
+      clone: () => project.headers.concat(),
+      get: (index) => project.headers[index],
       set: (index, header) => {
         project.headers[index] = header;
       },
@@ -130,10 +223,12 @@ export const createProject = (projectTitle) => {
   };
 
   return {
+    valueOf: () => project,
     structure,
     headers,
     trace,
     requirement,
+    clone,
   };
 };
 

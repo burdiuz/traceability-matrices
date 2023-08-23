@@ -15,7 +15,11 @@ const isStructure = (obj) =>
 
 const isPopulatedStructure = (obj) => isStructure(obj) && isPopulated(obj);
 
-const addEmptyRecordsFromStructure = (structure, records, requirements = []) => {
+const addEmptyRecordsFromStructure = (
+  structure,
+  records,
+  requirements = []
+) => {
   Object.entries(structure).forEach(([name, children]) => {
     if (isPopulated(children)) {
       addEmptyRecordsFromStructure(children, records);
@@ -99,10 +103,12 @@ const lookupForProjects = (filePath, projectList, globalProjects = {}) => {
     setSpecsUnique(source.records, specsUnique);
 
     if (global) {
+      global.description = global.description || source.description;
       mergeStructure(source.structure, global.structure);
     } else {
       global = {
         title: source.title,
+        description: source.description,
         structure: source.structure,
         records: {},
         files: {},
