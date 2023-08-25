@@ -44,6 +44,20 @@ const collectFiles = (roots) => {
   return files;
 };
 
+const getStructureDepth = (structure, depth = 0) => {
+  let newDepth = depth;
+
+  for (key in structure) {
+    const value = structure[key];
+
+    if (value && typeof value === "object") {
+      newDepth = Math.max(newDepth, getStructureDepth(value, depth + 1));
+    }
+  }
+
+  return newDepth;
+};
+
 /**
  * Adds empty recorts for requirements found in structure and not presdent in records
  * Adds requiremnts to structure which were tested(present in records) but aren't presented there.
@@ -62,15 +76,20 @@ const normalize = (globalProjects, files) => {
   });
 
   // add empty records from structure for global projects
-  Object.values(globalProjects).forEach(({ structure, records }) =>
-    addEmptyRecordsFromStructure(structure, records)
-  );
+  Object.values(globalProjects).forEach((project) => {
+    const { structure, records } = project;
+
+    addEmptyRecordsFromStructure(structure, records);
+
+    // calculate structure depth of the project
+    project.depth = getStructureDepth(project.structure);
+  });
 
   // add empty records from requirements found in structure for partial projects
   Object.values(files).forEach(({ projects }) =>
-    Object.values(projects).forEach(({ global, records }) =>
-      addEmptyRecordsFromStructure(global.structure, records)
-    )
+    Object.values(projects).forEach(({ global, records, depth, title }) => {
+      addEmptyRecordsFromStructure(global.structure, records);
+    })
   );
 };
 

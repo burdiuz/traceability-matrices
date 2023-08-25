@@ -83,20 +83,6 @@ const copyProjectRecords = ({ records: source }, { records: target }) => {
   });
 };
 
-const getStructureDepth = (source, depth = 0) => {
-  let newDepth = depth;
-
-  for (key in source) {
-    const value = source[key];
-
-    if (value && typeof value === "object") {
-      newDepth = Math.max(newDepth, getStructureDepth(value, depth + 1));
-    }
-  }
-
-  return newDepth;
-};
-
 const lookupForProjects = (filePath, projectList, globalProjects = {}) => {
   const specsUnique = {};
   const projects = {};
@@ -125,22 +111,28 @@ const lookupForProjects = (filePath, projectList, globalProjects = {}) => {
     delete source.structure;
 
     copyProjectRecords(source, global);
-    global.depth = getStructureDepth(global.structure);
+    global.depth = 1;
     global.files[filePath] = source.records;
     projects[source.title] = source;
 
     // one file projedct also gets files record just to match global project shape for easier processing
     source.files = { [filePath]: source.records };
 
-    Object.assign(source, {
-      get global() {
-        return global;
+    Object.defineProperties(source, {
+      global: {
+        get() {
+          return global;
+        },
       },
-      get structure() {
-        return global.structure;
+      structure: {
+        get() {
+          return global.structure;
+        },
       },
-      get depth() {
-        return global.depth;
+      depth: {
+        get() {
+          return global.depth;
+        },
       },
     });
   });
