@@ -3,3 +3,5 @@ coverage
 cypress_coverage
 test-project
 screenshots
+__tests__
+jest.config.js

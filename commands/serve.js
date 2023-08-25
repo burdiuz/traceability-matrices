@@ -3,45 +3,44 @@ const https = require("https");
 const { readFile } = require("fs/promises");
 const { resolve } = require("path");
 const Router = require("@koa/router");
-const { readCoverage } = require("./reader/reader");
-const { renderFile } = require("./view/file");
-const { renderFiles } = require("./view/files");
-const { renderProject } = require("./view/project");
-const { renderProjects } = require("./view/projects");
-const { calculateTotals } = require("./view/totals");
+const { readCoverage } = require("../reader/reader");
+const { renderFile } = require("../view/file");
+const { renderFiles } = require("../view/files");
+const { renderProject } = require("../view/project");
+const { renderProjects } = require("../view/projects");
+const { calculateTotals } = require("../view/totals");
+const { pageTemplate } = require("../view/page");
 
 const inModulePath = (path) => resolve(__dirname, path);
 
+const links = {
+  getFilesLink: () => "/files",
+  getProjectsLink: () => "/projects",
+  getFileLink: (id) => `/file?id=${id}`,
+  getProjectLink: (title) => `/project?id=${encodeURIComponent(title)}`,
+  getRefreshLink: () => "/refresh",
+};
+
 const serve = async (targetDirs, port, useHttps = true) => {
   let state = await readCoverage(targetDirs);
+  let totals = calculateTotals(state);
 
   const app = new Koa();
   const router = new Router();
-
-  const pageTemplateText = await readFile(inModulePath("./page.html"), {
-    encoding: "utf-8",
-  });
-
-  const pageTemplate = (content) => {
-    const totals = calculateTotals(state);
-    // console.log(totals);
-
-    let template = Object.entries(totals).reduce(
-      (tpl, [key, value]) => tpl.replace(`#{${key}}`, value),
-      pageTemplateText
-    );
-
-    return template.replace("#{content}", content);
-  };
 
   router.get("/", (ctx, next) => {
     ctx.redirect("/files");
   });
 
   router.get("/files", (ctx, next) => {
-    const content = renderFiles(state);
+    const content = renderFiles(state, links);
 
-    ctx.response.body = pageTemplate(content);
+    ctx.response.body = pageTemplate({
+      pageTitle: "Files",
+      links,
+      totals,
+      content,
+    });
   });
 
   // /file?id=<file_path>
@@ -56,15 +55,25 @@ const serve = async (targetDirs, port, useHttps = true) => {
       return;
     }
 
-    const content = renderFile(file, state);
+    const content = renderFile(file, state, links);
 
-    ctx.response.body = pageTemplate(content);
+    ctx.response.body = pageTemplate({
+      pageTitle: filePath,
+      links,
+      totals,
+      content,
+    });
   });
 
   router.get("/projects", (ctx, next) => {
-    const content = renderProjects(state);
+    const content = renderProjects(state, links);
 
-    ctx.response.body = pageTemplate(content);
+    ctx.response.body = pageTemplate({
+      pageTitle: "Projects",
+      links,
+      totals,
+      content,
+    });
   });
 
   // /file?id=<project_name>
@@ -79,12 +88,19 @@ const serve = async (targetDirs, port, useHttps = true) => {
       return;
     }
 
-    const content = renderProject(project, state);
-    ctx.response.body = pageTemplate(content);
+    const content = renderProject(project, state, links);
+
+    ctx.response.body = pageTemplate({
+      pageTitle: projectId,
+      links,
+      totals,
+      content,
+    });
   });
 
   router.get("/refresh", async (ctx, next) => {
     state = await readCoverage(targetDirs);
+    totals = calculateTotals(state);
 
     const { referer } = ctx.request.headers;
 

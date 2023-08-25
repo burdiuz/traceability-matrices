@@ -1,6 +1,7 @@
 [
   {
     "title": "Project C",
+    "description": "",
     "structure": {
       "Statics": {
         "Add header text": {},

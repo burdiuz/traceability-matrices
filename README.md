@@ -74,4 +74,4 @@ Project.structure({
   }
 });
 ```
-When using a trace, it will be matched to a leaf node of the structure with same name.
+When using a trace, it will be matched to a leaf node of the structure with the same name.

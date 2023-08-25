@@ -12,7 +12,7 @@ div.flex-vertical
           div.dir-path #{dir.localPath}
           each file in dir.files
             div.file
-              a(href=\`/file?id=\${file.id}\`) #{file.specName}
+              a(href=self.links.getFileLink(file.id)) #{file.specName}
               div.file-projects
                 each project in self.listFileProjects(file)
                   span.file-project #{project.title} #{project.requirementsCovered} / #{project.requirementsTotal}
@@ -25,9 +25,10 @@ div.flex-vertical
  *
  * @param {import("../reader/reader").ReadCoverageResult} state
  */
-const renderFiles = (state) => {
+const renderFiles = (state, links) => {
   return fileStructureTemplate({
     ...state,
+    links,
 
     // TODO CACHE totals per file and project
     listFileProjects: (file) =>

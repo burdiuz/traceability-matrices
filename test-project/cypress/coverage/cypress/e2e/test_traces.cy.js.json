@@ -1,6 +1,7 @@
 [
   {
     "title": "Project A",
+    "description": "",
     "structure": {},
     "headers": [],
     "records": {
@@ -170,6 +171,7 @@
   },
   {
     "title": "Project B",
+    "description": "",
     "structure": {},
     "headers": [],
     "records": {

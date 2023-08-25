@@ -32,7 +32,7 @@ const addRecordToProject = (project, namePath) => {
   }
 };
 
-export const getStructureBranch = (structure, path) => {
+const getStructureBranch = (structure, path) => {
   let index = 0;
   let parent = structure;
 
@@ -50,7 +50,7 @@ export const getStructureBranch = (structure, path) => {
   return parent;
 };
 
-export const mergeStructure = (source, target) => {
+const mergeStructure = (source, target) => {
   Object.entries(source).forEach(([title, children]) => {
     if (title in target) {
       mergeStructure(children, target[title]);
@@ -60,7 +60,7 @@ export const mergeStructure = (source, target) => {
   });
 };
 
-export const cloneStructure = (source, target = {}) => {
+const cloneStructure = (source, target = {}) => {
   for (let name in source) {
     if (!target[name]) {
       target[name] = {};
@@ -72,7 +72,7 @@ export const cloneStructure = (source, target = {}) => {
   return target;
 };
 
-export const createProject = (projectTitle, projectDescription = "") => {
+const createProject = (projectTitle, projectDescription = "") => {
   const project = {
     title: projectTitle,
     description: projectDescription,
@@ -102,6 +102,15 @@ export const createProject = (projectTitle, projectDescription = "") => {
 
     function cloneProjectStructure(...path) {
       const branch = getStructureBranch(project.structure, path);
+
+      if (!branch) {
+        throw new Error(
+          `Structure path [${
+            path.length ? `"${path.join('", "')}"` : ""
+          }] is not available in "${project.title}"`
+        );
+      }
+
       return cloneStructure(branch);
     }
 
@@ -238,3 +247,8 @@ after(() => {
     JSON.stringify(projects, null, 2)
   );
 });
+
+module.exports.getStructureBranch = getStructureBranch;
+module.exports.mergeStructure = mergeStructure;
+module.exports.cloneStructure = cloneStructure;
+module.exports.createProject = createProject;

@@ -32,7 +32,7 @@ export type ProjectApi = {
     set: (index: number, title: string) => void;
   };
   trace: (requirement: string | string[], chainFn?: () => void) => void;
-  requirement: (requirement: string | string[]) => {
+  requirement: (...requirement: string[]) => {
     describe: (title: string, ...args: any[]) => any;
     context: (title: string, ...args: any[]) => any;
     suite: (title: string, ...args: any[]) => any;

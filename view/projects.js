@@ -7,7 +7,7 @@ div.flex-vertical
   each project in self.list
     div(class= project.covered ? 'project-link covered' : 'project-link')
       span.totals #{project.requirementsCovered} / #{project.requirementsTotal}
-      a.title(href=\`/project?id=\${encodeURIComponent(project.title)}\`) #{project.title}
+      a.title(href=self.links.getProjectLink(project.title)) #{project.title}
 `,
   { self: true }
 );
@@ -16,7 +16,7 @@ div.flex-vertical
  *
  * @param {import("../reader/reader").ReadCoverageResult} state
  */
-const renderProjects = (state) => {
+const renderProjects = (state, links) => {
   const list = Object.values(state.projects).map((project) => {
     const stats = calculateProjectStats(project);
 
@@ -26,7 +26,7 @@ const renderProjects = (state) => {
     };
   });
 
-  return projectsStructureTemplate({ list });
+  return projectsStructureTemplate({ list, links });
 };
 
 module.exports.renderProjects = renderProjects;

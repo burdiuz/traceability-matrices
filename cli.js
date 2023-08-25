@@ -78,7 +78,7 @@ switch (command) {
         exitWithError(`Port value "${args.port}" results to NaN.`);
       }
 
-      const { serve } = require("./serve.js");
+      const { serve } = require("./commands/serve.js");
 
       serve(targetDirs, port, useHttps).then(() => {
         import("open").then(({ default: open }) =>
@@ -103,12 +103,12 @@ switch (command) {
 
         if (args["force-cleanup"]) {
           fs.rmSync(outputDir, { recursive: true, force: true });
-        } else {
-          exitWithError(`"${outputDir}" exists.`);
         }
+      } else {
+        fs.mkdirSync(outputDir);
       }
 
-      const { generateStatic } = require("./generate-static.js");
+      const { generateStatic } = require("./commands/generate-static.js");
 
       generateStatic(targetDirs, outputDir);
     }
@@ -116,6 +116,22 @@ switch (command) {
   case "threshold":
     {
       // threshold --total=80 --per-project=40
+      const total =
+        args["total"] === undefined ? 100 : parseInt(args["total"], 10);
+      const perProject =
+        args["per-project"] === undefined
+          ? 100
+          : parseInt(args["per-project"], 10);
+
+      if (isNaN(total) || isNaN(perProject)) {
+        exitWithError(
+          "Coverage thresholds should be positive integer values between 0 and 100."
+        );
+      }
+
+      const { threshold } = require("./commands/threshold.js");
+
+      threshold(targetDirs, total, perProject);
     }
     break;
   case "help":

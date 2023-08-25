@@ -38,6 +38,11 @@
     "pug": "^3.0.2"
   },
   "scripts": {
-    "certs": "mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1"
+    "certs": "mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "jest": "^29.6.3"
   }
 }

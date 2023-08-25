@@ -1,0 +1,16 @@
+div.project-link {
+  background-color: #ddd;
+  padding: 8px 16px;
+}
+div.project-link.covered {
+  background-color: #eee;
+}
+
+div.project-link .title {
+  font-size: 150%;
+}
+
+div.project-link .totals {
+  display: inline-block;
+  width: 80px;
+}

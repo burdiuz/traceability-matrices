@@ -1,0 +1,50 @@
+table.project {
+  border-collapse: collapse;
+  background-color: #fff;
+  margin: 16px;
+}
+
+table.project th {
+  max-width: 200px;
+}
+
+table.project th,
+table.project td {
+  height: 24px;
+}
+
+table.project th,
+table.project td {
+  border: 1px solid #666;
+  padding: 4px;
+}
+
+th.spec-count {
+  width: 55px;
+}
+
+td.spec-count {
+  text-align: center;
+}
+
+table.project th.spec-name {
+  max-width: 150px;
+  text-align: justify;
+}
+
+td.covered {
+  text-align: center;
+  font-size: 32px;
+  line-height: 24px;
+}
+
+tr.result:nth-child(odd) td[rowspan="1"],
+tr.result:nth-child(odd) td:not([rowspan]),
+tr.result:nth-child(odd) th[rowspan="1"],
+tr.result:nth-child(odd) th:not([rowspan]) {
+  background-color: #eee;
+}
+
+tr.totals td:first-child {
+  text-align: right;
+}

@@ -1,0 +1,34 @@
+div.dir-root {
+  margin: 16px 16px 0 16px;
+  color: #666;
+  font-size: 250%;
+}
+
+div.directory {
+  margin: 8px 16px;
+}
+
+div.dir-path {
+  color: #666;
+  font-size: 150%;
+}
+
+div.file {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin: 0 0 4px 16px;
+  background-color: #ddd;
+  padding: 4px;
+}
+
+div.file:nth-child(odd) {
+  background-color: #eee;
+}
+
+div.file div.file-projects {
+  display: flex;
+  gap: 16px;
+  margin-left: auto;
+  font-size: 80%;
+}

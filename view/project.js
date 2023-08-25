@@ -208,7 +208,7 @@ const buildDataRows = (vertical, horizontal) => {
  * @param {import("../reader/coverage-records").Project} project
  * @param {import("../reader/reader").ReadCoverageResult} state
  */
-const renderProject = (project, state) => {
+const renderProject = (project, state, links) => {
   /*
    * build headers
    * horizontal for specs
@@ -239,6 +239,7 @@ const renderProject = (project, state) => {
     coveredRequirements,
     totalSpecCount,
     dataHeaderRows: vertical.rows,
+    links,
   });
 
   return tableHtml;
