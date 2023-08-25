@@ -1,34 +1,118 @@
 # @actualwave/traceability-matrices
 
-# Work in progress
-
-Integrate requirements into e2e/integration test code and generate traceability matrices for your project. Currently it has an adapter to work with Cypress.
-
+Integrate requirements into e2e/integration test code and generate traceability matrices for your project. Currently it has an adapter to work with [Cypress](https://www.cypress.io/) tests.
 
 ![One file project](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/project_a.png?raw=true)
 
-
 ![Multi-file project](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/project_c.png?raw=true)
 
+## How it works
+
+Work with this project starts with placing traces of requirements within a test file.
+
+```js
+it("should do something according to requirement #1", () => {
+  project.trace("requirement #1");
+
+  expect(something).toEqual(somethingElse);
+});
+```
+
+Once test is finished, coverage report will be stored in a coverage folder specified in cypress config or environment variable. Stored file is a JSON file and is not suitable for viewung, to generate viewable information and actual matrices/tables user should use command `traceability-matrices generate` to generate static HTML files with reports or `traceability-matrices serve` to start local HTTP server with reports.
 
 ## Installation
-NPM
+
+First add the package via NPM
+
 ```
 npm install -D @actualwave/traceability-matrices
 ```
-Yarn
+
+or Yarn
+
 ```
 yarn add -D @actualwave/traceability-matrices
 ```
 
-## Usage
-Add a script to your package.json
+Then configure by defining a environment variable `TRACE_RECORDS_DATA_DIR`, this could be done in cypress config file
+
+```js
+const { defineConfig } = require("cypress");
+
+module.exports = defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      // implement node event listeners here
+    },
+    env: {
+      // will store coverage reports in <project-root>/cypress/coverage
+      TRACE_RECORDS_DATA_DIR: "cypress/coverage",
+    },
+  },
+});
 ```
-traceability-matrices serve --target-dir=<folder with coverage reports>
+
+Also, it might be useful to add commands to package.json
+
+```json
+  "scripts": {
+    "tm:serve": "traceability-matrices serve --target-dir=cypress/coverage",
+    "tm:generate": "traceability-matrices generate --target-dir=cypress/coverage --output-dir=coverage-static"
+  },
+```
+
+## Commands
+
+This package supports multiple commands to work with generated coverage reports after test run. All commands accept required parameter `--target-dir` which points at coverage reports root folder, it is the same folder defined in `TRACE_RECORDS_DATA_DIR` environment variable. This parameter could be provided multiple times to point at multiple coverage directories.
+
+### traceability-matrices serve
+
+Run HTTP/S server with coverage reports and open in default browser.  
+Parameters:
+
+- `--target-dir` - required, path to directory with coverage reports.
+- `--port` - port for HTTP/S server, 8477 by default
+- `--https` - set to "true"(`--https=true`) to start HTTPS server, by default starts HTTP server
+
+Example:
+
+```
+traceability-matrices serve --target-dir=cypress/coverage --https=true
+```
+
+### traceability-matrices generate
+
+Generate static HTML files with coverage reports.  
+Parameters:
+
+- `--target-dir` - required, path to directory with coverage reports.
+- `--output-dir` - required, path to folder where generated HTML files should be stored
+
+Example:
+
+```
+traceability-matrices generate --target-dir=cypress/coverage --output-dir=coverage-static
+```
+
+### traceability-matrices threshold
+
+Fails(exits with an error code) if coverage thresholds weren't met.  
+Parameters:
+
+- `--target-dir` - required, path to directory with coverage reports.
+- `--total` - optional, defines global coverage threshold, value can be between 0 and 100. Fails command if combined coverage of all project does not meet threshold.
+- `--per-project` - optional, defines coverage threshold applies to every project, value can be between 0 and 100. Fails command if at least one project does not meet threshold.
+
+Example:
+
+```
+traceability-matrices threshold --target-dir=cypress/coverage --total=80 --per-project=60
 ```
 
 ## Cypress integration
-Add `TRACE_RECORDS_DATA_DIR` environment variable to cypress config that will tell where to store coverage reports
+
+Start with adding `TRACE_RECORDS_DATA_DIR` environment variable to cypress config that will tell where to store coverage reports
+
 ```js
 const { defineConfig } = require("cypress");
 
@@ -41,37 +125,161 @@ module.exports = defineConfig({
 });
 ```
 
+and defining a project in a test file
 
-This project has a part that integrates into Cypress test files and adds traces of covered requirements. To start import it
-```js
-import { createProject } from "@actualwave/traceability-matrices/cypress";
-```
-Then use imported function to create a project
-```js
-const Project = createProject("My Project");
-```
-And create traces for requirements within the test specs
-```js
-it("should display entry point path", () => {
-  Project.trace("Path to App.js should be visible");
-  cy.get(".App-header p > code").should("contain", "src/App.js");
-});
-```
-When test run is finished, coverage report for it will be stored in specified folder. Coverage is generated into a JSON file, to have a human-readable format, run `serve` command.
-
-
-Using only traces will generate flat requirements structure, if you want to add categories, priorities or groups to it, sefine a structure to the project.
 ```js
 import { createProject } from "@actualwave/traceability-matrices/cypress";
 
-const Project = createProject("My Project");
+const project = createProject("My Project");
+```
 
-Project.structure({
-  Statics: {
-    "Add header text": {},
-    "Path to App.js should be visible": {},
-    "Add welcome text": {},
-  }
+This project provides methods to match test specs with project requriements and genrates test records that will be stored in a JSON file after test run is finished.
+
+### project.trace()
+
+To match requirements with specs engineer should place traces within specs, like
+
+```js
+// test spec
+it("should do something according to requirement #1", () => {
+  // trace requirement
+  project.trace("requirement #1");
+
+  expect(something).toEqual(somethingElse);
 });
 ```
-When using a trace, it will be matched to a leaf node of the structure with the same name.
+
+After running this test, coverage will contain a record that spec `should do something according to requirement #1` tests `requirement #1` requirement. One spec may contain multiple requriements and traces could contain expectations or be nested.
+
+```js
+it("should do something according to multiple requirements", () => {
+  project.trace("requirement #1", () => {
+    expect(something).toEqual(somethingElse);
+
+    project.trace("requirement #3", () => {
+      expect(something).toEqual(somethingElse);
+
+      project.trace("requirement #4", () => {
+        expect(something).toEqual(somethingElse);
+      });
+    });
+  });
+
+  project.trace("requirement #2");
+  expect(something).toEqual(somethingElse);
+});
+```
+
+`project.trace()` could be used to generate requirements tree by providing an array of strings
+
+```js
+it("should do something according to requirement #1", () => {
+  project.trace(["High", "General", "PRD I", "requirement #1"]);
+  project.trace(["High", "General", "PRD I", "requirement #2"]);
+  project.trace(["High", "General", "PRD I", "requirement #3"]);
+  project.trace(["Low", "PRD IVa", "requirement #45"]);
+  project.trace(["Low", "PRD IVa", "requirement #46"]);
+  project.trace(["optional requirement #1"]);
+
+  expect(something).toEqual(somethingElse);
+});
+```
+
+This will generate a structure of requirements
+
+- High
+  - General
+    - PRD I
+      - requirement #1
+      - requirement #2
+      - requirement #3
+- Low
+  - PRD IVa
+    - requirement #45
+    - requirement #46
+- optional requirement #1
+
+Such structure also could be created using `project.structure()` method
+
+```js
+project.structure({
+  High: {
+    General: {
+      "PRD I": {
+        "requirement #1": {},
+        "requirement #2": {},
+        "requirement #3": {},
+      },
+    },
+  },
+  Low: {
+    "PRD IVa": {
+      "requirement #45": {},
+      "requirement #46": {},
+    },
+  },
+  "optional requirement #1": {},
+});
+```
+
+and with this just use requirement name in `project.trace()` call,
+
+```js
+it("should do something according to requirement #1", () => {
+  project.trace("requirement #3");
+  expect(something).toEqual(somethingElse);
+});
+```
+
+it will be matched to leaf node of structure. If requirement not found in structure, it will be added to the root of structure when coverage is generated.
+
+### project.requirement()
+
+With `project.trace()`, engineer could use `project.requirement()` and specify requirement to use in multiple places.
+
+```js
+const req1 = project.requirement("requirement #1");
+```
+
+Once created, it could be used to replace test lifecycle hooks like `describe()` and `it()`
+
+```js
+req1.describe('When someting', () => {
+  ...
+});
+
+req1.it('should do', () => {
+  ...
+});
+```
+
+Both will record requirement being tested in these places.
+
+### project.structure()
+
+`project.structure()` used to specify category tree, ther are no specification but structure should be built only with objects. Leaf objects of this structure will be identified as testable requirementes, other branches are categories and could not be tested.
+
+```js
+project.structure({
+  High: {
+    General: {
+      "PRD I": {
+        "requirement #1": {},
+        "requirement #2": {},
+        "requirement #3": {},
+      },
+    },
+  },
+});
+```
+
+If test will contain a trace to category, that record will be added as a leaf node to the root of the structure.
+
+`project.structure()` return an object with additional methods to work with structure.
+
+- `add(...path: string[]) => Record<string, object>` - add categories/requirements to the structure if not exist
+- `get(...path: string[]) => Record<string, object>` - retrieve a branch of the structure
+- `merge(source: Record<string, object>) => void` - merge external structure into
+- `clone(...path: string[]) => Record<string, object>` - clone and return whole or branch of the structure
+- `branch(path: string[], projectTitle: string, projectDescription?: string) => ProjectApi` - create a sub-project from structure branch. sub-project will have no connection to current project and structures will be copied.
+- `narrow(path: string[], projectTitle: string, projectDescription?: string) => ProjectApi` - create sub-project with a structure by removing branches out of provided path. sub-project will have no connection to current project and structures will be copied.

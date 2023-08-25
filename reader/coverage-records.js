@@ -83,14 +83,18 @@ const copyProjectRecords = ({ records: source }, { records: target }) => {
   });
 };
 
-const getStructureDepth = (source, depth = 1) => {
-  Object.values(source).forEach((value) => {
-    if (isPopulatedStructure(value)) {
-      depth = Math.max(depth, getStructureDepth(value, depth + 1));
-    }
-  });
+const getStructureDepth = (source, depth = 0) => {
+  let newDepth = depth;
 
-  return depth;
+  for (key in source) {
+    const value = source[key];
+
+    if (value && typeof value === "object") {
+      newDepth = Math.max(newDepth, getStructureDepth(value, depth + 1));
+    }
+  }
+
+  return newDepth;
 };
 
 const lookupForProjects = (filePath, projectList, globalProjects = {}) => {

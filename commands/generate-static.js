@@ -49,14 +49,16 @@ const generateStatic = async (targetDirs, outputDir) => {
     mkdirSync(filesDir);
   }
 
-  Object.entries(state.files).forEach(([filePath, file]) => {
-    writeHtml(
-      getLinks(".").getFileLink(filePath),
-      "..",
-      filePath,
-      (state, links) => renderFile(file, state, links)
-    );
-  });
+  await Promise.all(
+    Object.entries(state.files).map(([filePath, file]) =>
+      writeHtml(
+        getLinks(".").getFileLink(filePath),
+        "..",
+        filePath,
+        (state, links) => renderFile(file, state, links)
+      )
+    )
+  );
 
   await writeHtml("files.html", ".", "Files", renderFiles);
 
@@ -67,14 +69,16 @@ const generateStatic = async (targetDirs, outputDir) => {
     mkdirSync(projectsDir);
   }
 
-  Object.entries(state.projects).forEach(([projectTitle, project]) => {
-    writeHtml(
-      getLinks(".").getProjectLink(projectTitle),
-      "..",
-      projectTitle,
-      (state, links) => renderProject(project, state, links)
-    );
-  });
+  await Promise.all(
+    Object.entries(state.projects).map(([projectTitle, project]) =>
+      writeHtml(
+        getLinks(".").getProjectLink(projectTitle),
+        "..",
+        projectTitle,
+        (state, links) => renderProject(project, state, links)
+      )
+    )
+  );
 
   await writeHtml("projects.html", ".", "Projects", renderProjects);
 };
