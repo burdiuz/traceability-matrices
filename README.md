@@ -1,6 +1,5 @@
 # @actualwave/traceability-matrices
-
-Integrate requirements into e2e/integration test code and generate traceability matrices for your project. Currently it has an adapter to work with [Cypress](https://www.cypress.io/) tests.
+Integrate requirements into e2e/integration test code and generate traceability matrices for your project. Currently this project has an adapter to work with [Cypress](https://www.cypress.io/) tests.
 
 ![One file project](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/project_a.png?raw=true)
 
@@ -18,11 +17,13 @@ it("should do something according to requirement #1", () => {
 });
 ```
 
-Once test is finished, coverage report will be stored in a coverage folder specified in cypress config or environment variable. Stored file is a JSON file and is not suitable for viewung, to generate viewable information and actual matrices/tables user should use command `traceability-matrices generate` to generate static HTML files with reports or `traceability-matrices serve` to start local HTTP server with reports.
+Once test run is finished, coverage report will be stored in a coverage folder specified in cypress config or environment variable. Stored file is a JSON file and is not suitable for viewing, to generate viewable information and actual matrices/tables, user should use command `traceability-matrices generate` to generate static HTML files with reports or `traceability-matrices serve` to start local HTTP server with reports.
+
+Example project is available in [git repo](https://github.com/burdiuz/traceability-matrices/tree/master/test-project)
 
 ## Installation
 
-First add the package via NPM
+Install the package via NPM
 
 ```
 npm install -D @actualwave/traceability-matrices
@@ -34,7 +35,7 @@ or Yarn
 yarn add -D @actualwave/traceability-matrices
 ```
 
-Then configure by defining a environment variable `TRACE_RECORDS_DATA_DIR`, this could be done in cypress config file
+Then configure by defining an environment variable `TRACE_RECORDS_DATA_DIR`, this could be done in cypress config file
 
 ```js
 const { defineConfig } = require("cypress");
@@ -60,17 +61,18 @@ Also, it might be useful to add commands to package.json
     "tm:generate": "traceability-matrices generate --target-dir=cypress/coverage --output-dir=coverage-static"
   },
 ```
+calling `npm run tm:serve` will start local HTTP server with coveragereports and `npm run tm:generate` will generate HTML reports into `xcoverage-static` folder.
 
 ## Commands
 
-This package supports multiple commands to work with generated coverage reports after test run. All commands accept required parameter `--target-dir` which points at coverage reports root folder, it is the same folder defined in `TRACE_RECORDS_DATA_DIR` environment variable. This parameter could be provided multiple times to point at multiple coverage directories.
+This package supports multiple commands to work with generated coverage reports after test run. All commands accept required parameter `--target-dir` which points at a coverage reports root folder, it is the same folder defined in `TRACE_RECORDS_DATA_DIR` environment variable. This parameter could be provided multiple times to point at multiple coverage directories to generate combined report.
 
 ### traceability-matrices serve
 
 Run HTTP/S server with coverage reports and open in default browser.  
 Parameters:
 
-- `--target-dir` - required, path to directory with coverage reports.
+- `--target-dir` - required, path to directory with coverage reports
 - `--port` - port for HTTP/S server, 8477 by default
 - `--https` - set to "true"(`--https=true`) to start HTTPS server, by default starts HTTP server
 
@@ -111,7 +113,7 @@ traceability-matrices threshold --target-dir=cypress/coverage --total=80 --per-p
 
 ## Cypress integration
 
-Start with adding `TRACE_RECORDS_DATA_DIR` environment variable to cypress config that will tell where to store coverage reports
+Cypresss integration starts with adding `TRACE_RECORDS_DATA_DIR` environment variable to cypress config that will tell where to store coverage reports
 
 ```js
 const { defineConfig } = require("cypress");
@@ -133,11 +135,11 @@ import { createProject } from "@actualwave/traceability-matrices/cypress";
 const project = createProject("My Project");
 ```
 
-This project provides methods to match test specs with project requriements and genrates test records that will be stored in a JSON file after test run is finished.
+Created `project` provides methods to match test specs with project requriements and genrates test records that will be stored in a JSON file once test run is finished.
 
 ### project.trace()
 
-To match requirements with specs engineer should place traces within specs, like
+To match requirements with specs, traces should be placed within specs, like
 
 ```js
 // test spec
@@ -257,7 +259,7 @@ Both will record requirement being tested in these places.
 
 ### project.structure()
 
-`project.structure()` used to specify category tree, ther are no specification but structure should be built only with objects. Leaf objects of this structure will be identified as testable requirementes, other branches are categories and could not be tested.
+`project.structure()` used to specify category tree, and it should be built only with objects. Leaf objects of this structure will be identified as a testable requirements, other branches are categories and could not be tested.
 
 ```js
 project.structure({
@@ -272,6 +274,21 @@ project.structure({
   },
 });
 ```
+With structure tree optionally list of table headers could be provided, they will be used to render HTML table in the report
+
+```js
+project.structure({
+  High: {
+    General: {
+      "PRD I": {
+        "requirement #1": {},
+        "requirement #2": {},
+        "requirement #3": {},
+      },
+    },
+  },
+}, ['Priority', 'Category', 'Requirement']);
+```
 
 If test will contain a trace to category, that record will be added as a leaf node to the root of the structure.
 
@@ -283,3 +300,15 @@ If test will contain a trace to category, that record will be added as a leaf no
 - `clone(...path: string[]) => Record<string, object>` - clone and return whole or branch of the structure
 - `branch(path: string[], projectTitle: string, projectDescription?: string) => ProjectApi` - create a sub-project from structure branch. sub-project will have no connection to current project and structures will be copied.
 - `narrow(path: string[], projectTitle: string, projectDescription?: string) => ProjectApi` - create sub-project with a structure by removing branches out of provided path. sub-project will have no connection to current project and structures will be copied.
+
+### project.headers()
+
+Allows to specify list of HTML table headers
+
+### project.clone()
+
+Clone project, creates a new project with same structure and empty test records.
+
+### project.valueOf()
+
+Returns internal state of the project

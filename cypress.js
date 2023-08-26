@@ -87,7 +87,7 @@ const createProject = (projectTitle, projectDescription = "") => {
     title: projectTitle,
     description: projectDescription,
     structure: cloneStructure(project.structure),
-    headers: [],
+    headers: [...project.headers],
     records: {},
   });
 

@@ -1,6 +1,6 @@
 {
   "name": "@actualwave/traceability-matrices",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "types": "cypress.d.ts",
   "bin": {
     "traceability-matrices": "./cli.js"
