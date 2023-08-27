@@ -8,6 +8,7 @@
 # testing
 /coverage
 cypress_coverage
+coverage_static
 
 # production
 /build

@@ -23,7 +23,7 @@ const addRecordToProject = (project, namePath) => {
 
   if (project.records[name]) {
     project.records[name].push({
-      // filePath: Cypress.spec.relative,
+      filePath: Cypress.spec.relative,
       title,
       titlePath: [...titlePath],
     });

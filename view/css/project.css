@@ -4,8 +4,27 @@ table.project {
   margin: 16px;
 }
 
+table.project td.project-description {
+  padding: 16px;
+}
+
+table.project th.project-title,
+table.project tr.totals {
+  font-weight: bold;
+}
+
 table.project th {
-  max-width: 200px;
+  font-weight: normal;
+}
+
+table.project th.file-name {
+  background-color: #666;
+  color: #fff;
+  padding: 0 16px;
+}
+
+table.project th.spec-name {
+  width: 120px;
 }
 
 table.project th,
@@ -15,7 +34,7 @@ table.project td {
 
 table.project th,
 table.project td {
-  border: 1px solid #666;
+  border: 1px solid #ccc;
   padding: 4px;
 }
 
@@ -32,10 +51,14 @@ table.project th.spec-name {
   text-align: justify;
 }
 
-td.covered {
-  text-align: center;
-  font-size: 32px;
-  line-height: 24px;
+td.cell.covered .cell-text {
+  display: block;
+  font-size: 0px;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  border-radius: 16px;
+  background-color: #000;
 }
 
 tr.result:nth-child(odd) td[rowspan="1"],

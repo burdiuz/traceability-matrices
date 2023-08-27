@@ -17,7 +17,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "cypress": "cypress open",
-    "tm": "traceability-matrices serve --target-dir=cypress/coverage"
+    "tm:serve": "traceability-matrices serve --target-dir=cypress/coverage",
+    "tm:generate": "traceability-matrices generate --target-dir=cypress/coverage --output-dir=coverage_static"
   },
   "eslintConfig": {
     "extends": [

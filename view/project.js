@@ -23,15 +23,18 @@ table.project
         th.header(title=self.projectHeaders[index]) #{self.projectHeaders[index]}
         - index++;
     each spec in self.specHeaders
-      th.spec-name(title=spec.title) #{spec.name}
+      th.spec-name(title=spec.title)
+        span.spec-name-text #{spec.name}
 
   //- Data Rows
   each row, index in self.dataRows
     tr(class=\`result \${row.class}\`)
       each header in self.dataHeaderRows[index]
-        th(colspan=header.colspan, rowspan=header.rowspan, class=header.class, title=header.title) !{header.name}
+        th(colspan=header.colspan, rowspan=header.rowspan, class=\`requirement \${header.class || ''}\`, title=header.title)
+          span.requirement-text !{header.name}
       each data in row.cells
-        td(title=data.title, class=data.class) #{data.name}
+        td(title=data.title, class=\`cell \${data.class || ''}\`) 
+          span.cell-text #{data.name}
 
   //- Totals
   tr.totals
