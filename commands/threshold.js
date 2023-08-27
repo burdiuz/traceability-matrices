@@ -9,6 +9,7 @@ const { calculateProjectStats } = require("../view/totals");
  */
 const applyCoverageThresholds = ({ projects }, total, perProject) => {
   const list = Object.values(projects);
+  let projectCount = list.length;
   let error = false;
   let combinedCoverage = 0;
 
@@ -18,8 +19,16 @@ const applyCoverageThresholds = ({ projects }, total, perProject) => {
   list.forEach((project) => {
     const { requirementsTotal, requirementsCovered } =
       calculateProjectStats(project);
-    const coverage = (requirementsCovered / requirementsTotal) * 100;
-    combinedCoverage += coverage;
+    const coverage = requirementsTotal
+      ? (requirementsCovered / requirementsTotal) * 100
+      : 100;
+
+    if (requirementsTotal) {
+      combinedCoverage += coverage;
+    } else {
+      // exclude empty projects from total coverage calculation
+      projectCount--;
+    }
 
     const str = `${coverage.toFixed(0).padStart(4, " ")}% - ${project.title}`;
 
@@ -32,7 +41,7 @@ const applyCoverageThresholds = ({ projects }, total, perProject) => {
     console.log("-------------------------------------------");
   });
 
-  const totalCoverage = combinedCoverage / list.length;
+  const totalCoverage = combinedCoverage / projectCount;
   const str = `${totalCoverage.toFixed(0).padStart(4, " ")}% - Global coverage`;
 
   if (totalCoverage < total) {

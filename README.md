@@ -111,6 +111,15 @@ Example:
 traceability-matrices threshold --target-dir=cypress/coverage --total=80 --per-project=60
 ```
 
+### traceability-matrices stats
+Outputs coverage information per project with requirements.
+
+Example:
+
+```
+traceability-matrices stats --target-dir=cypress/coverage
+```
+
 ## Cypress integration
 
 Cypresss integration starts with adding `TRACE_RECORDS_DATA_DIR` environment variable to cypress config that will tell where to store coverage reports

@@ -113,27 +113,36 @@ switch (command) {
       generateStatic(targetDirs, outputDir);
     }
     break;
-  case "threshold":
-    {
-      // threshold --total=80 --per-project=40
-      const total =
-        args["total"] === undefined ? 100 : parseInt(args["total"], 10);
-      const perProject =
-        args["per-project"] === undefined
-          ? 100
-          : parseInt(args["per-project"], 10);
-
-      if (isNaN(total) || isNaN(perProject)) {
-        exitWithError(
-          "Coverage thresholds should be positive integer values between 0 and 100."
-        );
+    case "threshold":
+      {
+        // threshold --target-dir= --total=80 --per-project=40
+        const total =
+          args["total"] === undefined ? 100 : parseInt(args["total"], 10);
+        const perProject =
+          args["per-project"] === undefined
+            ? 100
+            : parseInt(args["per-project"], 10);
+  
+        if (isNaN(total) || isNaN(perProject)) {
+          exitWithError(
+            "Coverage thresholds should be positive integer values between 0 and 100."
+          );
+        }
+  
+        const { threshold } = require("./commands/threshold.js");
+  
+        threshold(targetDirs, total, perProject);
       }
-
-      const { threshold } = require("./commands/threshold.js");
-
-      threshold(targetDirs, total, perProject);
-    }
-    break;
+      break;
+      case "stats":
+        {
+          // stats --target-dir=
+    
+          const { stats } = require("./commands/stats.js");
+    
+          stats(targetDirs);
+        }
+        break;
   case "help":
     // TODO
     break;
