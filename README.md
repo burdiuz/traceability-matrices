@@ -134,6 +134,14 @@ import { createProject } from "@actualwave/traceability-matrices/cypress";
 
 const project = createProject("My Project");
 ```
+`createProject(projectTitle: string, projectDescription?: string)` accepts project title and optionally description. Project titles must be unique strings. Project description could be an HTML string, it will display on top of project coverage table and is suitable for placing various project links and other useful information.
+```ts
+import { createProject } from "@actualwave/traceability-matrices/cypress";
+
+const project = createProject("My Project", `
+<h1>Useful information</1>
+<a href="https://react.dev/">Learn React</a>`);
+```
 
 Created `project` provides methods to match test specs with project requriements and genrates test records that will be stored in a JSON file once test run is finished.
 
@@ -150,6 +158,7 @@ it("should do something according to requirement #1", () => {
   expect(something).toEqual(somethingElse);
 });
 ```
+> Note: To properly match requirement string with project structure requirement must be a unique string within its project.
 
 After running this test, coverage will contain a record that spec `should do something according to requirement #1` tests `requirement #1` requirement. One spec may contain multiple requriements and traces could contain expectations or be nested.
 
@@ -234,6 +243,8 @@ it("should do something according to requirement #1", () => {
 ```
 
 it will be matched to leaf node of structure. If requirement not found in structure, it will be added to the root of structure when coverage is generated.
+
+> Note: Categories(branches, not leaf nodes) in such structure could contain HTML markup. Using HTML markup in requirement string is also possible, it will be properly rendered but might be uncomfortable to use in test specs.
 
 ### project.requirement()
 
