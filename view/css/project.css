@@ -27,6 +27,14 @@ table.project th.spec-name {
   width: 120px;
 }
 
+table.project th.requirement[colspan="1"] {
+  width: 120px;
+}
+
+table.project th.requirement[colspan="1"]:last-of-type {
+  width: 200px;
+}
+
 table.project th,
 table.project td {
   height: 24px;
