@@ -21,7 +21,7 @@ const links = {
   getRefreshLink: () => "/refresh",
 };
 
-const serve = async (targetDirs, port, useHttps = true) => {
+const serve = async (targetDirs, port, useHttps = true, projectTableType = 'default') => {
   let state = await readCoverage(targetDirs);
   let totals = calculateTotals(state);
 
@@ -55,7 +55,7 @@ const serve = async (targetDirs, port, useHttps = true) => {
       return;
     }
 
-    const content = renderFile(file, state, links);
+    const content = renderFile(file, state, links, projectTableType);
 
     ctx.response.body = pageTemplate({
       pageTitle: filePath,
@@ -88,7 +88,7 @@ const serve = async (targetDirs, port, useHttps = true) => {
       return;
     }
 
-    const content = renderProject(project, state, links);
+    const content = renderProject(project, state, links, projectTableType);
 
     ctx.response.body = pageTemplate({
       pageTitle: projectId,

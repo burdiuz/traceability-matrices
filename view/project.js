@@ -44,6 +44,52 @@ table.project
   { self: true }
 );
 
+const projectCompactTemplate = compile(
+  `
+table.project.compact
+
+  if self.projectDescription
+    tr
+      td.project-description(colspan=self.totalSpecCount + 2) !{self.projectDescription}
+
+  //- Header Rows
+  tr.file-headers
+    th.project-title(colspan=1, rowspan=self.projectHeaders.length ? 1 : 2) #{self.projectTitle} (#{self.coveredRequirements} / #{self.totalRequirements})
+    th.spec-count(rowspan='2') Spec count
+    each file in self.fileHeaders
+      th.file-name(colspan=file.colspan, title=file.title) #{file.name}
+  tr.specs-headers
+    if self.projectHeaders.length
+      - var header = self.projectHeaders[self.projectHeaders.length - 1];
+      th.header(title=header) #{header}
+    each spec in self.specHeaders
+      th.spec-name(title=spec.title)
+        span.spec-name-text #{spec.name}
+
+  //- Data Rows
+  each row, index in self.dataRows
+    - var dataHeaderCols = self.dataHeaderRows[index];
+    each dataHeader, headerIndex in dataHeaderCols
+      if headerIndex < dataHeaderCols.length - 1
+        tr.category-row
+          th(colspan=self.totalSpecCount + 2, class=\`category category-level-\${dataHeader.depth} \${dataHeader.class || ''}\`, title=dataHeader.title)
+            span.category-text !{dataHeader.name}
+      else
+        tr(class=\`result \${row.class}\`)
+          th(colspan=1, rowspan=1, class=\`requirement requirement-compact requirement-level-\${dataHeader.depth} \${dataHeader.class || ''}\`, title=dataHeader.title)
+            span.requirement-text !{dataHeader.name}
+          each data in row.cells
+            td(title=data.title, class=\`cell \${data.class || ''}\`) 
+              span.cell-text #{data.name}
+
+  //- Totals
+  tr.totals
+    td Project Coverage
+    td(colspan=self.totalSpecCount + 1) #{self.coveredRequirements} / #{self.totalRequirements}
+`,
+  { self: true }
+);
+
 /**
  *
  * @param {import("../reader/coverage-records").Project} param0
@@ -129,6 +175,7 @@ const buildVerticalHeaders = (project) => {
   const build = (requirement, depth) => {
     const cell = {
       name: requirement.title,
+      depth,
 
       // if title contains HTML -- strip tags
       title: requirement.title.replace(/<\/?[^>]+?>/gi, ""),
@@ -219,7 +266,7 @@ const buildDataRows = (vertical, horizontal) => {
  * @param {import("../reader/coverage-records").Project} project
  * @param {import("../reader/reader").ReadCoverageResult} state
  */
-const renderProject = (project, state, links) => {
+const renderProject = (project, state, links, type) => {
   /*
    * build headers
    * horizontal for specs
@@ -238,7 +285,9 @@ const renderProject = (project, state, links) => {
     totalSpecCount,
   } = buildDataRows(vertical, horizontal);
 
-  const tableHtml = projectTableTemplate({
+  const renderer = type === 'compact' ? projectCompactTemplate : projectTableTemplate;
+
+  const tableHtml = renderer({
     // +1 for spec counts column
     requirementsDepth: project.depth,
     projectTitle: project.title,

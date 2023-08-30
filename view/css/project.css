@@ -13,6 +13,11 @@ table.project tr.totals {
   font-weight: bold;
 }
 
+table.project.compact th.project-title {
+  width: 300px;
+  min-width: 300px;
+}
+
 table.project th {
   font-weight: normal;
 }
@@ -78,4 +83,43 @@ tr.result:nth-child(odd) th:not([rowspan]) {
 
 tr.totals td:first-child {
   text-align: right;
+}
+
+table.project.compact th.requirement,
+table.project.compact th.category {
+  text-align: left;
+}
+
+table.project.compact th.category {
+}
+
+table.project.compact th.category-level-0 {
+  background-color: #666;
+  color: #fff;
+}
+
+table.project.compact th.category-level-1,
+table.project.compact th.requirement-level-1 {
+  padding-left: 16px;
+}
+
+table.project.compact th.category-level-2,
+table.project.compact th.requirement-level-2 {
+  padding-left: 32px;
+}
+
+table.project.compact th.category-level-3,
+table.project.compact th.requirement-level-3 {
+  padding-left: 48px;
+}
+
+table.project.compact th.category-level-4,
+table.project.compact th.requirement-level-4 {
+  padding-left: 64px;
+}
+table.project.compact th.category-level-1,
+table.project.compact th.category-level-2,
+table.project.compact th.category-level-3,
+table.project.compact th.category-level-4 {
+  font-weight: bold;
 }

@@ -37,7 +37,7 @@ const createStaticHtmlWriter =
     );
   };
 
-const generateStatic = async (targetDirs, outputDir) => {
+const generateStatic = async (targetDirs, outputDir, projectTableType) => {
   const state = await readCoverage(targetDirs);
   const totals = calculateTotals(state);
   const writeHtml = createStaticHtmlWriter(outputDir, state, totals);
@@ -55,7 +55,7 @@ const generateStatic = async (targetDirs, outputDir) => {
         getLinks(".").getFileLink(filePath),
         "..",
         filePath,
-        (state, links) => renderFile(file, state, links)
+        (state, links) => renderFile(file, state, links, projectTableType)
       )
     )
   );
@@ -75,7 +75,7 @@ const generateStatic = async (targetDirs, outputDir) => {
         getLinks(".").getProjectLink(projectTitle),
         "..",
         projectTitle,
-        (state, links) => renderProject(project, state, links)
+        (state, links) => renderProject(project, state, links, projectTableType)
       )
     )
   );

@@ -1,4 +1,5 @@
 # @actualwave/traceability-matrices
+
 Integrate requirements into e2e/integration test code and generate traceability matrices for your project. Currently this project has an adapter to work with [Cypress](https://www.cypress.io/) tests.
 
 ![One file project](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/project_a.png?raw=true)
@@ -61,6 +62,7 @@ Also, it might be useful to add commands to package.json
     "tm:generate": "traceability-matrices generate --target-dir=cypress/coverage --output-dir=coverage-static"
   },
 ```
+
 calling `npm run tm:serve` will start local HTTP server with coveragereports and `npm run tm:generate` will generate HTML reports into `xcoverage-static` folder.
 
 ## Commands
@@ -75,11 +77,12 @@ Parameters:
 - `--target-dir` - required, path to directory with coverage reports
 - `--port` - port for HTTP/S server, 8477 by default
 - `--https` - set to "true"(`--https=true`) to start HTTPS server, by default starts HTTP server
+- `--compact` - optional, uses compact variant of HTML table, categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering projects with deep structures.
 
 Example:
 
 ```
-traceability-matrices serve --target-dir=cypress/coverage --https=true
+traceability-matrices serve --target-dir=cypress/coverage --https=true --compact=true
 ```
 
 ### traceability-matrices generate
@@ -89,6 +92,7 @@ Parameters:
 
 - `--target-dir` - required, path to directory with coverage reports.
 - `--output-dir` - required, path to folder where generated HTML files should be stored
+- `--compact` - optional, uses compact variant of HTML table, categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering projects with deep structures.
 
 Example:
 
@@ -112,6 +116,7 @@ traceability-matrices threshold --target-dir=cypress/coverage --total=80 --per-p
 ```
 
 ### traceability-matrices stats
+
 Outputs coverage information per project with requirements.
 
 Example:
@@ -143,13 +148,18 @@ import { createProject } from "@actualwave/traceability-matrices/cypress";
 
 const project = createProject("My Project");
 ```
+
 `createProject(projectTitle: string, projectDescription?: string)` accepts project title and optionally description. Project titles must be unique strings. Project description could be an HTML string, it will display on top of project coverage table and is suitable for placing various project links and other useful information.
+
 ```ts
 import { createProject } from "@actualwave/traceability-matrices/cypress";
 
-const project = createProject("My Project", `
+const project = createProject(
+  "My Project",
+  `
 <h1>Useful information</1>
-<a href="https://react.dev/">Learn React</a>`);
+<a href="https://react.dev/">Learn React</a>`
+);
 ```
 
 Created `project` provides methods to match test specs with project requriements and genrates test records that will be stored in a JSON file once test run is finished.
@@ -167,6 +177,7 @@ it("should do something according to requirement #1", () => {
   expect(something).toEqual(somethingElse);
 });
 ```
+
 > Note: To properly match requirement string with project structure requirement must be a unique string within its project.
 
 After running this test, coverage will contain a record that spec `should do something according to requirement #1` tests `requirement #1` requirement. One spec may contain multiple requriements and traces could contain expectations or be nested.
@@ -253,6 +264,8 @@ it("should do something according to requirement #1", () => {
 
 it will be matched to leaf node of structure. If requirement not found in structure, it will be added to the root of structure when coverage is generated.
 
+Without structure containing all project requirements it will have 100% coverage because there will be only requirements added from traces placed in specs(which are already marked as covered). Having structure with all project requirements allows proper coverage calculation. For coverage calculation it does not matter(purely visual benefit) if structure is flat or organised into categories.
+
 > Note: Categories(branches, not leaf nodes) in such structure could contain HTML markup. Using HTML markup in requirement string is also possible, it will be properly rendered but might be uncomfortable to use in test specs.
 
 ### project.requirement()
@@ -294,20 +307,24 @@ project.structure({
   },
 });
 ```
+
 With structure tree optionally list of table headers could be provided, they will be used to render HTML table in the report
 
 ```js
-project.structure({
-  High: {
-    General: {
-      "PRD I": {
-        "requirement #1": {},
-        "requirement #2": {},
-        "requirement #3": {},
+project.structure(
+  {
+    High: {
+      General: {
+        "PRD I": {
+          "requirement #1": {},
+          "requirement #2": {},
+          "requirement #3": {},
+        },
       },
     },
   },
-}, ['Priority', 'Category', 'Requirement']);
+  ["Priority", "Category", "Requirement"]
+);
 ```
 
 If test will contain a trace to category, that record will be added as a leaf node to the root of the structure.
@@ -323,7 +340,7 @@ If test will contain a trace to category, that record will be added as a leaf no
 
 ### project.headers()
 
-Allows to specify list of HTML table headers
+Allows to specify list of HTML table headers. In compact mode only last header is used.
 
 ### project.clone()
 

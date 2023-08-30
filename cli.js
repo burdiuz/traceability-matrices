@@ -65,11 +65,17 @@ targetDirs = targetDirs.map((target) => {
 // TM char codes 84 and 77
 const DEFAULT_PORT = 8477;
 
+let projectTableType = "default";
+
+if (String(args.compact) === "true") {
+  projectTableType = "compact";
+}
+
 switch (command) {
   case "serve":
     {
       /**
-       * serve --target-dir= --port= --https=true
+       * serve --target-dir= --port= --https=true --compact=true
        */
       const port = args.port ? parseInt(String(args.port), 10) : DEFAULT_PORT;
       const useHttps = String(args.https) === "true";
@@ -80,7 +86,7 @@ switch (command) {
 
       const { serve } = require("./commands/serve.js");
 
-      serve(targetDirs, port, useHttps).then(() => {
+      serve(targetDirs, port, useHttps, projectTableType).then(() => {
         import("open").then(({ default: open }) =>
           open(
             useHttps ? `https://localhost:${port}` : `http://localhost:${port}`
@@ -92,7 +98,7 @@ switch (command) {
   case "generate":
     {
       /**
-       * generate --target-dir= --output-dir=
+       * generate --target-dir= --output-dir= --compact=true
        */
       const outputDir = path.resolve(process.cwd(), String(args["output-dir"]));
 
@@ -110,39 +116,39 @@ switch (command) {
 
       const { generateStatic } = require("./commands/generate-static.js");
 
-      generateStatic(targetDirs, outputDir);
+      generateStatic(targetDirs, outputDir, projectTableType);
     }
     break;
-    case "threshold":
-      {
-        // threshold --target-dir= --total=80 --per-project=40
-        const total =
-          args["total"] === undefined ? 100 : parseInt(args["total"], 10);
-        const perProject =
-          args["per-project"] === undefined
-            ? 100
-            : parseInt(args["per-project"], 10);
-  
-        if (isNaN(total) || isNaN(perProject)) {
-          exitWithError(
-            "Coverage thresholds should be positive integer values between 0 and 100."
-          );
-        }
-  
-        const { threshold } = require("./commands/threshold.js");
-  
-        threshold(targetDirs, total, perProject);
+  case "threshold":
+    {
+      // threshold --target-dir= --total=80 --per-project=40
+      const total =
+        args["total"] === undefined ? 100 : parseInt(args["total"], 10);
+      const perProject =
+        args["per-project"] === undefined
+          ? 100
+          : parseInt(args["per-project"], 10);
+
+      if (isNaN(total) || isNaN(perProject)) {
+        exitWithError(
+          "Coverage thresholds should be positive integer values between 0 and 100."
+        );
       }
-      break;
-      case "stats":
-        {
-          // stats --target-dir=
-    
-          const { stats } = require("./commands/stats.js");
-    
-          stats(targetDirs);
-        }
-        break;
+
+      const { threshold } = require("./commands/threshold.js");
+
+      threshold(targetDirs, total, perProject);
+    }
+    break;
+  case "stats":
+    {
+      // stats --target-dir=
+
+      const { stats } = require("./commands/stats.js");
+
+      stats(targetDirs);
+    }
+    break;
   case "help":
     // TODO
     break;
