@@ -1,3 +1,40 @@
+.project-categories {
+  position: relative;
+  margin: 16px;
+}
+
+.project-categories .switch {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  appearance: none;
+  max-width: 100px;
+  margin: 0;
+}
+
+.project-categories .switch:not(:checked) + .category-listing-root {
+  display: none;
+}
+
+.project-categories .category-listing-root {
+  margin-top: 16px;
+}
+
+.project-categories li a {
+  text-decoration: none;
+}
+
+.project-categories li a:hover {
+  text-decoration: underline;
+}
+
+.project-categories li span {
+  white-space: nowrap;
+}
+
 table.project {
   border-collapse: collapse;
   background-color: #fff;
@@ -24,8 +61,11 @@ table.project th {
 
 table.project th.file-name {
   background-color: #666;
-  color: #fff;
   padding: 0 16px;
+}
+
+table.project th.file-name a {
+  color: #fff;
 }
 
 table.project th.spec-name {
@@ -85,6 +125,15 @@ tr.totals td:first-child {
   text-align: right;
 }
 
+table.project:not(.compact) th.category {
+  vertical-align: top;
+}
+
+table.project:not(.compact) th.category .requirement-text {
+  display: block;
+  padding-top: 6px;
+}
+
 table.project.compact th.requirement,
 table.project.compact th.category {
   text-align: left;
@@ -95,6 +144,9 @@ table.project.compact th.category {
 
 table.project.compact th.category-level-0 {
   background-color: #666;
+}
+
+table.project.compact th.category-level-0 a {
   color: #fff;
 }
 

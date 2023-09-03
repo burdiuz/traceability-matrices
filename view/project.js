@@ -15,7 +15,8 @@ table.project
     th.project-title(colspan=self.requirementsDepth, rowspan=self.projectHeaders.length ? 1 : 2) #{self.projectTitle} (#{self.coveredRequirements} / #{self.totalRequirements})
     th.spec-count(rowspan='2') Spec count
     each file in self.fileHeaders
-      th.file-name(colspan=file.colspan, title=file.title) #{file.name}
+      th.file-name(colspan=file.colspan, title=file.title)
+        a(href=self.links.getFileLink(file.path)) #{file.name}
   tr.specs-headers
     if self.projectHeaders.length
       - var index = 0;
@@ -31,7 +32,10 @@ table.project
     tr(class=\`result \${row.class}\`)
       each header in self.dataHeaderRows[index]
         th(colspan=header.colspan, rowspan=header.rowspan, class=\`requirement \${header.class || ''}\`, title=header.title)
-          span.requirement-text !{header.name}
+          if header.category
+            a.requirement-text(id=header.id, name=header.id) !{header.name} (#{header.requirementsCovered} / #{header.requirementsTotal})
+          else
+            span.requirement-text !{header.name}
       each data in row.cells
         td(title=data.title, class=\`cell \${data.class || ''}\`) 
           span.cell-text #{data.name}
@@ -57,7 +61,8 @@ table.project.compact
     th.project-title(colspan=1, rowspan=self.projectHeaders.length ? 1 : 2) #{self.projectTitle} (#{self.coveredRequirements} / #{self.totalRequirements})
     th.spec-count(rowspan='2') Spec count
     each file in self.fileHeaders
-      th.file-name(colspan=file.colspan, title=file.title) #{file.name}
+      th.file-name(colspan=file.colspan, title=file.title) 
+        a(href=self.links.getFileLink(file.path)) #{file.name}
   tr.specs-headers
     if self.projectHeaders.length
       - var header = self.projectHeaders[self.projectHeaders.length - 1];
@@ -73,7 +78,7 @@ table.project.compact
       if headerIndex < dataHeaderCols.length - 1
         tr.category-row
           th(colspan=self.totalSpecCount + 2, class=\`category category-level-\${dataHeader.depth} \${dataHeader.class || ''}\`, title=dataHeader.title)
-            span.category-text !{dataHeader.name}
+            a.category-text(id=dataHeader.id, name=dataHeader.id) !{dataHeader.name} (#{dataHeader.requirementsCovered} / #{dataHeader.requirementsTotal})
       else
         tr(class=\`result \${row.class}\`)
           th(colspan=1, rowspan=1, class=\`requirement requirement-compact requirement-level-\${dataHeader.depth} \${dataHeader.class || ''}\`, title=dataHeader.title)
@@ -90,21 +95,47 @@ table.project.compact
   { self: true }
 );
 
+const projectCategoriesTemplate = compile(
+  `
+mixin category(list, listClass)
+  ul(class=\`category-listing \${listClass}\`)
+    each cat in list
+      li.category-listing-item
+        a(href=\`\${self.categoryLinkBase}#\${cat.id}\`) !{cat.name}
+        span       (#{cat.requirementsCovered} / #{cat.requirementsTotal})
+        +category(cat.categories, '')
+
+div.project-categories
+  a(href='') Project Categories
+  input.switch(type="checkbox")
+  +category(self.categories, 'category-listing-root')
+`,
+  { self: true }
+);
+
 /**
  *
  * @param {import("../reader/coverage-records").Project} param0
  * @returns
  */
-const buildHorizontalHeaders = ({ files }) => {
+const buildHorizontalHeaders = ({ files }, globalFiles) => {
   const specs = [];
   const filesRow = [];
   const specsRow = [];
 
+  const filePaths = Object.values(globalFiles).reduce(
+    (res, { path, id }) => ({ ...res, [path]: id }),
+    {}
+  );
+
   // [path, records]
   Object.entries(files)
-    .map(([path, records]) => [basename(path, ".json"), records])
-    .sort(([path1], [path2]) => (path1 < path2 ? -1 : 1))
-    .forEach(([fileName, records]) => {
+    .map(([path, records]) => [
+      { path: filePaths[path], name: basename(path, ".json") },
+      records,
+    ])
+    .sort(([{ name: a }], [{ name: b }]) => (a < b ? -1 : 1))
+    .forEach(([{ path, name }, records]) => {
       const fileSpecsObj = Object.values(records).reduce(
         (result, specs) =>
           specs.reduce((result, spec) => {
@@ -122,9 +153,10 @@ const buildHorizontalHeaders = ({ files }) => {
 
       // add cell for file names row
       filesRow.push({
-        name: fileName,
+        path,
+        name: name,
         // TODO remove cypress coverage path part
-        title: fileName,
+        title: name,
         colspan: specList.length,
       });
 
@@ -154,7 +186,9 @@ const buildHorizontalHeaders = ({ files }) => {
 const buildVerticalHeaders = (project) => {
   const { depth: maxDepth, structure } = project;
 
-  const buildChildren = (children, depth) => {
+  const buildChildren = (children, categories = [], depth, path = "") => {
+    let requirementsTotal = 0;
+    let requirementsCovered = 0;
     const childReqs = [];
     const childRows = [];
 
@@ -163,19 +197,34 @@ const buildVerticalHeaders = (project) => {
       .forEach(([title, children]) => {
         const child = build(
           { title, children, specs: project.records[title] || [] },
-          depth
+          categories,
+          depth,
+          path
         );
+
+        requirementsCovered += child.requirementsCovered;
+        requirementsTotal += child.requirementsTotal;
+
         childReqs.push(...child.requirements);
         childRows.push(...child.rows);
       });
 
-    return { requirements: childReqs, rows: childRows };
+    return {
+      requirements: childReqs,
+      rows: childRows,
+      categories,
+      requirementsCovered,
+      requirementsTotal,
+    };
   };
 
-  const build = (requirement, depth) => {
+  const build = (requirement, categories, depth, path = "") => {
     const cell = {
       name: requirement.title,
       depth,
+      category: false,
+      requirementsTotal: 0,
+      requirementsCovered: 0,
 
       // if title contains HTML -- strip tags
       title: requirement.title.replace(/<\/?[^>]+?>/gi, ""),
@@ -184,18 +233,43 @@ const buildVerticalHeaders = (project) => {
     };
 
     if (isPopulated(requirement.children)) {
-      const children = buildChildren(requirement.children, depth + 1);
+      categories.push(cell);
+      cell.category = true;
+      cell.id = `${path}/${requirement.title.replace(/[^a-z0-9]+/gi, "_")}`;
+      const children = buildChildren(
+        requirement.children,
+        [],
+        depth + 1,
+        cell.id
+      );
       cell.rowspan = children.rows.length;
+      cell.class = "category";
+
+      cell.categories = children.categories;
+      cell.requirementsCovered = children.requirementsCovered;
+      cell.requirementsTotal = children.requirementsTotal;
+
       children.rows[0].unshift(cell);
+
       return children;
+    } else {
+      cell.requirementsTotal = project.records[requirement.title] ? 1 : 0;
+      cell.requirementsCovered = project.records[requirement.title]?.length
+        ? 1
+        : 0;
     }
 
     cell.colspan = maxDepth - depth;
 
-    return { requirements: [requirement], rows: [[cell]] };
+    return {
+      requirements: [requirement],
+      rows: [[cell]],
+      requirementsTotal: cell.requirementsTotal,
+      requirementsCovered: cell.requirementsCovered,
+    };
   };
 
-  return buildChildren(structure, 0);
+  return buildChildren(structure, [], 0);
 };
 
 const buildDataRows = (vertical, horizontal) => {
@@ -261,6 +335,15 @@ const buildDataRows = (vertical, horizontal) => {
   return { totalRequirements, coveredRequirements, totalSpecCount, rows };
 };
 
+const renderProjectCategories = (project, state, { getProjectLink }) => {
+  const { categories } = buildVerticalHeaders(project);
+
+  return projectCategoriesTemplate({
+    categories: categories,
+    categoryLinkBase: getProjectLink(project.title),
+  });
+};
+
 /**
  *
  * @param {import("../reader/coverage-records").Project} project
@@ -272,7 +355,7 @@ const renderProject = (project, state, links, type) => {
    * horizontal for specs
    * vertical for requirements
    */
-  const horizontal = buildHorizontalHeaders(project);
+  const horizontal = buildHorizontalHeaders(project, state.files);
   const vertical = buildVerticalHeaders(project);
 
   /*
@@ -285,7 +368,13 @@ const renderProject = (project, state, links, type) => {
     totalSpecCount,
   } = buildDataRows(vertical, horizontal);
 
-  const renderer = type === 'compact' ? projectCompactTemplate : projectTableTemplate;
+  const renderer =
+    type === "compact" ? projectCompactTemplate : projectTableTemplate;
+
+  const categoriesHtml = projectCategoriesTemplate({
+    categories: vertical.categories,
+    categoryLinkBase: "",
+  });
 
   const tableHtml = renderer({
     // +1 for spec counts column
@@ -303,7 +392,11 @@ const renderProject = (project, state, links, type) => {
     links,
   });
 
-  return tableHtml;
+  return `
+${categoriesHtml}
+${tableHtml}
+`;
 };
 
 module.exports.renderProject = renderProject;
+module.exports.renderProjectCategories = renderProjectCategories;

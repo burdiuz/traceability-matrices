@@ -1,16 +1,86 @@
 div.project-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
   background-color: #ddd;
   padding: 8px 16px;
 }
+
 div.project-link.covered {
   background-color: #eee;
 }
 
 div.project-link .title {
   font-size: 150%;
+  white-space: nowrap;
 }
 
 div.project-link .totals {
-  display: inline-block;
-  width: 80px;
+  white-space: nowrap;
+}
+
+div.project-link .totals,
+div.project-link .project-categories,
+div.project-link .project-files {
+  margin-top: 4px;
+}
+
+div.project-link .project-categories a {
+  white-space: nowrap;
+}
+
+div.project-link .project-categories {
+  margin-bottom: 0;
+}
+
+div.project-link .category-listing-root {
+  margin-top: 0;
+}
+
+div.project-link ul {
+  padding-inline-start: 20px;
+}
+
+div.project-link li a {
+  white-space: break-spaces;
+}
+
+.project-files {
+  position: relative;
+}
+
+.project-files a {
+  white-space: nowrap;
+}
+
+.project-files .switch {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  appearance: none;
+  max-width: 70px;
+  margin: 0;
+}
+
+.project-files .switch:not(:checked) + .project-files-list {
+  display: none;
+}
+
+.project-files .project-files-list {
+  margin: 0;
+}
+
+.project-files li a {
+  text-decoration: none;
+}
+
+.project-files li a:hover {
+  text-decoration: underline;
+}
+
+.project-files li span {
+  white-space: nowrap;
 }
