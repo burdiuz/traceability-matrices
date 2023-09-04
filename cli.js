@@ -142,11 +142,13 @@ switch (command) {
     break;
   case "stats":
     {
-      // stats --target-dir=
+      // stats --target-dir= --project=
+
+      const projects = args["project"] || [];
 
       const { stats } = require("./commands/stats.js");
 
-      stats(targetDirs);
+      stats(targetDirs, projects);
     }
     break;
   case "help":

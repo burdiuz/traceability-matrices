@@ -252,14 +252,13 @@ const buildVerticalHeaders = (project) => {
       children.rows[0].unshift(cell);
 
       return children;
-    } else {
-      cell.requirementsTotal = project.records[requirement.title] ? 1 : 0;
-      cell.requirementsCovered = project.records[requirement.title]?.length
-        ? 1
-        : 0;
     }
 
     cell.colspan = maxDepth - depth;
+    cell.requirementsTotal = project.records[requirement.title] ? 1 : 0;
+    cell.requirementsCovered = project.records[requirement.title]?.length
+      ? 1
+      : 0;
 
     return {
       requirements: [requirement],
@@ -397,6 +396,7 @@ ${categoriesHtml}
 ${tableHtml}
 `;
 };
-
+module.exports.buildVerticalHeaders = buildVerticalHeaders;
+module.exports.buildHorizontalHeaders = buildHorizontalHeaders;
 module.exports.renderProject = renderProject;
 module.exports.renderProjectCategories = renderProjectCategories;
