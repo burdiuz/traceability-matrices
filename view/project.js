@@ -33,7 +33,8 @@ table.project
       each header in self.dataHeaderRows[index]
         th(colspan=header.colspan, rowspan=header.rowspan, class=\`requirement \${header.class || ''}\`, title=header.title)
           if header.category
-            a.requirement-text(id=header.id, name=header.id) !{header.name} (#{header.requirementsCovered} / #{header.requirementsTotal})
+            a.requirement-text(id=header.id, name=header.id) !{header.name}  
+              span.category-coverage (#{header.requirementsCovered} / #{header.requirementsTotal})
           else
             span.requirement-text !{header.name}
       each data in row.cells
@@ -45,7 +46,7 @@ table.project
     td(colspan=self.requirementsDepth) Project Coverage
     td(colspan=self.totalSpecCount + 1) #{self.coveredRequirements} / #{self.totalRequirements}
 `,
-  { self: true }
+  { self: true, filename: "pug", basedir: __dirname }
 );
 
 const projectCompactTemplate = compile(
@@ -76,11 +77,15 @@ table.project.compact
     - var dataHeaderCols = self.dataHeaderRows[index];
     each dataHeader, headerIndex in dataHeaderCols
       if headerIndex < dataHeaderCols.length - 1
-        tr.category-row
+        tr.category-row(data-level=dataHeader.depth)
           th(colspan=self.totalSpecCount + 2, class=\`category category-level-\${dataHeader.depth} \${dataHeader.class || ''}\`, title=dataHeader.title)
+            button.toggle-visibility.collapse(onClick='handleCompactCategoryCollapse(this.parentElement.parentElement)', title='Collapse category')
+              include /icons/chevron-down-solid.svg
+            button.toggle-visibility.expand(onClick='handleCompactCategoryExpand(this.parentElement.parentElement)', title='Expand category')
+              include /icons/chevron-up-solid.svg
             a.category-text(id=dataHeader.id, name=dataHeader.id) !{dataHeader.name} (#{dataHeader.requirementsCovered} / #{dataHeader.requirementsTotal})
       else
-        tr(class=\`result \${row.class}\`)
+        tr(class=\`result \${row.class}\`, data-level=dataHeader.depth)
           th(colspan=1, rowspan=1, class=\`requirement requirement-compact requirement-level-\${dataHeader.depth} \${dataHeader.class || ''}\`, title=dataHeader.title)
             span.requirement-text !{dataHeader.name}
           each data in row.cells
@@ -92,10 +97,21 @@ table.project.compact
     td Project Coverage
     td(colspan=self.totalSpecCount + 1) #{self.coveredRequirements} / #{self.totalRequirements}
 `,
-  { self: true }
+  { self: true, filename: "pug", basedir: __dirname }
 );
 
 const projectCategoriesTemplate = compile(
+  `
+div.project-categories
+  a(href='', onClick='event.preventDefault(); handleProjectCategoriesToggleVisibility(this.parentElement)')
+    include /icons/bars-staggered-solid.svg
+    | Project Categories
+  | !{self.categoriesHtml}
+`,
+  { self: true, filename: "pug", basedir: __dirname }
+);
+
+const projectCategoryListTemplate = compile(
   `
 mixin category(list, listClass)
   ul(class=\`category-listing \${listClass}\`)
@@ -105,12 +121,9 @@ mixin category(list, listClass)
         span       (#{cat.requirementsCovered} / #{cat.requirementsTotal})
         +category(cat.categories, '')
 
-div.project-categories
-  a(href='') Project Categories
-  input.switch(type="checkbox")
-  +category(self.categories, 'category-listing-root')
++category(self.categories, 'category-listing-root')
 `,
-  { self: true }
+  { self: true, filename: "pug", basedir: __dirname }
 );
 
 /**
@@ -334,10 +347,20 @@ const buildDataRows = (vertical, horizontal) => {
   return { totalRequirements, coveredRequirements, totalSpecCount, rows };
 };
 
-const renderProjectCategories = (project, state, { getProjectLink }) => {
-  const { categories } = buildVerticalHeaders(project);
+const renderProjectCategories = (project, state, links) => {
+  const categoriesHtml = renderProjectCategoryList(project, state, links);
+
+  console.log(categoriesHtml);
 
   return projectCategoriesTemplate({
+    categoriesHtml,
+  });
+};
+
+const renderProjectCategoryList = (project, state, { getProjectLink }) => {
+  const { categories } = buildVerticalHeaders(project);
+
+  return projectCategoryListTemplate({
     categories: categories,
     categoryLinkBase: getProjectLink(project.title),
   });
@@ -370,9 +393,11 @@ const renderProject = (project, state, links, type) => {
   const renderer =
     type === "compact" ? projectCompactTemplate : projectTableTemplate;
 
-  const categoriesHtml = projectCategoriesTemplate({
-    categories: vertical.categories,
-    categoryLinkBase: "",
+  const categoriesSectionHtml = projectCategoriesTemplate({
+    categoriesHtml: projectCategoryListTemplate({
+      categories: vertical.categories,
+      categoryLinkBase: "",
+    }),
   });
 
   const tableHtml = renderer({
@@ -392,7 +417,7 @@ const renderProject = (project, state, links, type) => {
   });
 
   return `
-${categoriesHtml}
+${categoriesSectionHtml}
 ${tableHtml}
 `;
 };
@@ -400,3 +425,4 @@ module.exports.buildVerticalHeaders = buildVerticalHeaders;
 module.exports.buildHorizontalHeaders = buildHorizontalHeaders;
 module.exports.renderProject = renderProject;
 module.exports.renderProjectCategories = renderProjectCategories;
+module.exports.renderProjectCategoryList = renderProjectCategoryList;

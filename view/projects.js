@@ -1,25 +1,27 @@
 const { compile } = require("pug");
 const { calculateProjectStats } = require("./totals");
-const { renderProjectCategories } = require("./project");
+const { renderProjectCategoryList } = require("./project");
 
 const projectsStructureTemplate = compile(
   `
 div.flex-vertical
   each project in self.list
     div(class= project.covered ? 'project-link covered' : 'project-link')
-      span.totals #{project.requirementsCovered} / #{project.requirementsTotal}
-      a.title(href=self.links.getProjectLink(project.title)) #{project.title}
-      div !{project.renderCategories()}
-      div.project-files
-        a(href="") Project Files
-        input.switch(type="checkbox")
-        ul.project-files-list
-          each file in project.files
-            li
-              a(href=self.links.getFileLink(file.path)) #{file.name}
-              span  (#{file.requirementsCovered} / #{file.requirementsTotal})  
+      div.project-info
+        button.toggle-project-categories(onClick='handleProjectCategoriesToggleVisibility(this.parentElement.parentElement);', title='Show project categories')
+          include /icons/bars-staggered-solid.svg
+        button.toggle-project-files(onClick='handleProjectFilesToggleVisibility(this.parentElement.parentElement)', title='Show files where project related specs are present')
+          include /icons/file-lines-solid.svg
+        span.totals #{project.requirementsCovered} / #{project.requirementsTotal}
+        a.title(href=self.links.getProjectLink(project.title)) #{project.title}
+      | !{project.renderCategories()}
+      ul.project-files-list
+        each file in project.files
+          li
+            a(href=self.links.getFileLink(file.path)) #{file.name}
+            span  (#{file.requirementsCovered} / #{file.requirementsTotal})  
 `,
-  { self: true }
+  { self: true, filename: "pug", basedir: __dirname }
 );
 
 /**
@@ -55,7 +57,7 @@ const renderProjects = (state, links) => {
           requirementsCovered: covered,
         };
       }),
-      renderCategories: () => renderProjectCategories(project, state, links),
+      renderCategories: () => renderProjectCategoryList(project, state, links),
       ...stats,
     };
   });

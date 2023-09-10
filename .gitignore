@@ -14,6 +14,8 @@ coverage_static
 /build
 
 # misc
+cert.pem
+key.pem
 .history
 .DS_Store
 .env.local

@@ -75,18 +75,40 @@ switch (command) {
   case "serve":
     {
       /**
-       * serve --target-dir= --port= --https=true --compact=true
+       * serve --target-dir= --port= --key= --cert= --compact=true
        */
       const port = args.port ? parseInt(String(args.port), 10) : DEFAULT_PORT;
-      const useHttps = String(args.https) === "true";
+      let keyFilePath = (args.key || [])[0];
+      let certFilePath = (args.cert || [])[0];
+      let useHttps = false;
 
       if (Number.isNaN(port)) {
         exitWithError(`Port value "${args.port}" results to NaN.`);
       }
 
+      if(keyFilePath || certFilePath) {
+        if(!keyFilePath || !certFilePath) {
+          exitWithError(`Parameters "--key" and "--cert" are both required for HTTPS server and must point to corresponding files.`);
+        }
+
+        keyFilePath = path.resolve(process.cwd(), keyFilePath);
+
+        if(!keyFilePath || !fs.existsSync(keyFilePath) || !fs.statSync(keyFilePath).isFile()) {
+          exitWithError(`Parameter "--key" must point at file with private key for certificate.`);
+        }
+
+        certFilePath = path.resolve(process.cwd(), certFilePath);
+
+        if(!certFilePath || !fs.existsSync(certFilePath) || !fs.statSync(certFilePath).isFile()) {
+          exitWithError(`Parameter "--cert" must point at file with signed certificate.`);
+        }
+        
+        useHttps = true;
+      }
+
       const { serve } = require("./commands/serve.js");
 
-      serve(targetDirs, port, useHttps, projectTableType).then(() => {
+      serve(targetDirs, port, keyFilePath, certFilePath, projectTableType).then(() => {
         import("open").then(({ default: open }) =>
           open(
             useHttps ? `https://localhost:${port}` : `http://localhost:${port}`

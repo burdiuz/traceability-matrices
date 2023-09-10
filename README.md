@@ -2,6 +2,10 @@
 
 Integrate requirements into e2e/integration test code and generate traceability matrices for your project. Currently this project has an adapter to work with [Cypress](https://www.cypress.io/) tests.
 
+![List of spec files](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/files.png?raw=true)
+
+![List of projects](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/projects.png?raw=true)
+
 ![One file project](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/project_a.png?raw=true)
 
 ![Multi-file project](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/project_c.png?raw=true)
@@ -76,13 +80,19 @@ Parameters:
 
 - `--target-dir` - required, path to directory with coverage reports
 - `--port` - port for HTTP/S server, 8477 by default
-- `--https` - set to "true"(`--https=true`) to start HTTPS server, by default starts HTTP server
+- `--key` and `--cert` - should point at private key and signed certificate files to start HTTPS server, by default starts HTTP server
 - `--compact` - optional, uses compact variant of HTML table, categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering projects with deep structures.
 
 Example:
 
 ```
 traceability-matrices serve --target-dir=cypress/coverage --https=true --compact=true
+```
+![Project compact view](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/compact_view.png?raw=true)
+
+To run HTTPS server provide paths to key and certificate files relative to working directory
+```
+traceability-matrices serve --target-dir=coverage --output-dir=statics --compact=true --key=./key.pem --cert=./cert.pem
 ```
 
 ### traceability-matrices generate
@@ -114,6 +124,7 @@ Example:
 ```
 traceability-matrices threshold --target-dir=cypress/coverage --total=80 --per-project=60
 ```
+![Threshold command output](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/threshold.png?raw=true)
 
 ### traceability-matrices stats
 
@@ -124,6 +135,7 @@ Example:
 ```
 traceability-matrices stats --target-dir=cypress/coverage
 ```
+![Stats command output](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/stats.png?raw=true)
 
 ## Cypress integration
 
@@ -349,3 +361,6 @@ Clone project, creates a new project with same structure and empty test records.
 ### project.valueOf()
 
 Returns internal state of the project
+
+## Links
+For latest version of reporting UI I've used couple free [FontAwesome icons](https://fontawesome.com/).

@@ -1,9 +1,12 @@
 div.project-link {
+  background-color: #ddd;
+  padding: 8px 16px;
+}
+
+div.project-link div.project-info {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  background-color: #ddd;
-  padding: 8px 16px;
 }
 
 div.project-link.covered {
@@ -16,25 +19,25 @@ div.project-link .title {
 }
 
 div.project-link .totals {
+  font-size: 16px;
   white-space: nowrap;
 }
 
-div.project-link .totals,
-div.project-link .project-categories,
-div.project-link .project-files {
-  margin-top: 4px;
-}
-
-div.project-link .project-categories a {
-  white-space: nowrap;
-}
-
-div.project-link .project-categories {
-  margin-bottom: 0;
+div.project-link .totals {
+  margin-top: 2px;
 }
 
 div.project-link .category-listing-root {
-  margin-top: 0;
+  display: none;
+  margin: 0;
+}
+
+div.project-link .category-listing-root.visible {
+  display: inherit;
+}
+
+div.project-link .category-listing-root a {
+  white-space: nowrap;
 }
 
 div.project-link ul {
@@ -45,42 +48,47 @@ div.project-link li a {
   white-space: break-spaces;
 }
 
-.project-files {
-  position: relative;
+div.project-link button.toggle-project-categories,
+div.project-link button.toggle-project-files {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0 -8px;
+  align-self: center;
 }
 
-.project-files a {
+div.project-link button.toggle-project-categories svg {
+  width: 16px;
+  vertical-align: bottom;
+}
+
+div.project-link button.toggle-project-files svg {
+  width: 14px;
+  vertical-align: bottom;
+}
+
+.project-files-list {
+  display: none;
+  margin: 0;
+}
+
+.project-files-list a {
   white-space: nowrap;
 }
 
-.project-files .switch {
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 16px;
-  appearance: none;
-  max-width: 70px;
-  margin: 0;
+.project-files-list.visible {
+  display: inherit;
 }
 
-.project-files .switch:not(:checked) + .project-files-list {
-  display: none;
-}
-
-.project-files .project-files-list {
-  margin: 0;
-}
-
-.project-files li a {
+.project-files-list li a {
   text-decoration: none;
 }
 
-.project-files li a:hover {
+.project-files-list li a:hover {
   text-decoration: underline;
 }
 
-.project-files li span {
+.project-files-list li span {
   white-space: nowrap;
 }

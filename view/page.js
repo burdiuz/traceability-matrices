@@ -12,25 +12,28 @@ html
       include /css/files.css
       include /css/projects.css
       include /css/project.css
-    body
-      div.nav-bar
-        a(href=self.links.getFilesLink()) Files
-        a(href=self.links.getProjectsLink() style="margin-right: auto") Projects
-        span
-          | Projects 
-          strong #{self.totals.projects} 
-          | Files 
-          strong #{self.totals.files} 
-          | Specs 
-          strong #{self.totals.specs} 
-          | Requirements 
-          strong #{self.totals.requirements} 
-          | Coverage 
-          strong #{self.totals.coverage}% 
-        if self.links.getRefreshLink
-          a(href=self.links.getRefreshLink() style="margin-left: auto") Refresh
-        else 
-          span(style="margin-left: auto")
+    script
+      include /js/project.js
+      include /js/projects.js
+  body
+    div.nav-bar
+      a(href=self.links.getFilesLink()) Files
+      a(href=self.links.getProjectsLink() style="margin-right: auto") Projects
+      span
+        | Projects 
+        strong #{self.totals.projects} 
+        | Files 
+        strong #{self.totals.files} 
+        | Specs 
+        strong #{self.totals.specs} 
+        | Requirements 
+        strong #{self.totals.requirements} 
+        | Coverage 
+        strong #{self.totals.coverage}% 
+      if self.links.getRefreshLink
+        a(href=self.links.getRefreshLink() style="margin-left: auto") Refresh
+      else 
+        span(style="margin-left: auto")
   | !{self.content}
 `,
   { self: true, filename: "pug", basedir: __dirname }

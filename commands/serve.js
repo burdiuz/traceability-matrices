@@ -21,7 +21,14 @@ const links = {
   getRefreshLink: () => "/refresh",
 };
 
-const serve = async (targetDirs, port, useHttps = true, projectTableType = 'default') => {
+const serve = async (
+  targetDirs,
+  port,
+  keyFilePath = "",
+  certFilePath = "",
+  projectTableType = "default"
+) => {
+  const useHttps = Boolean(keyFilePath && certFilePath);
   let state = await readCoverage(targetDirs);
   let totals = calculateTotals(state);
 
@@ -119,8 +126,8 @@ const serve = async (targetDirs, port, useHttps = true, projectTableType = 'defa
     https
       .createServer(
         {
-          key: await readFile(resolve(__dirname, "key.pem")),
-          cert: await readFile(resolve(__dirname, "cert.pem")),
+          key: await readFile(keyFilePath),
+          cert: await readFile(certFilePath),
         },
         app.callback()
       )

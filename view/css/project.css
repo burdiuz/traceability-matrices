@@ -1,37 +1,39 @@
 .project-categories {
-  position: relative;
   margin: 16px;
 }
 
-.project-categories .switch {
+.project-categories a {
   cursor: pointer;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 16px;
-  appearance: none;
-  max-width: 100px;
-  margin: 0;
 }
 
-.project-categories .switch:not(:checked) + .category-listing-root {
-  display: none;
+.project-categories a svg {
+  width: 16px;
+  vertical-align: bottom;
+  margin-right: 8px;
 }
 
 .project-categories .category-listing-root {
+  display: none;
+  padding-inline-start: 20px;
+}
+
+.project-categories .category-listing-root.visible {
+  display: inherit;
+}
+
+.category-listing-root {
   margin-top: 16px;
 }
 
-.project-categories li a {
+.category-listing-root li a {
   text-decoration: none;
 }
 
-.project-categories li a:hover {
+.category-listing-root li a:hover {
   text-decoration: underline;
 }
 
-.project-categories li span {
+.category-listing-root li span {
   white-space: nowrap;
 }
 
@@ -104,6 +106,10 @@ table.project th.spec-name {
   text-align: justify;
 }
 
+table.project .category-coverage {
+  white-space: nowrap;
+}
+
 td.cell.covered .cell-text {
   display: block;
   font-size: 0px;
@@ -146,32 +152,64 @@ table.project.compact th.category-level-0 {
   background-color: #666;
 }
 
+table.project.compact th.category-level-0 button.toggle-visibility {
+  fill: #fff;
+}
+
 table.project.compact th.category-level-0 a {
   color: #fff;
 }
 
 table.project.compact th.category-level-1,
 table.project.compact th.requirement-level-1 {
-  padding-left: 16px;
+  padding-left: 20px;
 }
 
 table.project.compact th.category-level-2,
 table.project.compact th.requirement-level-2 {
-  padding-left: 32px;
+  padding-left: 40px;
 }
 
 table.project.compact th.category-level-3,
 table.project.compact th.requirement-level-3 {
-  padding-left: 48px;
+  padding-left: 60px;
 }
 
 table.project.compact th.category-level-4,
 table.project.compact th.requirement-level-4 {
-  padding-left: 64px;
+  padding-left: 80px;
 }
 table.project.compact th.category-level-1,
 table.project.compact th.category-level-2,
 table.project.compact th.category-level-3,
 table.project.compact th.category-level-4 {
   font-weight: bold;
+}
+
+table.project.compact button.toggle-visibility {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+table.project.compact button.toggle-visibility.expand {
+  display: none;
+}
+
+table.project.compact tr.collapsed button.toggle-visibility.expand {
+  display: unset;
+}
+
+table.project.compact tr.collapsed button.toggle-visibility.collapse {
+  display: none;
+}
+
+table.project.compact button.toggle-visibility svg {
+  width: 16px;
+  vertical-align: bottom;
+}
+
+table.project.compact .hidden {
+  display: none;
 }
