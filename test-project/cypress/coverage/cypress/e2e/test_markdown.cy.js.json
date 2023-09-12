@@ -1,0 +1,314 @@
+[
+  {
+    "title": "Project B",
+    "description": "",
+    "structure": {},
+    "headers": [],
+    "records": {
+      "PRD Requirement BEFORE": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement BEFORE EACH": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement A": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement B": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement C": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement AFTER EACH": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement AFTER": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "title": "Project Markdown",
+    "description": "<p>My project description with <a href=\"https://google.com\">HTML</a></p>",
+    "structure": {
+      "Optional Requirement 1": {},
+      "Optional Requirement 2": {},
+      "Optional Requirement 3": {},
+      "High": {
+        "PRD Requirement 1": {},
+        "PRD Requirement 2": {},
+        "PRD Requirement 3": {},
+        "Sub-category \n<a href=\"http://google.com\">with a link</a>": {
+          "Requirement on a side 1": {},
+          "Requirement on a side 2": {},
+          "Requirement on a side 3": {}
+        }
+      },
+      "Medium": {
+        "PRD Requirement 4": {},
+        "PRD Requirement 5": {},
+        "PRD Requirement 6": {}
+      },
+      "Low": {
+        "Requirement 7": {},
+        "Requirement 8": {}
+      }
+    },
+    "headers": [],
+    "records": {
+      "In before each": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display logo",
+          "titlePath": [
+            "React App",
+            "should display logo"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement 1": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display logo",
+          "titlePath": [
+            "React App",
+            "should display logo"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement 2": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display logo",
+          "titlePath": [
+            "React App",
+            "should display logo"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        }
+      ],
+      "PRD Requirement 3": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        },
+        {
+          "filePath": "cypress/e2e/test_markdown.cy.js",
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement 4": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "PRD Requirement 5": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ]
+    }
+  }
+]

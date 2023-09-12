@@ -44,6 +44,15 @@ export type ProjectApi = {
   valueOf: () => Project;
 };
 
+export declare const createEmptyProjectState: (
+  title: String,
+  description?: string
+) => Project;
+
+export declare const registerProject: (project: Project | ProjectApi) => void;
+
+export declare const wrapProjectState: (state: Project) => ProjectApi;
+
 export declare const createProject: (
   projectTitle: string,
   projectDescription?: string

@@ -12,6 +12,7 @@ coverage_static
 
 # production
 /build
+/markdown.js
 
 # misc
 cert.pem

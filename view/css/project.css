@@ -140,6 +140,7 @@ table.project:not(.compact) th.category .requirement-text {
   padding-top: 6px;
 }
 
+table.project th.requirement,
 table.project.compact th.requirement,
 table.project.compact th.category {
   text-align: left;

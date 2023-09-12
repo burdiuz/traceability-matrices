@@ -1,4 +1,53 @@
-const projects = [];
+/**
+ * Storing and assigning a list from global nsmepsace will allow to collect all projects 
+ * of current test run from independent instances of this module.
+ * It might be useful if this file gets bundled with other module and used there, by runtime 
+ * it will br treated as a separate module and without this check it will have own projects
+ * list and might overwrite coverage from other sources for same spec file.
+ * 
+ */
+const projects = (() => {
+  let list = [];
+
+  try {
+    if (typeof global !== "undefined" && global) {
+      list = global.tm_projects || list;
+      global.tm_projects = list;
+    } else if (typeof window !== "undefined" && window) {
+      list = window.tm_projects || list;
+      window.tm_projects = list;
+    }
+  } catch (error) {
+    // global scope is not avialable
+  }
+
+  return list;
+})();
+
+console.log(projects);
+
+const saveProjectInfo = (project) => {
+  const fileName = `${project.title.replace(
+    /[^a-z0-9]/gi,
+    "_"
+  )}_${Date.now()}.project.json`;
+
+  cy.writeFile(
+    `${Cypress.env("TRACE_RECORDS_DATA_DIR")}/${fileName}`,
+    JSON.stringify({ ...project, records: {} }, null, 2)
+  );
+};
+
+const setupSaveHook = (projects, path = Cypress.spec?.relative) => {
+  if (path) {
+    after(() => {
+      cy.writeFile(
+        `${Cypress.env("TRACE_RECORDS_DATA_DIR")}/${path}.json`,
+        JSON.stringify(projects, null, 2)
+      );
+    });
+  }
+};
 
 const addRecordToProject = (project, namePath) => {
   const { title, titlePath } = Cypress.currentTest || {};
@@ -72,17 +121,17 @@ const cloneStructure = (source, target = {}) => {
   return target;
 };
 
-const createProject = (projectTitle, projectDescription = "") => {
-  const project = {
-    title: projectTitle,
-    description: projectDescription,
-    structure: {},
-    headers: [],
-    records: {},
-  };
+const createEmptyProjectState = (projectTitle, projectDescription = "") => ({
+  title: projectTitle,
+  description: projectDescription,
+  structure: {},
+  headers: [],
+  records: {},
+});
 
-  projects.push(project);
+const registerProject = (project) => projects.push(project.valueOf());
 
+const wrapProjectState = (project) => {
   const clone = (projectTitle, projectDescription) => ({
     title: projectTitle,
     description: projectDescription,
@@ -241,14 +290,23 @@ const createProject = (projectTitle, projectDescription = "") => {
   };
 };
 
-after(() => {
-  cy.writeFile(
-    `${Cypress.env("TRACE_RECORDS_DATA_DIR")}/${Cypress.spec.relative}.json`,
-    JSON.stringify(projects, null, 2)
-  );
-});
+const createProject = (projectTitle, projectDescription = "") => {
+  const project = createEmptyProjectState(projectTitle, projectDescription);
 
-module.exports.getStructureBranch = getStructureBranch;
-module.exports.mergeStructure = mergeStructure;
-module.exports.cloneStructure = cloneStructure;
-module.exports.createProject = createProject;
+  registerProject(project);
+
+  return wrapProjectState(project);
+};
+
+setupSaveHook(projects);
+
+export {
+  getStructureBranch,
+  mergeStructure,
+  cloneStructure,
+  createEmptyProjectState,
+  createProject,
+  registerProject,
+  wrapProjectState,
+  setupSaveHook,
+};

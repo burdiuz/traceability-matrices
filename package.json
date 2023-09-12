@@ -5,6 +5,7 @@
   "bin": {
     "traceability-matrices": "./cli.js"
   },
+  "browser": "./cypress.js",
   "keywords": [
     "traceability",
     "matrix",
@@ -40,9 +41,18 @@
   "scripts": {
     "certs": "mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "build:parsers": "rollup --config parsers/rollup.config.js"
   },
   "devDependencies": {
-    "jest": "^29.6.3"
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "jest": "^29.6.3",
+    "remark-html": "^15.0.2",
+    "remark-parse": "^10.0.2",
+    "remark-stringify": "^10.0.3",
+    "rollup": "^3.29.1",
+    "unified": "^11.0.3",
+    "unist-util-visit": "^5.0.0"
   }
 }
