@@ -1,4 +1,5 @@
 import {
+  createProject,
   createEmptyProjectState,
   registerProject,
   wrapProjectState,
@@ -102,6 +103,18 @@ const collectData = async (list, parent, ancestors) => {
   }
 };
 
+/**
+ * Parse markdown content string and create a prioject from it.
+ * The structure of markdown file is following:
+ * # Project title
+ * Optional paragraph ormultiple paragraphs of project description, may contain links
+ * 
+ * ## Category
+ * - list of requirements
+ * 
+ * @param {string} content String of markdown content
+ * @returns 
+ */
 export const parseMarkdownProject = async (content) => {
   const result = await unified().use(remarkParse).parse(content).children;
 
@@ -120,12 +133,9 @@ export const parseMarkdownProject = async (content) => {
 };
 
 /**
- * Since it uses cy.readFile(), it can be secuted only in cypress hooks like before().
+ * Since it uses cy.readFile(), it can be executed only within cypress hooks like before().
  *
- * TODO create an async version of this function, it will return empty project and then merge title/descritpion/structure once it is loaded.
- * This way we will not need to wait and can use before() hook inside of that function.
- *
- * @param {*} path
+ * @param {string} path Path to markdown file from project root
  * @returns
  */
 export const createProjectFromMarkdown = (path) =>
@@ -141,3 +151,35 @@ export const createProjectFromMarkdown = (path) =>
           .catch(reject);
       })
   );
+
+/**
+ * It immediately returns empty project and creates a before() hook which reads markdown file.
+ * Once markdown has been read, its content(title, description, structure) merged
+ * with returned project.
+ *
+ * This way we don't need to wait for a promise or wrap it into lifecycle hooks.
+ *
+ * @param {string} path Path to markdown file from project root
+ * @returns ProjectApi
+ */
+export const createProjectFromMarkdownAsync = (path) => {
+  const project = createProject("");
+
+  before(() => {
+    cy.readFile(path).then(
+      (content) =>
+        new Cypress.Promise((resolve, reject) => {
+          parseMarkdownProject(content)
+            .then((state) => {
+              project.structure().merge(state.structure);
+              project.headers(state.headers);
+              project.valueOf().title = state.title;
+              project.valueOf().description = state.description;
+            })
+            .catch(reject);
+        })
+    );
+  });
+
+  return project;
+};

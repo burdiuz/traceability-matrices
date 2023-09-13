@@ -1,10 +1,10 @@
 /**
- * Storing and assigning a list from global nsmepsace will allow to collect all projects 
+ * Storing and assigning a list from global nsmepsace will allow to collect all projects
  * of current test run from independent instances of this module.
- * It might be useful if this file gets bundled with other module and used there, by runtime 
+ * It might be useful if this file gets bundled with other module and used there, by runtime
  * it will br treated as a separate module and without this check it will have own projects
  * list and might overwrite coverage from other sources for same spec file.
- * 
+ *
  */
 const projects = (() => {
   let list = [];
@@ -24,8 +24,6 @@ const projects = (() => {
   return list;
 })();
 
-console.log(projects);
-
 const saveProjectInfo = (project) => {
   const fileName = `${project.title.replace(
     /[^a-z0-9]/gi,
@@ -38,15 +36,15 @@ const saveProjectInfo = (project) => {
   );
 };
 
-const setupSaveHook = (projects, path = Cypress.spec?.relative) => {
-  if (path) {
-    after(() => {
-      cy.writeFile(
-        `${Cypress.env("TRACE_RECORDS_DATA_DIR")}/${path}.json`,
-        JSON.stringify(projects, null, 2)
-      );
-    });
-  }
+const setupSaveHook = (projects, path = "") => {
+  after(() => {
+    const filePath = path || Cypress.spec.relative;
+
+    cy.writeFile(
+      `${Cypress.env("TRACE_RECORDS_DATA_DIR")}/${filePath}.json`,
+      JSON.stringify(projects, null, 2)
+    );
+  });
 };
 
 const addRecordToProject = (project, namePath) => {

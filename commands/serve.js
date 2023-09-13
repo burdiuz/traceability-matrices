@@ -36,7 +36,7 @@ const serve = async (
   const router = new Router();
 
   router.get("/", (ctx, next) => {
-    ctx.redirect("/files");
+    ctx.redirect("/projects");
   });
 
   router.get("/files", (ctx, next) => {

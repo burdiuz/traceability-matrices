@@ -1,6 +1,6 @@
 {
   "name": "@actualwave/traceability-matrices",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "types": "cypress.d.ts",
   "bin": {
     "traceability-matrices": "./cli.js"
@@ -42,7 +42,8 @@
     "certs": "mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1",
     "test": "jest",
     "test:watch": "jest --watch",
-    "build:parsers": "rollup --config parsers/rollup.config.js"
+    "build:parsers": "rollup --config parsers/rollup.config.js",
+    "prepublish": "npm run build:parsers"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.4",
