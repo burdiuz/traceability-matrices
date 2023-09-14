@@ -59,8 +59,7 @@ const collectData = async (list, parent, ancestors) => {
       {
         const [nameNodes, children] = splitItems(list);
         const name = await toHtml([...item.children, ...nameNodes]);
-
-        ancestors = ancestors.slice(0, item.depth);
+        ancestors = ancestors.slice(0, item.depth - 1);
 
         // 1st level title is a title of the project, structure starts with 2nd level
         parent = ancestors[item.depth - 2];
@@ -108,12 +107,12 @@ const collectData = async (list, parent, ancestors) => {
  * The structure of markdown file is following:
  * # Project title
  * Optional paragraph ormultiple paragraphs of project description, may contain links
- * 
+ *
  * ## Category
  * - list of requirements
- * 
+ *
  * @param {string} content String of markdown content
- * @returns 
+ * @returns
  */
 export const parseMarkdownProject = async (content) => {
   const result = await unified().use(remarkParse).parse(content).children;

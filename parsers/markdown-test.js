@@ -1,13 +1,24 @@
 const fs = require("fs");
 
+const createEmptyProjectState = (projectTitle, projectDescription = "") => ({
+  title: projectTitle,
+  description: projectDescription,
+  structure: {},
+  headers: [],
+  records: {},
+});
+
 (async () => {
   const { unified } = await import("unified");
   const { default: remarkParse } = await import("remark-parse");
   const { default: remarkHtml } = await import("remark-html");
   const { default: remarkStringify } = await import("remark-stringify");
+  // const { createEmptyProjectState } = await import("../cypress.js");
   const { visit } = await import("unist-util-visit");
 
   const content = fs.readFileSync("./project.md");
+
+  // ---------------------- markdown.js parser code starts
 
   const isStructurePart = ({ type }, types = ["heading", "list"]) =>
     types.includes(type);
@@ -60,8 +71,7 @@ const fs = require("fs");
         {
           const [nameNodes, children] = splitItems(list);
           const name = await toHtml([...item.children, ...nameNodes]);
-
-          ancestors = ancestors.slice(0, item.depth);
+          ancestors = ancestors.slice(0, item.depth - 1);
 
           // 1st level title is a title of the project, structure starts with 2nd level
           parent = ancestors[item.depth - 2];
@@ -107,29 +117,38 @@ const fs = require("fs");
     }
   };
 
+  /**
+   * Parse markdown content string and create a prioject from it.
+   * The structure of markdown file is following:
+   * # Project title
+   * Optional paragraph ormultiple paragraphs of project description, may contain links
+   *
+   * ## Category
+   * - list of requirements
+   *
+   * @param {string} content String of markdown content
+   * @returns
+   */
+  const parseMarkdownProject = async (content) => {
+    const result = await unified().use(remarkParse).parse(content).children;
 
+    const project = createEmptyProjectState("");
 
+    if (result[0].type === "heading" || result[0].type === "paragraph") {
+      project.title = await toHtml(result.shift().children);
+    }
 
+    const [description, struct] = splitItems(result);
+    project.description = await toHtml(description);
 
+    await collectData(struct, project.structure, [project.structure]);
 
-  const result = await unified().use(remarkParse).parse(content).children;
-
-  const project = {
-    title: "",
-    description: "",
-    structure: {},
-    headers: [],
-    records: [],
+    return project;
   };
 
-  if (result[0].type === "heading" || result[0].type === "paragraph") {
-    project.title = await toHtml(result.shift().children);
-  }
+  // ---------------------- markdown.js parser code ends
 
-  const [description, struct] = splitItems(result);
-  project.description = await toHtml(description);
-
-  await collectData(struct, project.structure, [project.structure]);
+  const project = await parseMarkdownProject(content);
 
   console.log(project.structure);
 })();
