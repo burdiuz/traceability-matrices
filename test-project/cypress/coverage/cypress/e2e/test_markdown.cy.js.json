@@ -114,20 +114,20 @@
       "High": {
         "PRD Requirement 1": {},
         "PRD Requirement 2": {},
-        "PRD Requirement 3": {},
-        "Sub-category \n<a href=\"http://google.com\">with a link</a>": {
-          "Requirement on a side 1": {},
-          "Requirement on a side 2": {},
-          "Requirement on a side 3": {}
-        }
+        "PRD Requirement 3": {}
       },
       "Medium": {
         "PRD Requirement 4": {},
         "PRD Requirement 5": {},
-        "PRD Requirement 6": {}
+        "PRD Requirement 6": {},
+        "Sub-category \n<a href=\"http://google.com\">with a link</a>": {
+          "Requirement on a side with & \" ' entities 1": {},
+          "Requirement on a side 2": {},
+          "Requirement on a side 3": {}
+        }
       },
       "Low": {
-        "Requirement 7": {},
+        "Requirement with & \" ' < > entities 7": {},
         "Requirement 8": {}
       }
     },
@@ -287,6 +287,17 @@
           ]
         }
       ],
+      "Requirement on a side with & \" ' entities 1": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
       "PRD Requirement 4": [
         {
           "title": "should have a react offsite link",
@@ -299,6 +310,17 @@
         }
       ],
       "PRD Requirement 5": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ],
+      "Requirement with & \" ' < > entities 7": [
         {
           "title": "should have a react offsite link",
           "titlePath": [

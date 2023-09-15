@@ -50,6 +50,7 @@ describe("React App", () => {
     context("Links", () => {
       beforeEach(() => {
         Project2.trace("PRD Requirement BEFORE EACH");
+        ProjectMarkdown.trace("Requirement on a side with & \" ' entities 1");
       });
 
       before(() => {
@@ -58,6 +59,7 @@ describe("React App", () => {
 
       after(() => {
         Project2.trace("PRD Requirement AFTER");
+        ProjectMarkdown.trace("Requirement with & \" ' < > entities 7");
       });
 
       afterEach(() => {

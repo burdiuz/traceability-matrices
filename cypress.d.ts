@@ -42,6 +42,25 @@ export type ProjectApi = {
     trace: () => void;
   };
   valueOf: () => Project;
+  clone: () => ProjectApi;
+  setTraceToRequirementMatcher: (
+    matcher: (
+      /**
+       * Traced requirment or path to requirement([category1, category2, requirement])
+       */
+      nameOrPath: string | string[],
+      /**
+       * Hash of requirements where 
+       *  - property name is a requirement
+       *  - property value is a list of ancestor categories
+       */
+      requirements: Record<string, string[]>,
+      /**
+       * Project structure
+       */
+      structure: Record<string, object>
+    ) => string | string[]
+  ) => void;
 };
 
 export declare const createEmptyProjectState: (

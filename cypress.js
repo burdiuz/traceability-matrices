@@ -119,6 +119,28 @@ const cloneStructure = (source, target = {}) => {
   return target;
 };
 
+const readStructureRequirements = (structure) => {
+  const records = {};
+
+  const isEmpty = (structure, categories) => {
+    let empty = true;
+
+    Object.entries(structure).forEach(([title, children]) => {
+      empty = false;
+
+      if (isEmpty(children, [...categories, title])) {
+        records[title] = categories;
+      }
+    });
+
+    return empty;
+  };
+
+  isEmpty(structure, []);
+
+  return records;
+};
+
 const createEmptyProjectState = (projectTitle, projectDescription = "") => ({
   title: projectTitle,
   description: projectDescription,
@@ -130,7 +152,13 @@ const createEmptyProjectState = (projectTitle, projectDescription = "") => ({
 const registerProject = (project) => projects.push(project.valueOf());
 
 const wrapProjectState = (project) => {
-  const clone = (projectTitle, projectDescription) => ({
+  let traceToRequirementMatcher;
+
+  const setTraceToRequirementMatcher = (matcher) => {
+    traceToRequirementMatcher = matcher;
+  };
+
+  const clone = (projectTitle, projectDescription) => wrapProjectState({
     title: projectTitle,
     description: projectDescription,
     structure: cloneStructure(project.structure),
@@ -224,6 +252,14 @@ const wrapProjectState = (project) => {
   };
 
   const trace = (nameOrPath, chainFn) => {
+    if (traceToRequirementMatcher) {
+      nameOrPath = traceToRequirementMatcher(
+        nameOrPath,
+        readStructureRequirements(project.structure),
+        project.structure
+      );
+    }
+
     addRecordToProject(
       project,
       typeof nameOrPath === "string" ? [nameOrPath] : nameOrPath
@@ -235,6 +271,14 @@ const wrapProjectState = (project) => {
   };
 
   const requirement = (...namePath) => {
+    if (traceToRequirementMatcher) {
+      namePath = traceToRequirementMatcher(
+        namePath,
+        readStructureRequirements(project.structure),
+        project.structure
+      );
+    }
+
     // TODO skip adding nested calls to records
     const describeFn = (...args) => {
       // last argument should be callback function
@@ -285,6 +329,7 @@ const wrapProjectState = (project) => {
     trace,
     requirement,
     clone,
+    setTraceToRequirementMatcher,
   };
 };
 

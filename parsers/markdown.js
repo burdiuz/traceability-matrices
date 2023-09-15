@@ -44,8 +44,30 @@ const createRoot = (
   },
 });
 
-const toHtml = (list) =>
-  unified().use(remarkHtml).stringify(createRoot(list)).trim();
+const entities = [
+  ["&lt;", `<`],
+  ["&#x3C;", `<`],
+  ["&gt;", `>`],
+  ["&amp;", `&`],
+  ["&#x26;", `&`],
+  ["&quot;", `"`],
+  ["&#39;", `'`],
+];
+
+const toHtml = (list) => {
+  const string = unified().use(remarkHtml).stringify(createRoot(list)).trim();
+
+  if (!string.includes("<")) {
+    // This means string does not contain any tags and we should convert HTML entities back to normal
+    // this way user can enter normal symbol in trace instead of using HTML entities
+    return entities.reduce(
+      (result, [entity, symbol]) => result.replace(entity, symbol),
+      string
+    );
+  }
+
+  return string;
+};
 
 const collectData = async (list, parent, ancestors) => {
   if (!list.length) {

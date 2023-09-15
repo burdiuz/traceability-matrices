@@ -1,0 +1,83 @@
+[
+  {
+    "title": "Project Matcher",
+    "description": "",
+    "structure": {
+      "Statics": {
+        "S001 Add header text": {},
+        "S002 Path to App.js should be visible": {},
+        "S003 Add welcome text": {}
+      },
+      "Interactive": {
+        "Redirects": {
+          "High Priority": {
+            "IRH001 Redirect to reactjs.org": {}
+          },
+          "IR001 Link with text \"Learn React\"": {}
+        }
+      },
+      "001 SVG logo preset on the page": {}
+    },
+    "headers": [],
+    "records": {
+      "S001 Add header text": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        }
+      ],
+      "S003 Add welcome text": [
+        {
+          "title": "should display help text",
+          "titlePath": [
+            "React App",
+            "should display help text"
+          ]
+        }
+      ],
+      "S002 Path to App.js should be visible": [
+        {
+          "title": "should display entry point path",
+          "titlePath": [
+            "React App",
+            "should display entry point path"
+          ]
+        }
+      ],
+      "001 SVG logo preset on the page": [
+        {
+          "title": "should display logo",
+          "titlePath": [
+            "React App",
+            "Graphics",
+            "should display logo"
+          ]
+        }
+      ],
+      "IR001 Link with text \"Learn React\"": [
+        {
+          "title": "should have a link with proper text",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "should have a link with proper text"
+          ]
+        }
+      ],
+      "IRH001 Redirect to reactjs.org": [
+        {
+          "title": "should have a react offsite link",
+          "titlePath": [
+            "React App",
+            "Redirects",
+            "Links",
+            "should have a react offsite link"
+          ]
+        }
+      ]
+    }
+  }
+]

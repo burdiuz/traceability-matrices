@@ -18,11 +18,11 @@ My project description with [HTML](https://google.com)
  - PRD Requirement 6
 
 ### Sub-category [with a link](http://google.com)
- - Requirement on a side 1
+ - Requirement on a side with & " ' entities 1
  - Requirement on a side 2
  - Requirement on a side 3
 
 ## Low
 
-- Requirement 7
+- Requirement with & " ' < > entities 7
 - Requirement 8
