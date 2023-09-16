@@ -7,6 +7,7 @@ import {
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkHtml from "remark-html";
+import { parseEntities } from "parse-entities";
 
 const isStructurePart = ({ type }, types = ["heading", "list"]) =>
   types.includes(type);
@@ -44,26 +45,13 @@ const createRoot = (
   },
 });
 
-const entities = [
-  ["&lt;", `<`],
-  ["&#x3C;", `<`],
-  ["&gt;", `>`],
-  ["&amp;", `&`],
-  ["&#x26;", `&`],
-  ["&quot;", `"`],
-  ["&#39;", `'`],
-];
-
 const toHtml = (list) => {
   const string = unified().use(remarkHtml).stringify(createRoot(list)).trim();
 
-  if (!string.includes("<")) {
-    // This means string does not contain any tags and we should convert HTML entities back to normal
-    // this way user can enter normal symbol in trace instead of using HTML entities
-    return entities.reduce(
-      (result, [entity, symbol]) => result.replace(entity, symbol),
-      string
-    );
+  if (!/<[a-z][^>]+>/i.test(string)) {
+    // String does not contain any tags and we should convert HTML entities back to normal
+    // this way user can use normal symbol in trace instead of using HTML entities
+    return parseEntities(string);
   }
 
   return string;
