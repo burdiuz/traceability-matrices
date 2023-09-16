@@ -184,6 +184,7 @@ export const createProjectFromMarkdownAsync = (path) => {
               project.headers(state.headers);
               project.valueOf().title = state.title;
               project.valueOf().description = state.description;
+              resolve(project);
             })
             .catch(reject);
         })

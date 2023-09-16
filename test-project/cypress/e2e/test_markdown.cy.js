@@ -1,9 +1,22 @@
 import { createProject } from "@actualwave/traceability-matrices/cypress";
-import { createProjectFromMarkdown } from "@actualwave/traceability-matrices/markdown";
+import {
+  createProjectFromMarkdown,
+  createProjectFromMarkdownAsync,
+} from "@actualwave/traceability-matrices/markdown";
 
 const Project2 = createProject("Project B");
+/*
+  When loading markdown asynchronously project structure is not available immediately, 
+  until test starts it will be empty.
+*/
+const ProjectMarkdown = createProjectFromMarkdownAsync(
+  "cypress/projects/ProjectMarkdown.md"
+);
 
 describe("React App", () => {
+  /*
+  The other way to create project from markdown is to wait for Markdown parser
+
   let ProjectMarkdown;
 
   before(() => {
@@ -11,6 +24,7 @@ describe("React App", () => {
       ProjectMarkdown = project;
     });
   });
+  */
 
   beforeEach(() => {
     ProjectMarkdown.trace("In before each");
