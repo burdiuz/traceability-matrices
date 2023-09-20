@@ -1,33 +1,33 @@
-export type ProjectStructure = Record<string, object>;
+export type FeatureStructure = Record<string, object>;
 
-export type ProjectSpec = {
+export type FeatureSpec = {
   title: string;
   filePath: string;
   titlePath: string[];
 };
 
-export type Project = {
+export type Feature = {
   title: string;
   readonly depth: number;
-  readonly structure: ProjectStructure;
-  readonly global: Project;
-  files: Record<string, Project>;
-  records: Record<string, ProjectSpec[]>;
+  readonly structure: FeatureStructure;
+  readonly global: Feature;
+  files: Record<string, Feature>;
+  records: Record<string, FeatureSpec[]>;
 };
 
-export type GlobalProject = Project;
+export type GlobalFeature = Feature;
 
 export declare const getStructureLeafNodes: (
-  structure: ProjectStructure,
+  structure: FeatureStructure,
   requirements?: string[]
 ) => string[];
 
 export declare const addEmptyRecordsFromStructure: (
-  structure: ProjectStructure,
-  records: Record<string, ProjectSpec[]>
+  structure: FeatureStructure,
+  records: Record<string, FeatureSpec[]>
 ) => void;
 
 export declare const readRecords: (
   filePath: string,
-  globalProjects: Record<string, GlobalProject>
-) => Promise<Record<string, Project>>;
+  globalFeatures: Record<string, GlobalFeature>
+) => Promise<Record<string, Feature>>;

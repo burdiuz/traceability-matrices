@@ -6,25 +6,25 @@ const {
   addEmptyRecordsFromStructure,
 } = require("./coverage-records");
 
-const readFiles = async (dirPath, files, projects) => {
+const readFiles = async (dirPath, files, features) => {
   for (let index = 0; index < files.length; index++) {
     const fileName = files[index];
     const filePath = resolve(dirPath, fileName);
 
-    const fileProjects = await readRecords(filePath, projects);
+    const fileFeatures = await readRecords(filePath, features);
 
     files[index] = {
       name: fileName,
       specName: basename(fileName, ".json"),
       path: filePath,
-      projects: fileProjects,
+      features: fileFeatures,
     };
   }
 };
 
-const readDirectories = async (list, projects) => {
+const readDirectories = async (list, features) => {
   for (let dir of list) {
-    await readFiles(dir.path, dir.files, projects);
+    await readFiles(dir.path, dir.files, features);
   }
 };
 
@@ -61,52 +61,52 @@ const getStructureDepth = (structure, depth = 0) => {
 /**
  * Adds empty recorts for requirements found in structure and not presdent in records
  * Adds requiremnts to structure which were tested(present in records) but aren't presented there.
- * @param {Record<string, import("./coverage-records").Project>} globalProjects
- * @param {Record<string, import("./reader").FileWithProjects>} files
+ * @param {Record<string, import("./coverage-records").Feature>} globalFeatures
+ * @param {Record<string, import("./reader").FileWithFeatures>} files
  */
-const normalize = (globalProjects, files) => {
+const normalize = (globalFeatures, files) => {
   // generate missing structure pieces from records
-  Object.values(globalProjects).forEach((project) => {
-    const structReqs = getStructureLeafNodes(project.structure);
-    Object.keys(project.records).forEach((req) => {
+  Object.values(globalFeatures).forEach((feature) => {
+    const structReqs = getStructureLeafNodes(feature.structure);
+    Object.keys(feature.records).forEach((req) => {
       if (structReqs.indexOf(req) < 0) {
-        project.structure[req] = {};
+        feature.structure[req] = {};
       }
     });
   });
 
-  // add empty records from structure for global projects
-  Object.values(globalProjects).forEach((project) => {
-    const { structure, records } = project;
+  // add empty records from structure for global features
+  Object.values(globalFeatures).forEach((feature) => {
+    const { structure, records } = feature;
 
     addEmptyRecordsFromStructure(structure, records);
 
-    // calculate structure depth of the project
-    project.depth = getStructureDepth(project.structure);
+    // calculate structure depth of the feature
+    feature.depth = getStructureDepth(feature.structure);
   });
 
-  // add empty records from requirements found in structure for partial projects
-  Object.values(files).forEach(({ projects }) =>
-    Object.values(projects).forEach(({ global, records, depth, title }) => {
+  // add empty records from requirements found in structure for partial features
+  Object.values(files).forEach(({ features }) =>
+    Object.values(features).forEach(({ global, records, depth, title }) => {
       addEmptyRecordsFromStructure(global.structure, records);
     })
   );
 };
 
-const readCoverage = async (paths, projects = {}) => {
+const readCoverage = async (paths, features = {}) => {
   const roots = await readAll(paths);
 
   for (item of roots) {
     const { list } = item;
 
-    await readDirectories(list, projects);
+    await readDirectories(list, features);
   }
 
   const files = collectFiles(roots);
 
-  normalize(projects, files);
+  normalize(features, files);
 
-  return { roots, projects, files };
+  return { roots, features, files };
 };
 
 module.exports.readCoverage = readCoverage;

@@ -1,6 +1,6 @@
-# Project Markdown
+# Feature Markdown
 
-My project description with [HTML](https://google.com)
+My feature description with [HTML](https://google.com)
 
  - Optional Requirement 1
  - Optional Requirement 2

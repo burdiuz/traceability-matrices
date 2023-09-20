@@ -1,21 +1,21 @@
-import { createProject } from "@actualwave/traceability-matrices/cypress";
+import { createFeature } from "@actualwave/traceability-matrices/cypress";
 
-const Project = createProject("Project C");
+const Feature = createFeature("Feature C");
 
 describe("React App", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000/");
   });
 
-  Project.requirement("Statics", "Add header text").it(
+  Feature.requirement("Statics", "Add header text").it(
     "should display help text",
     () => {
-      Project.trace(["Statics", "Add welcome text"]);
+      Feature.trace(["Statics", "Add welcome text"]);
       cy.get(".App-header p").should("contain", "save to reload.");
     }
   );
 
-  Project.requirement("Statics", "Path to App.js should be visible").it(
+  Feature.requirement("Statics", "Path to App.js should be visible").it(
     "should display entry point path",
     () => {
       cy.get(".App-header p > code").should("contain", "src/App.js");
@@ -23,7 +23,7 @@ describe("React App", () => {
   );
 
   describe("Graphics", () => {
-    Project.requirement("SVG logo preset on the page").it(
+    Feature.requirement("SVG logo preset on the page").it(
       "should display logo",
       () => {
         cy.get(".App-header .App-logo").should("exist");
@@ -32,7 +32,7 @@ describe("React App", () => {
   });
 
   describe("Redirects", () => {
-    Project.requirement(
+    Feature.requirement(
       "Interactive",
       "Redirects",
       'Link with text "Learn React"'
@@ -41,7 +41,7 @@ describe("React App", () => {
     });
 
     context("Links", () => {
-      Project.requirement(
+      Feature.requirement(
         "Interactive",
         "Redirects",
         "High Priority",

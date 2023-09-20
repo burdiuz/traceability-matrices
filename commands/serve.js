@@ -6,8 +6,8 @@ const Router = require("@koa/router");
 const { readCoverage } = require("../reader/reader");
 const { renderFile } = require("../view/file");
 const { renderFiles } = require("../view/files");
-const { renderProject } = require("../view/project");
-const { renderProjects } = require("../view/projects");
+const { renderFeature } = require("../view/feature");
+const { renderFeatures } = require("../view/features");
 const { calculateTotals } = require("../view/totals");
 const { pageTemplate } = require("../view/page");
 
@@ -15,9 +15,9 @@ const inModulePath = (path) => resolve(__dirname, path);
 
 const links = {
   getFilesLink: () => "/files",
-  getProjectsLink: () => "/projects",
+  getFeaturesLink: () => "/features",
   getFileLink: (id) => `/file?id=${id}`,
-  getProjectLink: (title) => `/project?id=${encodeURIComponent(title)}`,
+  getFeatureLink: (title) => `/feature?id=${encodeURIComponent(title)}`,
   getRefreshLink: () => "/refresh",
 };
 
@@ -26,7 +26,7 @@ const serve = async (
   port,
   keyFilePath = "",
   certFilePath = "",
-  projectTableType = "default"
+  featureTableType = "default"
 ) => {
   const useHttps = Boolean(keyFilePath && certFilePath);
   let state = await readCoverage(targetDirs);
@@ -36,7 +36,7 @@ const serve = async (
   const router = new Router();
 
   router.get("/", (ctx, next) => {
-    ctx.redirect("/projects");
+    ctx.redirect("/features");
   });
 
   router.get("/files", (ctx, next) => {
@@ -62,7 +62,7 @@ const serve = async (
       return;
     }
 
-    const content = renderFile(file, state, links, projectTableType);
+    const content = renderFile(file, state, links, featureTableType);
 
     ctx.response.body = pageTemplate({
       pageTitle: filePath,
@@ -72,33 +72,33 @@ const serve = async (
     });
   });
 
-  router.get("/projects", (ctx, next) => {
-    const content = renderProjects(state, links);
+  router.get("/features", (ctx, next) => {
+    const content = renderFeatures(state, links);
 
     ctx.response.body = pageTemplate({
-      pageTitle: "Projects",
+      pageTitle: "Features",
       links,
       totals,
       content,
     });
   });
 
-  // /file?id=<project_name>
-  router.get("/project", (ctx, next) => {
+  // /file?id=<feature_name>
+  router.get("/feature", (ctx, next) => {
     const [, searchParamsStr] = ctx.request.url.match(/^[^?]+\?(.+)$/) || [];
     const searchParams = new URLSearchParams(searchParamsStr);
-    const projectId = searchParams.get("id");
-    const { [projectId]: project } = state.projects;
+    const featureId = searchParams.get("id");
+    const { [featureId]: feature } = state.features;
 
-    if (!project) {
-      ctx.response.body = "Project not found.";
+    if (!feature) {
+      ctx.response.body = "Feature not found.";
       return;
     }
 
-    const content = renderProject(project, state, links, projectTableType);
+    const content = renderFeature(feature, state, links, featureTableType);
 
     ctx.response.body = pageTemplate({
-      pageTitle: projectId,
+      pageTitle: featureId,
       links,
       totals,
       content,

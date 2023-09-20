@@ -1,21 +1,21 @@
 /**
- * Storing and assigning a list from global nsmepsace will allow to collect all projects
+ * Storing and assigning a list from global nsmepsace will allow to collect all features
  * of current test run from independent instances of this module.
  * It might be useful if this file gets bundled with other module and used there, by runtime
- * it will br treated as a separate module and without this check it will have own projects
+ * it will br treated as a separate module and without this check it will have own features
  * list and might overwrite coverage from other sources for same spec file.
  *
  */
-const projects = (() => {
+const features = (() => {
   let list = [];
 
   try {
     if (typeof global !== "undefined" && global) {
-      list = global.tm_projects || list;
-      global.tm_projects = list;
+      list = global.tm_features || list;
+      global.tm_features = list;
     } else if (typeof window !== "undefined" && window) {
-      list = window.tm_projects || list;
-      window.tm_projects = list;
+      list = window.tm_features || list;
+      window.tm_features = list;
     }
   } catch (error) {
     // global scope is not avialable
@@ -24,30 +24,18 @@ const projects = (() => {
   return list;
 })();
 
-const saveProjectInfo = (project) => {
-  const fileName = `${project.title.replace(
-    /[^a-z0-9]/gi,
-    "_"
-  )}_${Date.now()}.project.json`;
-
-  cy.writeFile(
-    `${Cypress.env("TRACE_RECORDS_DATA_DIR")}/${fileName}`,
-    JSON.stringify({ ...project, records: {} }, null, 2)
-  );
-};
-
-const setupSaveHook = (projects, path = "") => {
+const setupSaveHook = (features, path = "") => {
   after(() => {
     const filePath = path || Cypress.spec.relative;
 
     cy.writeFile(
       `${Cypress.env("TRACE_RECORDS_DATA_DIR")}/${filePath}.json`,
-      JSON.stringify(projects, null, 2)
+      JSON.stringify(features, null, 2)
     );
   });
 };
 
-const addRecordToProject = (project, namePath) => {
+const addRecordToFeature = (feature, namePath) => {
   const { title, titlePath } = Cypress.currentTest || {};
 
   let name;
@@ -55,7 +43,7 @@ const addRecordToProject = (project, namePath) => {
   if (typeof namePath === "string" || namePath.length <= 1) {
     name = String(namePath);
   } else {
-    let parent = project.structure;
+    let parent = feature.structure;
 
     namePath.forEach((part) => {
       name = part;
@@ -68,14 +56,14 @@ const addRecordToProject = (project, namePath) => {
     });
   }
 
-  if (project.records[name]) {
-    project.records[name].push({
+  if (feature.records[name]) {
+    feature.records[name].push({
       filePath: Cypress.spec.relative,
       title,
       titlePath: [...titlePath],
     });
   } else {
-    project.records[name] = [{ title, titlePath: [...titlePath] }];
+    feature.records[name] = [{ title, titlePath: [...titlePath] }];
   }
 };
 
@@ -141,48 +129,48 @@ const readStructureRequirements = (structure) => {
   return records;
 };
 
-const createEmptyProjectState = (projectTitle, projectDescription = "") => ({
-  title: projectTitle,
-  description: projectDescription,
+const createEmptyFeatureState = (featureTitle, featureDescription = "") => ({
+  title: featureTitle,
+  description: featureDescription,
   structure: {},
   headers: [],
   records: {},
 });
 
-const registerProject = (project) => projects.push(project.valueOf());
+const registerFeature = (feature) => features.push(feature.valueOf());
 
-const wrapProjectState = (project) => {
+const wrapFeatureState = (feature) => {
   let traceToRequirementMatcher;
 
   const setTraceToRequirementMatcher = (matcher) => {
     traceToRequirementMatcher = matcher;
   };
 
-  const clone = (projectTitle, projectDescription) => wrapProjectState({
-    title: projectTitle,
-    description: projectDescription,
-    structure: cloneStructure(project.structure),
-    headers: [...project.headers],
+  const clone = (featureTitle, featureDescription) => wrapFeatureState({
+    title: featureTitle,
+    description: featureDescription,
+    structure: cloneStructure(feature.structure),
+    headers: [...feature.headers],
     records: {},
   });
 
   const structure = (data, columnHeaders) => {
     if (data) {
-      mergeStructure(data, project.structure);
+      mergeStructure(data, feature.structure);
     }
 
     if (columnHeaders) {
-      project.headers = columnHeaders;
+      feature.headers = columnHeaders;
     }
 
-    function cloneProjectStructure(...path) {
-      const branch = getStructureBranch(project.structure, path);
+    function cloneFeatureStructure(...path) {
+      const branch = getStructureBranch(feature.structure, path);
 
       if (!branch) {
         throw new Error(
           `Structure path [${
             path.length ? `"${path.join('", "')}"` : ""
-          }] is not available in "${project.title}"`
+          }] is not available in "${feature.title}"`
         );
       }
 
@@ -192,7 +180,7 @@ const wrapProjectState = (project) => {
     return {
       add: (...path) => {
         let index = 0;
-        let parent = project.structure;
+        let parent = feature.structure;
 
         while (index < path.length) {
           const name = path[index];
@@ -207,46 +195,46 @@ const wrapProjectState = (project) => {
 
         return parent;
       },
-      get: (...path) => getStructureBranch(project.structure, path),
-      merge: (struct) => mergeStructure(struct, project.structure),
-      clone: cloneProjectStructure,
-      branch: (path, projectTitle, projectDescription) => {
-        const subProject = createProject(projectTitle, projectDescription);
+      get: (...path) => getStructureBranch(feature.structure, path),
+      merge: (struct) => mergeStructure(struct, feature.structure),
+      clone: cloneFeatureStructure,
+      branch: (path, featureTitle, featureDescription) => {
+        const subFeature = createFeature(featureTitle, featureDescription);
 
-        subProject.structure(cloneProjectStructure(path));
+        subFeature.structure(cloneFeatureStructure(path));
 
-        return subProject;
+        return subFeature;
       },
-      narrow: (path, projectTitle, projectDescription) => {
-        const subProject = createProject(projectTitle, projectDescription);
-        subProject.valueOf().headers = project.headers.concat();
-        const sourceStruct = getStructureBranch(project.structure, path);
+      narrow: (path, featureTitle, featureDescription) => {
+        const subFeature = createFeature(featureTitle, featureDescription);
+        subFeature.valueOf().headers = feature.headers.concat();
+        const sourceStruct = getStructureBranch(feature.structure, path);
 
         if (!sourceStruct) {
           throw new Error(
             `Structure path [${
               path.length ? `"${path.join('", "')}"` : ""
-            }] is not available in "${project.title}"`
+            }] is not available in "${feature.title}"`
           );
         }
 
-        cloneStructure(sourceStruct, subProject.structure().add(path));
+        cloneStructure(sourceStruct, subFeature.structure().add(path));
 
-        return subProject;
+        return subFeature;
       },
     };
   };
 
   const headers = (columnHeaders) => {
     if (columnHeaders) {
-      project.headers = columnHeaders;
+      feature.headers = columnHeaders;
     }
 
     return {
-      clone: () => project.headers.concat(),
-      get: (index) => project.headers[index],
+      clone: () => feature.headers.concat(),
+      get: (index) => feature.headers[index],
       set: (index, header) => {
-        project.headers[index] = header;
+        feature.headers[index] = header;
       },
     };
   };
@@ -255,13 +243,13 @@ const wrapProjectState = (project) => {
     if (traceToRequirementMatcher) {
       nameOrPath = traceToRequirementMatcher(
         nameOrPath,
-        readStructureRequirements(project.structure),
-        project.structure
+        readStructureRequirements(feature.structure),
+        feature.structure
       );
     }
 
-    addRecordToProject(
-      project,
+    addRecordToFeature(
+      feature,
       typeof nameOrPath === "string" ? [nameOrPath] : nameOrPath
     );
 
@@ -274,8 +262,8 @@ const wrapProjectState = (project) => {
     if (traceToRequirementMatcher) {
       namePath = traceToRequirementMatcher(
         namePath,
-        readStructureRequirements(project.structure),
-        project.structure
+        readStructureRequirements(feature.structure),
+        feature.structure
       );
     }
 
@@ -285,7 +273,7 @@ const wrapProjectState = (project) => {
       const fn = args.pop();
 
       args.push((...fnArgs) => {
-        addRecordToProject(project, namePath);
+        addRecordToFeature(feature, namePath);
 
         return fn(...fnArgs);
       });
@@ -297,7 +285,7 @@ const wrapProjectState = (project) => {
       const fn = args.pop();
 
       args.push((...fnArgs) => {
-        addRecordToProject(project, namePath);
+        addRecordToFeature(feature, namePath);
 
         return fn(...fnArgs);
       });
@@ -313,7 +301,7 @@ const wrapProjectState = (project) => {
       specify: specFn,
       test: specFn,
       trace: (chainFn) => {
-        addRecordToProject(project, namePath);
+        addRecordToFeature(feature, namePath);
 
         if (chainFn) {
           chainFn();
@@ -323,7 +311,7 @@ const wrapProjectState = (project) => {
   };
 
   return {
-    valueOf: () => project,
+    valueOf: () => feature,
     structure,
     headers,
     trace,
@@ -333,23 +321,23 @@ const wrapProjectState = (project) => {
   };
 };
 
-const createProject = (projectTitle, projectDescription = "") => {
-  const project = createEmptyProjectState(projectTitle, projectDescription);
+const createFeature = (featureTitle, featureDescription = "") => {
+  const feature = createEmptyFeatureState(featureTitle, featureDescription);
 
-  registerProject(project);
+  registerFeature(feature);
 
-  return wrapProjectState(project);
+  return wrapFeatureState(feature);
 };
 
-setupSaveHook(projects);
+setupSaveHook(features);
 
 export {
   getStructureBranch,
   mergeStructure,
   cloneStructure,
-  createEmptyProjectState,
-  createProject,
-  registerProject,
-  wrapProjectState,
+  createEmptyFeatureState,
+  createFeature,
+  registerFeature,
+  wrapFeatureState,
   setupSaveHook,
 };

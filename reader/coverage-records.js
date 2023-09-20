@@ -73,7 +73,7 @@ const mergeStructure = (source, target) => {
   });
 };
 
-const copyProjectRecords = ({ records: source }, { records: target }) => {
+const copyFeatureRecords = ({ records: source }, { records: target }) => {
   Object.entries(source).forEach(([requirement, specs]) => {
     if (requirement in target) {
       target[requirement] = [...target[requirement], ...specs];
@@ -83,12 +83,12 @@ const copyProjectRecords = ({ records: source }, { records: target }) => {
   });
 };
 
-const lookupForProjects = (filePath, projectList, globalProjects = {}) => {
+const lookupForFeatures = (filePath, featureList, globalFeatures = {}) => {
   const specsUnique = {};
-  const projects = {};
+  const features = {};
 
-  projectList.forEach((source) => {
-    let global = globalProjects[source.title];
+  featureList.forEach((source) => {
+    let global = globalFeatures[source.title];
 
     setSpecsUnique(source.records, specsUnique);
 
@@ -104,18 +104,18 @@ const lookupForProjects = (filePath, projectList, globalProjects = {}) => {
         files: {},
       };
 
-      globalProjects[source.title] = global;
+      globalFeatures[source.title] = global;
     }
 
     // delete structure to be able to assign global getter
     delete source.structure;
 
-    copyProjectRecords(source, global);
+    copyFeatureRecords(source, global);
     global.depth = 1;
     global.files[filePath] = source.records;
-    projects[source.title] = source;
+    features[source.title] = source;
 
-    // one file projedct also gets files record just to match global project shape for easier processing
+    // one file projedct also gets files record just to match global feature shape for easier processing
     source.files = { [filePath]: source.records };
 
     Object.defineProperties(source, {
@@ -137,24 +137,24 @@ const lookupForProjects = (filePath, projectList, globalProjects = {}) => {
     });
   });
 
-  return projects;
+  return features;
 };
 
-const readRecords = async (filePath, globalProjects) => {
+const readRecords = async (filePath, globalFeatures) => {
   const records = await readCoverageReportFile(filePath);
   // const specFile = filePath.replace(/\.json$/, "");
 
-  const projects = lookupForProjects(filePath, records, globalProjects);
+  const features = lookupForFeatures(filePath, records, globalFeatures);
 
-  //console.log(projects['Project A'].structure['Grand requirement']);
+  //console.log(features['Feature A'].structure['Grand requirement']);
   /*
   console.log(
-    projects['Project A'].requirements['PRD Requirement 3'].specs[0]
+    features['Feature A'].requirements['PRD Requirement 3'].specs[0]
       .requirements
   );
   */
 
-  return projects;
+  return features;
 };
 
 module.exports.readRecords = readRecords;

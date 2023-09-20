@@ -1,8 +1,8 @@
-import { createProject } from "@actualwave/traceability-matrices/cypress";
+import { createFeature } from "@actualwave/traceability-matrices/cypress";
 
-const Project = createProject("Project Matcher");
+const Feature = createFeature("Feature Matcher");
 
-Project.structure({
+Feature.structure({
   Statics: {
     "S001 Add header text": {},
     "S002 Path to App.js should be visible": {},
@@ -19,7 +19,7 @@ Project.structure({
   "001 SVG logo preset on the page": {},
 });
 
-Project.setTraceToRequirementMatcher((name, requirements) => {
+Feature.setTraceToRequirementMatcher((name, requirements) => {
   const req = Object.keys(requirements).find((key) => key.indexOf(name) === 0);
 
   return req || name;
@@ -31,22 +31,22 @@ describe("React App", () => {
   });
 
   it("should display help text", () => {
-    Project.trace("S001", () => {
-      Project.trace("S003");
+    Feature.trace("S001", () => {
+      Feature.trace("S003");
 
       cy.get(".App-header p").should("contain", "save to reload.");
     });
   });
 
   it("should display entry point path", () => {
-    Project.trace("S002");
+    Feature.trace("S002");
 
     cy.get(".App-header p > code").should("contain", "src/App.js");
   });
 
   describe("Graphics", () => {
     it("should display logo", () => {
-      Project.trace("001");
+      Feature.trace("001");
 
       cy.get(".App-header .App-logo").should("exist");
     });
@@ -54,14 +54,14 @@ describe("React App", () => {
 
   describe("Redirects", () => {
     it("should have a link with proper text", () => {
-      Project.trace("IR001");
+      Feature.trace("IR001");
 
       cy.get("a.App-link").should("contain", "Learn React");
     });
 
     context("Links", () => {
       it("should have a react offsite link", () => {
-        Project.trace("IRH001");
+        Feature.trace("IRH001");
 
         cy.get(".App-link")
           .invoke("attr", "href")

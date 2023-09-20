@@ -65,10 +65,10 @@ targetDirs = targetDirs.map((target) => {
 // TM char codes 84 and 77
 const DEFAULT_PORT = 8477;
 
-let projectTableType = "default";
+let feaureTableType = "default";
 
 if (String(args.compact) === "true") {
-  projectTableType = "compact";
+  feaureTableType = "compact";
 }
 
 switch (command) {
@@ -108,7 +108,7 @@ switch (command) {
 
       const { serve } = require("./commands/serve.js");
 
-      serve(targetDirs, port, keyFilePath, certFilePath, projectTableType).then(() => {
+      serve(targetDirs, port, keyFilePath, certFilePath, feaureTableType).then(() => {
         import("open").then(({ default: open }) =>
           open(
             useHttps ? `https://localhost:${port}` : `http://localhost:${port}`
@@ -138,20 +138,20 @@ switch (command) {
 
       const { generateStatic } = require("./commands/generate-static.js");
 
-      generateStatic(targetDirs, outputDir, projectTableType);
+      generateStatic(targetDirs, outputDir, feaureTableType);
     }
     break;
   case "threshold":
     {
-      // threshold --target-dir= --total=80 --per-project=40
+      // threshold --target-dir= --total=80 --per-feature=40
       const total =
         args["total"] === undefined ? 100 : parseInt(args["total"], 10);
-      const perProject =
-        args["per-project"] === undefined
+      const perFeature =
+        args["per-feature"] === undefined
           ? 100
-          : parseInt(args["per-project"], 10);
+          : parseInt(args["per-feature"], 10);
 
-      if (isNaN(total) || isNaN(perProject)) {
+      if (isNaN(total) || isNaN(perFeature)) {
         exitWithError(
           "Coverage thresholds should be positive integer values between 0 and 100."
         );
@@ -159,18 +159,18 @@ switch (command) {
 
       const { threshold } = require("./commands/threshold.js");
 
-      threshold(targetDirs, total, perProject);
+      threshold(targetDirs, total, perFeature);
     }
     break;
   case "stats":
     {
-      // stats --target-dir= --project=
+      // stats --target-dir= --feature=
 
-      const projects = args["project"] || [];
+      const features = args["feature"] || [];
 
       const { stats } = require("./commands/stats.js");
 
-      stats(targetDirs, projects);
+      stats(targetDirs, features);
     }
     break;
   case "help":

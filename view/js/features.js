@@ -1,5 +1,5 @@
-function handleProjectFilesToggleVisibility(row) {
-  const files = row.querySelector(".project-files-list");
+function handleFeatureFilesToggleVisibility(row) {
+  const files = row.querySelector(".feature-files-list");
   const categories = row.querySelector(".category-listing-root");
 
   if (files) {
@@ -14,8 +14,8 @@ function handleProjectFilesToggleVisibility(row) {
     categories.classList.remove("visible");
   }
 }
-function handleProjectCategoriesToggleVisibility(row) {
-  const files = row.querySelector(".project-files-list");
+function handleFeatureCategoriesToggleVisibility(row) {
+  const files = row.querySelector(".feature-files-list");
   const categories = row.querySelector(".category-listing-root");
 
   if (categories) {

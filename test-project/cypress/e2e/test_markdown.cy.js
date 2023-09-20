@@ -1,59 +1,59 @@
-import { createProject } from "@actualwave/traceability-matrices/cypress";
+import { createFeature } from "@actualwave/traceability-matrices/cypress";
 import {
-  createProjectFromMarkdown,
-  createProjectFromMarkdownAsync,
+  createFeatureFromMarkdown,
+  createFeatureFromMarkdownAsync,
 } from "@actualwave/traceability-matrices/markdown";
 
-const Project2 = createProject("Project B");
+const Feature2 = createFeature("Feature B");
 /*
   When loading markdown asynchronously project structure is not available immediately, 
   until test starts it will be empty.
 */
-const ProjectMarkdown = createProjectFromMarkdownAsync(
-  "cypress/projects/ProjectMarkdown.md"
+const FeatureMarkdown = createFeatureFromMarkdownAsync(
+  "cypress/features/FeatureMarkdown.md"
 );
 
 describe("React App", () => {
   /*
   The other way to create project from markdown is to wait for Markdown parser
 
-  let ProjectMarkdown;
+  let FeatureMarkdown;
 
   before(() => {
-    createProjectFromMarkdown("cypress/projects/ProjectMarkdown.md").then((project) => {
-      ProjectMarkdown = project;
+    createFeatureFromMarkdown("cypress/projects/FeatureMarkdown.md").then((project) => {
+      FeatureMarkdown = project;
     });
   });
   */
 
   beforeEach(() => {
-    ProjectMarkdown.trace("In before each");
+    FeatureMarkdown.trace("In before each");
     cy.visit("http://localhost:3000/");
   });
 
   it("should display help text", () => {
-    ProjectMarkdown.trace("PRD Requirement 1");
-    ProjectMarkdown.trace("PRD Requirement 2");
-    ProjectMarkdown.trace("PRD Requirement 3", () => {
-      ProjectMarkdown.trace("PRD Requirement 1");
-      ProjectMarkdown.trace("PRD Requirement 2");
+    FeatureMarkdown.trace("PRD Requirement 1");
+    FeatureMarkdown.trace("PRD Requirement 2");
+    FeatureMarkdown.trace("PRD Requirement 3", () => {
+      FeatureMarkdown.trace("PRD Requirement 1");
+      FeatureMarkdown.trace("PRD Requirement 2");
 
       cy.get(".App-header p").should("contain", "save to reload.");
     });
   });
 
   it("should display logo", () => {
-    ProjectMarkdown.trace("PRD Requirement 1");
-    ProjectMarkdown.trace("PRD Requirement 2");
+    FeatureMarkdown.trace("PRD Requirement 1");
+    FeatureMarkdown.trace("PRD Requirement 2");
     cy.get(".App-header .App-logo").should("exist");
   });
 
   it("should display help text", () => {
-    ProjectMarkdown.trace("PRD Requirement 1");
-    ProjectMarkdown.trace("PRD Requirement 2");
-    ProjectMarkdown.trace("PRD Requirement 3", () => {
-      ProjectMarkdown.trace("PRD Requirement 1");
-      ProjectMarkdown.trace("PRD Requirement 2");
+    FeatureMarkdown.trace("PRD Requirement 1");
+    FeatureMarkdown.trace("PRD Requirement 2");
+    FeatureMarkdown.trace("PRD Requirement 3", () => {
+      FeatureMarkdown.trace("PRD Requirement 1");
+      FeatureMarkdown.trace("PRD Requirement 2");
 
       cy.get(".App-header p").should("contain", "save to reload.");
       cy.get(".App-header p > code").should("contain", "src/App.js");
@@ -63,29 +63,29 @@ describe("React App", () => {
   describe("Redirects", () => {
     context("Links", () => {
       beforeEach(() => {
-        Project2.trace("PRD Requirement BEFORE EACH");
-        ProjectMarkdown.trace("Requirement on a side with & \" ' entities 1");
+        Feature2.trace("PRD Requirement BEFORE EACH");
+        FeatureMarkdown.trace("Requirement on a side with & \" ' entities 1");
       });
 
       before(() => {
-        Project2.trace("PRD Requirement BEFORE");
+        Feature2.trace("PRD Requirement BEFORE");
       });
 
       after(() => {
-        Project2.trace("PRD Requirement AFTER");
-        ProjectMarkdown.trace("Requirement with & \" ' < > entities 7");
+        Feature2.trace("PRD Requirement AFTER");
+        FeatureMarkdown.trace("Requirement with & \" ' < > entities 7");
       });
 
       afterEach(() => {
-        Project2.trace("PRD Requirement AFTER EACH");
+        Feature2.trace("PRD Requirement AFTER EACH");
       });
 
       it("should have a react offsite link", () => {
-        Project2.trace("PRD Requirement A", () => {
-          Project2.trace("PRD Requirement A");
-          Project2.trace("PRD Requirement B", () => {
-            Project2.trace("PRD Requirement A");
-            Project2.trace("PRD Requirement C");
+        Feature2.trace("PRD Requirement A", () => {
+          Feature2.trace("PRD Requirement A");
+          Feature2.trace("PRD Requirement B", () => {
+            Feature2.trace("PRD Requirement A");
+            Feature2.trace("PRD Requirement C");
 
             cy.get(".App-link")
               .invoke("attr", "href")
@@ -93,10 +93,10 @@ describe("React App", () => {
           });
         });
 
-        ProjectMarkdown.trace("PRD Requirement 4", () => {
-          ProjectMarkdown.trace("PRD Requirement 1");
-          ProjectMarkdown.trace("PRD Requirement 3");
-          ProjectMarkdown.trace("PRD Requirement 5");
+        FeatureMarkdown.trace("PRD Requirement 4", () => {
+          FeatureMarkdown.trace("PRD Requirement 1");
+          FeatureMarkdown.trace("PRD Requirement 3");
+          FeatureMarkdown.trace("PRD Requirement 5");
 
           cy.get(".App-link").should("contain", "Learn React");
         });

@@ -1,8 +1,8 @@
 import {
-  createProject,
-  createEmptyProjectState,
-  registerProject,
-  wrapProjectState,
+  createFeature,
+  createEmptyFeatureState,
+  registerFeature,
+  wrapFeatureState,
 } from "@actualwave/traceability-matrices/cypress";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
@@ -71,7 +71,7 @@ const collectData = async (list, parent, ancestors) => {
         const name = await toHtml([...item.children, ...nameNodes]);
         ancestors = ancestors.slice(0, item.depth - 1);
 
-        // 1st level title is a title of the project, structure starts with 2nd level
+        // 1st level title is a title of the feature, structure starts with 2nd level
         parent = ancestors[item.depth - 2];
 
         if (!(name in parent)) {
@@ -113,10 +113,10 @@ const collectData = async (list, parent, ancestors) => {
 };
 
 /**
- * Parse markdown content string and create a prioject from it.
+ * Parse markdown content string and create a feature from it.
  * The structure of markdown file is following:
- * # Project title
- * Optional paragraph ormultiple paragraphs of project description, may contain links
+ * # Feature title
+ * Optional paragraph ormultiple paragraphs of feature description, may contain links
  *
  * ## Category
  * - list of requirements
@@ -124,72 +124,72 @@ const collectData = async (list, parent, ancestors) => {
  * @param {string} content String of markdown content
  * @returns
  */
-export const parseMarkdownProject = async (content) => {
+export const parseMarkdownFeature = async (content) => {
   const result = await unified().use(remarkParse).parse(content).children;
 
-  const project = createEmptyProjectState("");
+  const feature = createEmptyFeatureState("");
 
   if (result[0].type === "heading" || result[0].type === "paragraph") {
-    project.title = await toHtml(result.shift().children);
+    feature.title = await toHtml(result.shift().children);
   }
 
   const [description, struct] = splitItems(result);
-  project.description = await toHtml(description);
+  feature.description = await toHtml(description);
 
-  await collectData(struct, project.structure, [project.structure]);
+  await collectData(struct, feature.structure, [feature.structure]);
 
-  return project;
+  return feature;
 };
 
 /**
  * Since it uses cy.readFile(), it can be executed only within cypress hooks like before().
  *
- * @param {string} path Path to markdown file from project root
+ * @param {string} path Path to markdown file from feature root
  * @returns
  */
-export const createProjectFromMarkdown = (path) =>
+export const createFeatureFromMarkdown = (path) =>
   cy.readFile(path).then(
     (content) =>
       new Cypress.Promise((resolve, reject) => {
-        parseMarkdownProject(content)
+        parseMarkdownFeature(content)
           .then((state) => {
-            registerProject(state);
-            const project = wrapProjectState(state);
-            resolve(project);
+            registerFeature(state);
+            const feature = wrapFeatureState(state);
+            resolve(feature);
           })
           .catch(reject);
       })
   );
 
 /**
- * It immediately returns empty project and creates a before() hook which reads markdown file.
+ * It immediately returns empty feature and creates a before() hook which reads markdown file.
  * Once markdown has been read, its content(title, description, structure) merged
- * with returned project.
+ * with returned feature.
  *
  * This way we don't need to wait for a promise or wrap it into lifecycle hooks.
  *
- * @param {string} path Path to markdown file from project root
- * @returns ProjectApi
+ * @param {string} path Path to markdown file from feature root
+ * @returns FeatureApi
  */
-export const createProjectFromMarkdownAsync = (path) => {
-  const project = createProject("");
+export const createFeatureFromMarkdownAsync = (path) => {
+  const feature = createFeature("");
 
   before(() => {
     cy.readFile(path).then(
       (content) =>
         new Cypress.Promise((resolve, reject) => {
-          parseMarkdownProject(content)
+          parseMarkdownFeature(content)
             .then((state) => {
-              project.structure().merge(state.structure);
-              project.headers(state.headers);
-              project.valueOf().title = state.title;
-              project.valueOf().description = state.description;
-              resolve(project);
+              feature.structure().merge(state.structure);
+              feature.headers(state.headers);
+              feature.valueOf().title = state.title;
+              feature.valueOf().description = state.description;
+              resolve(feature);
             })
             .catch(reject);
         })
     );
   });
 
-  return project;
+  return feature;
 };

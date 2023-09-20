@@ -1,33 +1,33 @@
 const { readCoverage } = require("../reader/reader");
-const { buildVerticalHeaders } = require("../view/project");
+const { buildVerticalHeaders } = require("../view/feature");
 
 /**
  * displays coverage information
  * @param {import("./reader/reader").ReadCoverageResult} state
  *
  */
-const readCoverageStats = ({ projects }, includeProjects = []) => {
-  const list = Object.values(projects);
-  let projectCount = list.length;
+const readCoverageStats = ({ features }, includeFeatures = []) => {
+  const list = Object.values(features);
+  let featureCount = list.length;
   let combinedCoverage = 0;
 
   console.log("Coverage Information");
 
-  list.forEach((project) => {
-    if (includeProjects.length && !includeProjects.includes(project.title)) {
-      projectCount--;
+  list.forEach((feature) => {
+    if (includeFeatures.length && !includeFeatures.includes(feature.title)) {
+      featureCount--;
       return;
     }
 
-    const result = buildVerticalHeaders(project);
+    const result = buildVerticalHeaders(feature);
     let coverage = 100;
 
     if (result.requirements.length) {
       coverage = (result.requirementsCovered / result.requirementsTotal) * 100;
       combinedCoverage += coverage;
     } else {
-      // exclude empty projects from total coverage calculation
-      projectCount--;
+      // exclude empty features from total coverage calculation
+      featureCount--;
     }
 
     /**
@@ -42,7 +42,7 @@ const readCoverageStats = ({ projects }, includeProjects = []) => {
     console.log(
       score(result),
       result.requirements.length ? `${coverage.toFixed(2)}%` : "100%",
-      project.title
+      feature.title
     );
 
     result.rows.forEach((row) =>
@@ -52,7 +52,7 @@ const readCoverageStats = ({ projects }, includeProjects = []) => {
           return;
         }
 
-        let covered = !!project.records[cell.name].length;
+        let covered = !!feature.records[cell.name].length;
 
         console.log(
           covered ? "\x1b[32m%s\x1b[0m" : "\x1b[31m%s\x1b[0m",
@@ -62,16 +62,16 @@ const readCoverageStats = ({ projects }, includeProjects = []) => {
     );
   });
 
-  const totalCoverage = combinedCoverage / projectCount;
+  const totalCoverage = combinedCoverage / featureCount;
 
   console.log("-------------------------------------------");
   console.log("Coverage:", `${totalCoverage.toFixed(2)}%`);
 };
 
-const stats = async (targetDirs, projects) => {
+const stats = async (targetDirs, features) => {
   const state = await readCoverage(targetDirs);
 
-  readCoverageStats(state, projects);
+  readCoverageStats(state, features);
 };
 
 module.exports.stats = stats;

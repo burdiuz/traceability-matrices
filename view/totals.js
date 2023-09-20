@@ -1,9 +1,9 @@
 /**
  *
- * @param {import("../reader/coverage-records").Project} param0
+ * @param {import("../reader/coverage-records").Feature} param0
  * @returns
  */
-const calculateProjectStats = ({ title, records, structure }) => {
+const calculateFeatureStats = ({ title, records, structure }) => {
   const specs = new Set();
   const list = Object.values(records);
   const requirementsTotal = list.length;
@@ -34,16 +34,16 @@ const calculateProjectStats = ({ title, records, structure }) => {
  * @param {import("./reader/reader").ReadCoverageResult} state
  */
 const calculateTotals = (state) => {
-  const projects = Object.values(state.projects);
+  const features = Object.values(state.features);
 
   const {
     requirementsCovered: covered,
     requirementsTotal: requirements,
     specsCount: specs,
-  } = projects.reduce(
-    (counts, project) => {
+  } = features.reduce(
+    (counts, feature) => {
       const { requirementsCovered, requirementsTotal, specsCount } =
-        calculateProjectStats(project);
+        calculateFeatureStats(feature);
 
       return {
         requirementsCovered: requirementsCovered + counts.requirementsCovered,
@@ -61,7 +61,7 @@ const calculateTotals = (state) => {
   );
 
   return {
-    projects: projects.length,
+    features: features.length,
     files: fileCount,
     specs,
     requirements,
@@ -70,5 +70,5 @@ const calculateTotals = (state) => {
   };
 };
 
-module.exports.calculateProjectStats = calculateProjectStats;
+module.exports.calculateFeatureStats = calculateFeatureStats;
 module.exports.calculateTotals = calculateTotals;

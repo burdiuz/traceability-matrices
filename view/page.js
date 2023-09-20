@@ -10,18 +10,18 @@ html
     style
       include /css/page.css
       include /css/files.css
-      include /css/projects.css
-      include /css/project.css
+      include /css/features.css
+      include /css/feature.css
     script
-      include /js/project.js
-      include /js/projects.js
+      include /js/feature.js
+      include /js/features.js
   body
     div.nav-bar
       a(href=self.links.getFilesLink()) Files
-      a(href=self.links.getProjectsLink() style="margin-right: auto") Projects
+      a(href=self.links.getFeaturesLink() style="margin-right: auto") Features
       span
-        | Projects 
-        strong #{self.totals.projects} 
+        | Features 
+        strong #{self.totals.features} 
         | Files 
         strong #{self.totals.files} 
         | Specs 

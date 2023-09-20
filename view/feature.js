@@ -2,26 +2,26 @@ const { basename } = require("path");
 const { compile } = require("pug");
 const { isPopulated } = require("../reader/coverage-records");
 
-const projectTableTemplate = compile(
+const featureTableTemplate = compile(
   `
-table.project
+table.feature
 
-  if self.projectDescription
+  if self.featureDescription
     tr
-      td.project-description(colspan=self.requirementsDepth + self.totalSpecCount + 1) !{self.projectDescription}
+      td.feature-description(colspan=self.requirementsDepth + self.totalSpecCount + 1) !{self.featureDescription}
 
   //- Header Rows
   tr.file-headers
-    th.project-title(colspan=self.requirementsDepth, rowspan=self.projectHeaders.length ? 1 : 2) #{self.projectTitle} (#{self.coveredRequirements} / #{self.totalRequirements})
+    th.feature-title(colspan=self.requirementsDepth, rowspan=self.featureHeaders.length ? 1 : 2) #{self.featureTitle} (#{self.coveredRequirements} / #{self.totalRequirements})
     th.spec-count(rowspan='2') Spec count
     each file in self.fileHeaders
       th.file-name(colspan=file.colspan, title=file.title)
         a(href=self.links.getFileLink(file.path)) #{file.name}
   tr.specs-headers
-    if self.projectHeaders.length
+    if self.featureHeaders.length
       - var index = 0;
       while index < self.requirementsDepth
-        th.header(title=self.projectHeaders[index]) #{self.projectHeaders[index]}
+        th.header(title=self.featureHeaders[index]) #{self.featureHeaders[index]}
         - index++;
     each spec in self.specHeaders
       th.spec-name(title=spec.title)
@@ -43,30 +43,30 @@ table.project
 
   //- Totals
   tr.totals
-    td(colspan=self.requirementsDepth) Project Coverage
+    td(colspan=self.requirementsDepth) Feature Coverage
     td(colspan=self.totalSpecCount + 1) #{self.coveredRequirements} / #{self.totalRequirements}
 `,
   { self: true, filename: "pug", basedir: __dirname }
 );
 
-const projectCompactTemplate = compile(
+const featureCompactTemplate = compile(
   `
-table.project.compact
+table.feature.compact
 
-  if self.projectDescription
+  if self.featureDescription
     tr
-      td.project-description(colspan=self.totalSpecCount + 2) !{self.projectDescription}
+      td.feature-description(colspan=self.totalSpecCount + 2) !{self.featureDescription}
 
   //- Header Rows
   tr.file-headers
-    th.project-title(colspan=1, rowspan=self.projectHeaders.length ? 1 : 2) #{self.projectTitle} (#{self.coveredRequirements} / #{self.totalRequirements})
+    th.feature-title(colspan=1, rowspan=self.featureHeaders.length ? 1 : 2) #{self.featureTitle} (#{self.coveredRequirements} / #{self.totalRequirements})
     th.spec-count(rowspan='2') Spec count
     each file in self.fileHeaders
       th.file-name(colspan=file.colspan, title=file.title) 
         a(href=self.links.getFileLink(file.path)) #{file.name}
   tr.specs-headers
-    if self.projectHeaders.length
-      - var header = self.projectHeaders[self.projectHeaders.length - 1];
+    if self.featureHeaders.length
+      - var header = self.featureHeaders[self.featureHeaders.length - 1];
       th.header(title=header) #{header}
     each spec in self.specHeaders
       th.spec-name(title=spec.title)
@@ -94,24 +94,24 @@ table.project.compact
 
   //- Totals
   tr.totals
-    td Project Coverage
+    td Feature Coverage
     td(colspan=self.totalSpecCount + 1) #{self.coveredRequirements} / #{self.totalRequirements}
 `,
   { self: true, filename: "pug", basedir: __dirname }
 );
 
-const projectCategoriesTemplate = compile(
+const featureCategoriesTemplate = compile(
   `
-div.project-categories
-  a(href='', onClick='event.preventDefault(); handleProjectCategoriesToggleVisibility(this.parentElement)')
+div.feature-categories
+  a(href='', onClick='event.preventDefault(); handleFeatureCategoriesToggleVisibility(this.parentElement)')
     include /icons/bars-staggered-solid.svg
-    | Project Categories
+    | Feature Categories
   | !{self.categoriesHtml}
 `,
   { self: true, filename: "pug", basedir: __dirname }
 );
 
-const projectCategoryListTemplate = compile(
+const featureCategoryListTemplate = compile(
   `
 mixin category(list, listClass)
   ul(class=\`category-listing \${listClass}\`)
@@ -128,7 +128,7 @@ mixin category(list, listClass)
 
 /**
  *
- * @param {import("../reader/coverage-records").Project} param0
+ * @param {import("../reader/coverage-records").Feature} param0
  * @returns
  */
 const buildHorizontalHeaders = ({ files }, globalFiles) => {
@@ -196,8 +196,8 @@ const buildHorizontalHeaders = ({ files }, globalFiles) => {
  * 3. parent nodes will rowspan by count of children
  * 4. after building all nodes returns first row so we know where to add its parent, also inform parent about count of rows
  */
-const buildVerticalHeaders = (project) => {
-  const { depth: maxDepth, structure } = project;
+const buildVerticalHeaders = (feature) => {
+  const { depth: maxDepth, structure } = feature;
 
   const buildChildren = (children, categories = [], depth, path = "") => {
     let requirementsTotal = 0;
@@ -209,7 +209,7 @@ const buildVerticalHeaders = (project) => {
       .sort(([a], [b]) => (a < b ? -1 : 1))
       .forEach(([title, children]) => {
         const child = build(
-          { title, children, specs: project.records[title] || [] },
+          { title, children, specs: feature.records[title] || [] },
           categories,
           depth,
           path
@@ -268,8 +268,8 @@ const buildVerticalHeaders = (project) => {
     }
 
     cell.colspan = maxDepth - depth;
-    cell.requirementsTotal = project.records[requirement.title] ? 1 : 0;
-    cell.requirementsCovered = project.records[requirement.title]?.length
+    cell.requirementsTotal = feature.records[requirement.title] ? 1 : 0;
+    cell.requirementsCovered = feature.records[requirement.title]?.length
       ? 1
       : 0;
 
@@ -347,38 +347,38 @@ const buildDataRows = (vertical, horizontal) => {
   return { totalRequirements, coveredRequirements, totalSpecCount, rows };
 };
 
-const renderProjectCategories = (project, state, links) => {
-  const categoriesHtml = renderProjectCategoryList(project, state, links);
+const renderFeatureCategories = (feature, state, links) => {
+  const categoriesHtml = renderFeatureCategoryList(feature, state, links);
 
   console.log(categoriesHtml);
 
-  return projectCategoriesTemplate({
+  return featureCategoriesTemplate({
     categoriesHtml,
   });
 };
 
-const renderProjectCategoryList = (project, state, { getProjectLink }) => {
-  const { categories } = buildVerticalHeaders(project);
+const renderFeatureCategoryList = (feature, state, { getFeatureLink }) => {
+  const { categories } = buildVerticalHeaders(feature);
 
-  return projectCategoryListTemplate({
+  return featureCategoryListTemplate({
     categories: categories,
-    categoryLinkBase: getProjectLink(project.title),
+    categoryLinkBase: getFeatureLink(feature.title),
   });
 };
 
 /**
  *
- * @param {import("../reader/coverage-records").Project} project
+ * @param {import("../reader/coverage-records").Feature} feature
  * @param {import("../reader/reader").ReadCoverageResult} state
  */
-const renderProject = (project, state, links, type) => {
+const renderFeature = (feature, state, links, type) => {
   /*
    * build headers
    * horizontal for specs
    * vertical for requirements
    */
-  const horizontal = buildHorizontalHeaders(project, state.files);
-  const vertical = buildVerticalHeaders(project);
+  const horizontal = buildHorizontalHeaders(feature, state.files);
+  const vertical = buildVerticalHeaders(feature);
 
   /*
    * build rows with intersections
@@ -391,10 +391,10 @@ const renderProject = (project, state, links, type) => {
   } = buildDataRows(vertical, horizontal);
 
   const renderer =
-    type === "compact" ? projectCompactTemplate : projectTableTemplate;
+    type === "compact" ? featureCompactTemplate : featureTableTemplate;
 
-  const categoriesSectionHtml = projectCategoriesTemplate({
-    categoriesHtml: projectCategoryListTemplate({
+  const categoriesSectionHtml = featureCategoriesTemplate({
+    categoriesHtml: featureCategoryListTemplate({
       categories: vertical.categories,
       categoryLinkBase: "",
     }),
@@ -402,10 +402,10 @@ const renderProject = (project, state, links, type) => {
 
   const tableHtml = renderer({
     // +1 for spec counts column
-    requirementsDepth: project.depth,
-    projectTitle: project.title,
-    projectDescription: project.description,
-    projectHeaders: project.headers || [],
+    requirementsDepth: feature.depth,
+    featureTitle: feature.title,
+    featureDescription: feature.description,
+    featureHeaders: feature.headers || [],
     fileHeaders: horizontal.filesRow,
     specHeaders: horizontal.specsRow,
     dataRows,
@@ -423,6 +423,6 @@ ${tableHtml}
 };
 module.exports.buildVerticalHeaders = buildVerticalHeaders;
 module.exports.buildHorizontalHeaders = buildHorizontalHeaders;
-module.exports.renderProject = renderProject;
-module.exports.renderProjectCategories = renderProjectCategories;
-module.exports.renderProjectCategoryList = renderProjectCategoryList;
+module.exports.renderFeature = renderFeature;
+module.exports.renderFeatureCategories = renderFeatureCategories;
+module.exports.renderFeatureCategoryList = renderFeatureCategoryList;

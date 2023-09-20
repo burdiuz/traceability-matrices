@@ -1,24 +1,24 @@
 const { readCoverage } = require("../reader/reader");
-const { calculateProjectStats } = require("../view/totals");
+const { calculateFeatureStats } = require("../view/totals");
 
 /**
  * exists with error if coverage lower thresholds
  * @param {import("./reader/reader").ReadCoverageResult} state
  * @param {number} total global coverage threshold
- * @param {number} perProject project minimal coverage
+ * @param {number} perFeature feature minimal coverage
  */
-const applyCoverageThresholds = ({ projects }, total, perProject) => {
-  const list = Object.values(projects);
-  let projectCount = list.length;
+const applyCoverageThresholds = ({ features }, total, perFeature) => {
+  const list = Object.values(features);
+  let featureCount = list.length;
   let error = false;
   let combinedCoverage = 0;
 
   console.log("Coverage Information");
   console.log("-------------------------------------------");
 
-  list.forEach((project) => {
+  list.forEach((feature) => {
     const { requirementsTotal, requirementsCovered } =
-      calculateProjectStats(project);
+      calculateFeatureStats(feature);
     const coverage = requirementsTotal
       ? (requirementsCovered / requirementsTotal) * 100
       : 100;
@@ -26,13 +26,13 @@ const applyCoverageThresholds = ({ projects }, total, perProject) => {
     if (requirementsTotal) {
       combinedCoverage += coverage;
     } else {
-      // exclude empty projects from total coverage calculation
-      projectCount--;
+      // exclude empty features from total coverage calculation
+      featureCount--;
     }
 
-    const str = `${coverage.toFixed(0).padStart(4, " ")}% - ${project.title}`;
+    const str = `${coverage.toFixed(0).padStart(4, " ")}% - ${feature.title}`;
 
-    if (coverage < perProject) {
+    if (coverage < perFeature) {
       console.log("\x1b[31m%s\x1b[0m", str);
       error = true;
     } else {
@@ -41,7 +41,7 @@ const applyCoverageThresholds = ({ projects }, total, perProject) => {
     console.log("-------------------------------------------");
   });
 
-  const totalCoverage = combinedCoverage / projectCount;
+  const totalCoverage = combinedCoverage / featureCount;
   const str = `${totalCoverage.toFixed(0).padStart(4, " ")}% - Global coverage`;
 
   if (totalCoverage < total) {
@@ -54,10 +54,10 @@ const applyCoverageThresholds = ({ projects }, total, perProject) => {
   process.exit(Number(error));
 };
 
-const threshold = async (targetDirs, total, perProject) => {
+const threshold = async (targetDirs, total, perFeature) => {
   const state = await readCoverage(targetDirs);
 
-  applyCoverageThresholds(state, total, perProject);
+  applyCoverageThresholds(state, total, perFeature);
 };
 
 module.exports.threshold = threshold;

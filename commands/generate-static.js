@@ -3,22 +3,22 @@ const { join, basename } = require("path");
 const { readCoverage } = require("../reader/reader");
 const { renderFile } = require("../view/file");
 const { renderFiles } = require("../view/files");
-const { renderProject } = require("../view/project");
-const { renderProjects } = require("../view/projects");
+const { renderFeature } = require("../view/feature");
+const { renderFeatures } = require("../view/features");
 const { calculateTotals } = require("../view/totals");
 const { pageTemplate } = require("../view/page");
 const { mkdirSync, existsSync } = require("fs");
 
 const getLinks = (pathBack) => ({
   getFilesLink: () => join(pathBack, "files.html"),
-  getProjectsLink: () => join(pathBack, "projects.html"),
+  getFeaturesLink: () => join(pathBack, "features.html"),
   getFileLink: (path) =>
     join(
       pathBack,
       "files",
       `${basename(path.replace(/[/\\]+/g, "_"), ".json")}.html`
     ),
-  getProjectLink: (title) => join(pathBack, "projects", `${title}.html`),
+  getFeatureLink: (title) => join(pathBack, "features", `${title}.html`),
 });
 
 const createStaticHtmlWriter =
@@ -37,7 +37,7 @@ const createStaticHtmlWriter =
     );
   };
 
-const generateStatic = async (targetDirs, outputDir, projectTableType) => {
+const generateStatic = async (targetDirs, outputDir, featureTableType) => {
   const state = await readCoverage(targetDirs);
   const totals = calculateTotals(state);
   const writeHtml = createStaticHtmlWriter(outputDir, state, totals);
@@ -55,32 +55,32 @@ const generateStatic = async (targetDirs, outputDir, projectTableType) => {
         getLinks(".").getFileLink(filePath),
         "..",
         filePath,
-        (state, links) => renderFile(file, state, links, projectTableType)
+        (state, links) => renderFile(file, state, links, featureTableType)
       )
     )
   );
 
   await writeHtml("files.html", ".", "Files", renderFiles);
 
-  // projects
-  const projectsDir = join(outputDir, "projects");
+  // features
+  const featuresDir = join(outputDir, "features");
 
-  if (!existsSync(projectsDir)) {
-    mkdirSync(projectsDir);
+  if (!existsSync(featuresDir)) {
+    mkdirSync(featuresDir);
   }
 
   await Promise.all(
-    Object.entries(state.projects).map(([projectTitle, project]) =>
+    Object.entries(state.features).map(([featureTitle, feature]) =>
       writeHtml(
-        getLinks(".").getProjectLink(projectTitle),
+        getLinks(".").getFeatureLink(featureTitle),
         "..",
-        projectTitle,
-        (state, links) => renderProject(project, state, links, projectTableType)
+        featureTitle,
+        (state, links) => renderFeature(feature, state, links, featureTableType)
       )
     )
   );
 
-  await writeHtml("projects.html", ".", "Projects", renderProjects);
+  await writeHtml("features.html", ".", "Features", renderFeatures);
 };
 
 module.exports.generateStatic = generateStatic;

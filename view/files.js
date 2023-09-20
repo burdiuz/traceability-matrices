@@ -1,5 +1,5 @@
 const { compile } = require("pug");
-const { calculateProjectStats } = require("./totals");
+const { calculateFeatureStats } = require("./totals");
 
 const fileStructureTemplate = compile(
   `
@@ -13,9 +13,9 @@ div.flex-vertical
           each file in dir.files
             div.file
               a(href=self.links.getFileLink(file.id)) #{file.specName}
-              div.file-projects
-                each project in self.listFileProjects(file)
-                  span.file-project #{project.title} #{project.requirementsCovered} / #{project.requirementsTotal}
+              div.file-features
+                each feature in self.listFileFeatures(file)
+                  span.file-feature #{feature.title} #{feature.requirementsCovered} / #{feature.requirementsTotal}
 
 `,
   { self: true }
@@ -30,13 +30,13 @@ const renderFiles = (state, links) => {
     ...state,
     links,
 
-    // TODO CACHE totals per file and project
-    listFileProjects: (file) =>
-      Object.values(file.projects).map((project) => {
-        const totals = calculateProjectStats(project);
+    // TODO CACHE totals per file and feature
+    listFileFeatures: (file) =>
+      Object.values(file.features).map((feature) => {
+        const totals = calculateFeatureStats(feature);
         
         return {
-          title: project.title,
+          title: feature.title,
           ...totals,
         };
       }),

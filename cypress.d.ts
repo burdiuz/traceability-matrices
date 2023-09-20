@@ -1,4 +1,4 @@
-export type Project = {
+export type Feature = {
   title: String;
   description: string;
   structure: Record<string, object>;
@@ -6,7 +6,7 @@ export type Project = {
   records: Record<string, object>;
 };
 
-export type ProjectApi = {
+export type FeatureApi = {
   structure: (
     data?: Record<string, object>,
     headers?: string[]
@@ -17,14 +17,14 @@ export type ProjectApi = {
     clone: (...path: string[]) => Record<string, object>;
     branch: (
       path: string[],
-      projectTitle: string,
-      projectDescription?: string
-    ) => ProjectApi;
+      featureTitle: string,
+      featureDescription?: string
+    ) => FeatureApi;
     narrow: (
       path: string[],
-      projectTitle: string,
-      projectDescription?: string
-    ) => ProjectApi;
+      featureTitle: string,
+      featureDescription?: string
+    ) => FeatureApi;
   };
   headers: (headers?: string[]) => {
     clone: () => string[];
@@ -41,8 +41,8 @@ export type ProjectApi = {
     test: (title: string, ...args: any[]) => any;
     trace: () => void;
   };
-  valueOf: () => Project;
-  clone: () => ProjectApi;
+  valueOf: () => Feature;
+  clone: () => FeatureApi;
   setTraceToRequirementMatcher: (
     matcher: (
       /**
@@ -56,26 +56,26 @@ export type ProjectApi = {
        */
       requirements: Record<string, string[]>,
       /**
-       * Project structure
+       * Feature requirements structure
        */
       structure: Record<string, object>
     ) => string | string[]
   ) => void;
 };
 
-export declare const createEmptyProjectState: (
+export declare const createEmptyFeatureState: (
   title: String,
   description?: string
-) => Project;
+) => Feature;
 
-export declare const registerProject: (project: Project | ProjectApi) => void;
+export declare const registerFeature: (feature: Feature | FeatureApi) => void;
 
-export declare const wrapProjectState: (state: Project) => ProjectApi;
+export declare const wrapFeatureState: (state: Feature) => FeatureApi;
 
-export declare const createProject: (
-  projectTitle: string,
-  projectDescription?: string
-) => ProjectApi;
+export declare const createFeature: (
+  featureTitle: string,
+  featureDescription?: string
+) => FeatureApi;
 
 export declare const getStructureBranch: (
   structure: Record<string, object>,
