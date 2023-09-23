@@ -45,10 +45,12 @@ const createRoot = (
   },
 });
 
+const isHtml = (string) => /<[a-z][^>]+>/i.test(string);
+
 const toHtml = (list) => {
   const string = unified().use(remarkHtml).stringify(createRoot(list)).trim();
 
-  if (!/<[a-z][^>]+>/i.test(string)) {
+  if (!isHtml(string)) {
     // String does not contain any tags and we should convert HTML entities back to normal
     // this way user can use normal symbol in trace instead of using HTML entities
     return parseEntities(string);
@@ -127,10 +129,27 @@ const collectData = async (list, parent, ancestors) => {
 export const parseMarkdownFeature = async (content) => {
   const result = await unified().use(remarkParse).parse(content).children;
 
-  const feature = createEmptyFeatureState("");
+  const feature = createEmptyFeatureState({
+    title: "",
+    description: "",
+    group: "",
+  });
 
   if (result[0].type === "heading" || result[0].type === "paragraph") {
-    feature.title = await toHtml(result.shift().children);
+    let group = "";
+    let title = await toHtml(result.shift().children);
+
+    if (!isHtml(title)) {
+      const parts = title.split("/");
+
+      if (parts.length > 1) {
+        group = parts.shift().trim();
+        title = parts.join("/").trim();
+      }
+    }
+
+    feature.title = title;
+    feature.group = group;
   }
 
   const [description, struct] = splitItems(result);
@@ -172,7 +191,11 @@ export const createFeatureFromMarkdown = (path) =>
  * @returns FeatureApi
  */
 export const createFeatureFromMarkdownAsync = (path) => {
-  const feature = createFeature("");
+  const feature = createFeature({
+    title: "",
+    description: "",
+    group: "",
+  });
 
   before(() => {
     cy.readFile(path).then(

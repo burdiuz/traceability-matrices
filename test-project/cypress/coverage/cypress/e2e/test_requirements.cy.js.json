@@ -1,82 +1,86 @@
 [
   {
-    "title": "Project C",
+    "group": "",
     "description": "",
-    "structure": {
-      "Statics": {
-        "Add header text": {},
-        "Add welcome text": {},
-        "Path to App.js should be visible": {}
-      },
-      "Interactive": {
-        "Redirects": {
-          "Link with text \"Learn React\"": {},
-          "High Priority": {
-            "Redirect to reactjs.org": {}
-          }
-        }
-      }
-    },
+    "structure": {},
     "headers": [],
-    "records": {
-      "Add header text": [
-        {
-          "title": "should display help text",
-          "titlePath": [
-            "React App",
-            "should display help text"
-          ]
-        }
-      ],
-      "Add welcome text": [
-        {
-          "title": "should display help text",
-          "titlePath": [
-            "React App",
-            "should display help text"
-          ]
-        }
-      ],
-      "Path to App.js should be visible": [
-        {
-          "title": "should display entry point path",
-          "titlePath": [
-            "React App",
-            "should display entry point path"
-          ]
-        }
-      ],
-      "SVG logo preset on the page": [
-        {
-          "title": "should display logo",
-          "titlePath": [
-            "React App",
-            "Graphics",
-            "should display logo"
-          ]
-        }
-      ],
-      "Link with text \"Learn React\"": [
-        {
-          "title": "should have a link with proper text",
-          "titlePath": [
-            "React App",
-            "Redirects",
-            "should have a link with proper text"
-          ]
-        }
-      ],
-      "Redirect to reactjs.org": [
-        {
-          "title": "should have a react offsite link",
-          "titlePath": [
-            "React App",
-            "Redirects",
-            "Links",
-            "should have a react offsite link"
-          ]
-        }
-      ]
-    }
+    "records": [
+      {
+        "requirement": [
+          "Statics",
+          "Add header text"
+        ],
+        "title": "should display help text",
+        "filePath": "cypress/e2e/test_requirements.cy.js",
+        "titlePath": [
+          "React App",
+          "should display help text"
+        ]
+      },
+      {
+        "requirement": [
+          "Statics",
+          "Add welcome text"
+        ],
+        "title": "should display help text",
+        "filePath": "cypress/e2e/test_requirements.cy.js",
+        "titlePath": [
+          "React App",
+          "should display help text"
+        ]
+      },
+      {
+        "requirement": [
+          "Statics",
+          "Path to App.js should be visible"
+        ],
+        "title": "should display entry point path",
+        "filePath": "cypress/e2e/test_requirements.cy.js",
+        "titlePath": [
+          "React App",
+          "should display entry point path"
+        ]
+      },
+      {
+        "requirement": "SVG logo preset on the page",
+        "title": "should display logo",
+        "filePath": "cypress/e2e/test_requirements.cy.js",
+        "titlePath": [
+          "React App",
+          "Graphics",
+          "should display logo"
+        ]
+      },
+      {
+        "requirement": [
+          "Interactive",
+          "Redirects",
+          "Link with text \"Learn React\""
+        ],
+        "title": "should have a link with proper text",
+        "filePath": "cypress/e2e/test_requirements.cy.js",
+        "titlePath": [
+          "React App",
+          "Redirects",
+          "should have a link with proper text"
+        ]
+      },
+      {
+        "requirement": [
+          "Interactive",
+          "Redirects",
+          "High Priority",
+          "Redirect to reactjs.org"
+        ],
+        "title": "should have a react offsite link",
+        "filePath": "cypress/e2e/test_requirements.cy.js",
+        "titlePath": [
+          "React App",
+          "Redirects",
+          "Links",
+          "should have a react offsite link"
+        ]
+      }
+    ]
   }
 ]

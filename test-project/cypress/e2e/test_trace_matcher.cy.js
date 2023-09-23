@@ -1,4 +1,7 @@
-import { createFeature } from "@actualwave/traceability-matrices/cypress";
+import {
+  createFeature,
+  readStructureRequirements,
+} from "@actualwave/traceability-matrices/cypress";
 
 const Feature = createFeature("Feature Matcher");
 
@@ -19,8 +22,10 @@ Feature.structure({
   "001 SVG logo preset on the page": {},
 });
 
-Feature.setTraceToRequirementMatcher((name, requirements) => {
-  const req = Object.keys(requirements).find((key) => key.indexOf(name) === 0);
+Feature.setTraceToRequirementMatcher((name, structure) => {
+  const [req] = readStructureRequirements(structure).find(
+    ([key]) => key.indexOf(name) === 0
+  );
 
   return req || name;
 });
