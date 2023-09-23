@@ -13,6 +13,7 @@ coverage_static
 # production
 /build
 /markdown.js
+/cypress
 
 # misc
 cert.pem

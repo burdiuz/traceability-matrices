@@ -40,6 +40,6 @@
   },
   "devDependencies": {
     "cypress": "^12.17.3",
-    "@actualwave/traceability-matrices": "^0.1.8"
+    "@actualwave/traceability-matrices": "^0.1.10"
   }
 }

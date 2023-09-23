@@ -3,7 +3,7 @@ const resolve = require("@rollup/plugin-node-resolve");
 
 module.exports = [
   {
-    input: "./parsers/markdown.js",
+    input: "./src/parsers/markdown.js",
     output: { file: "./markdown.js", format: "es" },
     plugins: [resolve(), commonjs()],
     external: [

@@ -5,6 +5,7 @@ test-project
 screenshots
 __tests__
 jest.config.js
-/parsers
+tsconfig.json
+/src
 key.pem
 cert.pem
