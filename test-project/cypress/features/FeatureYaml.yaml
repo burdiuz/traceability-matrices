@@ -1,0 +1,22 @@
+title: Feature Yaml
+description: My feature description with <a href=\"https://google.com\">HTML</a>
+group:
+structure:
+  Optional Requirement 1: true
+  Optional Requirement 3: true
+  Optional Requirement 4: true
+  High:
+    - PRD Requirement 1
+    - PRD Requirement 2
+    - PRD Requirement 3
+  Medium:
+    PRD Requirement 4: null
+    PRD Requirement 5: []
+    PRD Requirement 6: {}
+  'Sub-category <a href=\"with a link\">http://google.com</a>':
+    - "Requirement on a side with & \" '' entities 1": false
+    - Requirement on a side 2: false
+    - Requirement on a side 3: false
+  Low:
+    - 'Requirement with & " '' < > entities 7': true
+    - Requirement 8: false

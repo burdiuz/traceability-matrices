@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { load } from "js-yaml";
 
 const createEmptyFeatureState = ({ title, description = "", group = "" }) => ({
   title,
@@ -10,9 +11,9 @@ const createEmptyFeatureState = ({ title, description = "", group = "" }) => ({
 });
 
 (async () => {
-  const content = fs.readFileSync("./FeatureJson.json", { encoding: "utf-8" });
+  const content = fs.readFileSync("./FeatureYaml.yaml", { encoding: "utf-8" });
 
-  // ---------------------- json.js parser code starts
+  // ---------------------- yaml.js parser code starts
 
   const renderStructure = (parentNode, structure = {}) => {
     if (!parentNode) {
@@ -45,9 +46,8 @@ const createEmptyFeatureState = ({ title, description = "", group = "" }) => ({
     return structure;
   };
 
-  const parseJsonFeature = async (content) => {
-    // Cypress automatically parses JSON files
-    const doc = typeof content === 'string' ? JSON.parse(content) : content;
+  const parseYamlFeature = async (content) => {
+    const doc = load(content);
     const feature = createEmptyFeatureState(doc);
 
     feature.structure = renderStructure(doc.structure);
@@ -55,9 +55,9 @@ const createEmptyFeatureState = ({ title, description = "", group = "" }) => ({
     return feature;
   };
 
-  // ---------------------- json.js parser code ends
+  // ---------------------- yaml.js parser code ends
 
-  const feature = await parseJsonFeature(content);
+  const feature = await parseYamlFeature(content);
 
   console.log(feature.structure);
 })();

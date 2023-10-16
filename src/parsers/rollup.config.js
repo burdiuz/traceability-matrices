@@ -29,4 +29,13 @@ export default [
       "@actualwave/traceability-matrices/cypress",
     ],
   },
+  {
+    input: "./src/parsers/yaml.js",
+    output: { file: "./yaml.js", format: "es" },
+    plugins: [resolve(), commonjs()],
+    external: [
+      "@actualwave/traceability-matrices",
+      "@actualwave/traceability-matrices/cypress",
+    ],
+  },
 ];

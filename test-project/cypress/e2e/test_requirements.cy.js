@@ -1,6 +1,6 @@
 import { createFeature } from "@actualwave/traceability-matrices/cypress";
 
-const Feature = createFeature("Feature C");
+const Feature = createFeature({ title: "Feature C" });
 
 describe("React App", () => {
   beforeEach(() => {

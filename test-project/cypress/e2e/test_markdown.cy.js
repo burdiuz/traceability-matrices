@@ -4,7 +4,7 @@ import {
   createFeatureFromMarkdownAsync,
 } from "@actualwave/traceability-matrices/markdown";
 
-const Feature2 = createFeature("Feature B");
+const Feature2 = createFeature({ title: "Feature B" });
 /*
   When loading markdown asynchronously project structure is not available immediately, 
   until test starts it will be empty.

@@ -1,4 +1,10 @@
-import { createEmptyFeatureState, registerFeature, wrapFeatureState, createFeature } from '@actualwave/traceability-matrices/cypress';
+import {
+  createFeature,
+  createEmptyFeatureState,
+  registerFeature,
+  wrapFeatureState,
+} from "@actualwave/traceability-matrices/cypress";
+import { load } from "js-yaml";
 
 const renderStructure = (parentNode, structure = {}) => {
   if (!parentNode) {
@@ -32,31 +38,25 @@ const renderStructure = (parentNode, structure = {}) => {
 };
 
 /**
- * Parse JSON string and create a feature from it.
- * The structure of json file is following:
- * {
- *   "title": "Feature title",
- *   "description": "Optional feature description",
- *   "group": "Optional feature group",
- *   "structure": {
- *     "Requirement name": {},
- *     "Requirement name": null,
- *     "Requirement name": '',
- *     "Category name": {
- *       "Requirement name": {},
- *       "Category name": {
- *         "Requirement name": {}
- *       }
- *     }
- *   }
- * }
+ * Parse YAML string and create a feature from it.
+ * The structure of yaml file is following:
+title: Feature Yaml
+description: My feature description with <a href=\"https://google.com\">HTML</a>
+group:
+structure:
+  Requirement 1: true
+  Requirement 3: false
+  Requirement 4: 1
+  Categoy Name:
+    - Requirement 4
+  Categoy Name:
+    Requirement 5: null
  *
- * @param {string} content String of JSON content
+ * @param {string} content String of YAML content
  * @returns
  */
-const parseJsonFeature = async (content) => {
-  // Cypress automatically parses JSON files
-  const doc = typeof content === 'string' ? JSON.parse(content) : content;
+export const parseYamlFeature = async (content) => {
+  const doc = load(content);
   const feature = createEmptyFeatureState(doc);
 
   feature.structure = renderStructure(doc.structure);
@@ -67,14 +67,14 @@ const parseJsonFeature = async (content) => {
 /**
  * Since it uses cy.readFile(), it can be executed only within cypress hooks like before().
  *
- * @param {string} path Path to json file from feature root
+ * @param {string} path Path to yaml file from feature root
  * @returns
  */
-const createFeatureFromJson = (path) =>
+export const createFeatureFromYaml = (path) =>
   cy.readFile(path).then(
     (content) =>
       new Cypress.Promise((resolve, reject) => {
-        parseJsonFeature(content)
+        parseYamlFeature(content)
           .then((state) => {
             registerFeature(state);
             const feature = wrapFeatureState(state);
@@ -85,16 +85,16 @@ const createFeatureFromJson = (path) =>
   );
 
 /**
- * It immediately returns empty feature and creates a before() hook which reads json file.
- * Once json has been read, its content(title, description, structure) merged
+ * It immediately returns empty feature and creates a before() hook which reads yaml file.
+ * Once yaml has been read, its content(title, description, structure) merged
  * with returned feature.
  *
  * This way we don't need to wait for a promise or wrap it into lifecycle hooks.
  *
- * @param {string} path Path to json file from feature root
+ * @param {string} path Path to yaml file from feature root
  * @returns FeatureApi
  */
-const createFeatureFromJsonAsync = (path) => {
+export const createFeatureFromYamlAsync = (path) => {
   const feature = createFeature({
     title: "",
     description: "",
@@ -105,7 +105,7 @@ const createFeatureFromJsonAsync = (path) => {
     cy.readFile(path).then(
       (content) =>
         new Cypress.Promise((resolve, reject) => {
-          parseJsonFeature(content)
+          parseYamlFeature(content)
             .then((state) => {
               feature.structure().merge(state.structure);
               feature.headers(state.headers);
@@ -120,5 +120,3 @@ const createFeatureFromJsonAsync = (path) => {
 
   return feature;
 };
-
-export { createFeatureFromJson, createFeatureFromJsonAsync, parseJsonFeature };

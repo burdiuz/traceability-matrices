@@ -3,7 +3,7 @@ import {
   readStructureRequirements,
 } from "@actualwave/traceability-matrices/cypress";
 
-const Feature = createFeature("Feature Matcher");
+const Feature = createFeature({ title: "Feature Matcher" });
 
 Feature.structure({
   Statics: {

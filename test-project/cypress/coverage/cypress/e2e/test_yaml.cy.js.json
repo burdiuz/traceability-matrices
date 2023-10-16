@@ -9,7 +9,7 @@
       {
         "requirement": "PRD Requirement BEFORE",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -20,7 +20,7 @@
       {
         "requirement": "PRD Requirement BEFORE EACH",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -31,7 +31,7 @@
       {
         "requirement": "PRD Requirement A",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -42,7 +42,7 @@
       {
         "requirement": "PRD Requirement A",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -53,7 +53,7 @@
       {
         "requirement": "PRD Requirement B",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -64,7 +64,7 @@
       {
         "requirement": "PRD Requirement A",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -75,7 +75,7 @@
       {
         "requirement": "PRD Requirement C",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -86,7 +86,7 @@
       {
         "requirement": "PRD Requirement AFTER EACH",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -97,7 +97,7 @@
       {
         "requirement": "PRD Requirement AFTER",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -108,13 +108,13 @@
     ]
   },
   {
-    "title": "Feature Markdown",
+    "title": "Feature Yaml",
     "group": "",
-    "description": "<p>My feature description with <a href=\"https://google.com\">HTML</a></p>",
+    "description": "My feature description with <a href=\\\"https://google.com\\\">HTML</a>",
     "structure": {
       "Optional Requirement 1": {},
-      "Optional Requirement 2": {},
       "Optional Requirement 3": {},
+      "Optional Requirement 4": {},
       "High": {
         "PRD Requirement 1": {},
         "PRD Requirement 2": {},
@@ -123,12 +123,12 @@
       "Medium": {
         "PRD Requirement 4": {},
         "PRD Requirement 5": {},
-        "PRD Requirement 6": {},
-        "Sub-category \n<a href=\"http://google.com\">with a link</a>": {
-          "Requirement on a side with & \" ' entities 1": {},
-          "Requirement on a side 2": {},
-          "Requirement on a side 3": {}
-        }
+        "PRD Requirement 6": {}
+      },
+      "Sub-category <a href=\\\"with a link\\\">http://google.com</a>": {
+        "Requirement on a side with & \" '' entities 1": {},
+        "Requirement on a side 2": {},
+        "Requirement on a side 3": {}
       },
       "Low": {
         "Requirement with & \" ' < > entities 7": {},
@@ -140,7 +140,7 @@
       {
         "requirement": "In before each",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -149,7 +149,7 @@
       {
         "requirement": "PRD Requirement 1",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -158,7 +158,7 @@
       {
         "requirement": "PRD Requirement 2",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -167,7 +167,7 @@
       {
         "requirement": "PRD Requirement 3",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -176,7 +176,7 @@
       {
         "requirement": "PRD Requirement 1",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -185,7 +185,7 @@
       {
         "requirement": "PRD Requirement 2",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -194,7 +194,7 @@
       {
         "requirement": "In before each",
         "title": "should display logo",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display logo"
@@ -203,7 +203,7 @@
       {
         "requirement": "PRD Requirement 1",
         "title": "should display logo",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display logo"
@@ -212,7 +212,7 @@
       {
         "requirement": "PRD Requirement 2",
         "title": "should display logo",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display logo"
@@ -221,7 +221,7 @@
       {
         "requirement": "In before each",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -230,7 +230,7 @@
       {
         "requirement": "PRD Requirement 1",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -239,7 +239,7 @@
       {
         "requirement": "PRD Requirement 2",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -248,7 +248,7 @@
       {
         "requirement": "PRD Requirement 3",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -257,7 +257,7 @@
       {
         "requirement": "PRD Requirement 1",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -266,7 +266,7 @@
       {
         "requirement": "PRD Requirement 2",
         "title": "should display help text",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "should display help text"
@@ -275,7 +275,7 @@
       {
         "requirement": "In before each",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -286,7 +286,7 @@
       {
         "requirement": "Requirement on a side with & \" ' entities 1",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -297,7 +297,7 @@
       {
         "requirement": "PRD Requirement 4",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -308,7 +308,7 @@
       {
         "requirement": "PRD Requirement 1",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -319,7 +319,7 @@
       {
         "requirement": "PRD Requirement 3",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -330,7 +330,7 @@
       {
         "requirement": "PRD Requirement 5",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",
@@ -341,7 +341,7 @@
       {
         "requirement": "Requirement with & \" ' < > entities 7",
         "title": "should have a react offsite link",
-        "filePath": "cypress/e2e/test_markdown.cy.js",
+        "filePath": "cypress/e2e/test_yaml.cy.js",
         "titlePath": [
           "React App",
           "Redirects",

@@ -1,6 +1,6 @@
 import { createFeature } from "@actualwave/traceability-matrices/cypress";
 
-const Feature = createFeature("Feature C");
+const Feature = createFeature({ title: "Feature C" });
 Feature.structure({
   Statics: {
     "Add header text": {},

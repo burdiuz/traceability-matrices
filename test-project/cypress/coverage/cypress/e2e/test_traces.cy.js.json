@@ -1,5 +1,6 @@
 [
   {
+    "title": "Feature A",
     "group": "",
     "description": "",
     "structure": {},
@@ -198,6 +199,7 @@
     ]
   },
   {
+    "title": "Feature B",
     "group": "",
     "description": "",
     "structure": {},

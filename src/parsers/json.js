@@ -60,7 +60,8 @@ const renderStructure = (parentNode, structure = {}) => {
  * @returns
  */
 export const parseJsonFeature = async (content) => {
-  const doc = JSON.parse(content);
+  // Cypress automatically parses JSON files
+  const doc = typeof content === 'string' ? JSON.parse(content) : content;
   const feature = createEmptyFeatureState(doc);
 
   feature.structure = renderStructure(doc.structure);
