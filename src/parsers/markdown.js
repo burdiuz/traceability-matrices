@@ -118,7 +118,7 @@ const collectData = async (list, parent, ancestors) => {
  * Parse markdown content string and create a feature from it.
  * The structure of markdown file is following:
  * # Feature title
- * Optional paragraph ormultiple paragraphs of feature description, may contain links
+ * Optional paragraph or multiple paragraphs of feature description, may contain links
  *
  * ## Category
  * - list of requirements

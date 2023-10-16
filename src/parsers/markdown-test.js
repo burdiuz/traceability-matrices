@@ -1,21 +1,18 @@
-const fs = require("fs");
+import * as fs from "fs";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkHtml from "remark-html";
 
-const createEmptyProjectState = (projectTitle, projectDescription = "") => ({
-  title: projectTitle,
-  description: projectDescription,
+const createEmptyFeatureState = ({ title, description = "", group = "" }) => ({
+  title,
+  group,
+  description,
   structure: {},
   headers: [],
-  records: {},
+  records: [],
 });
 
 (async () => {
-  const { unified } = await import("unified");
-  const { default: remarkParse } = await import("remark-parse");
-  const { default: remarkHtml } = await import("remark-html");
-  const { default: remarkStringify } = await import("remark-stringify");
-  // const { createEmptyProjectState } = await import("../cypress.js");
-  const { visit } = await import("unist-util-visit");
-
   const content = fs.readFileSync("./project.md");
 
   // ---------------------- markdown.js parser code starts
@@ -132,7 +129,7 @@ const createEmptyProjectState = (projectTitle, projectDescription = "") => ({
   const parseMarkdownProject = async (content) => {
     const result = await unified().use(remarkParse).parse(content).children;
 
-    const project = createEmptyProjectState("");
+    const project = createEmptyFeatureState({ title: "" });
 
     if (result[0].type === "heading" || result[0].type === "paragraph") {
       project.title = await toHtml(result.shift().children);

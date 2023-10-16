@@ -2,9 +2,37 @@
 import { Feature, MatcherFn } from "./types";
 import { concatPath } from "./utils";
 
+/**
+ * Check of user does not try to trace a category
+ * @param structure 
+ * @param namePath 
+ * @returns 
+ */
+const validatePath = (structure: object, namePath: string | string[]) => {
+  if (!structure || !(namePath instanceof Array)) {
+    return;
+  }
+
+  let parent = structure;
+  for (let index = 0; index < namePath.length; index++) {
+    parent = parent[namePath[index]];
+    if (!parent || typeof parent !== "object") return;
+  }
+
+  if (typeof parent === "object" && Object.keys(parent).length) {
+    // user traced an category, this is not allowed
+
+    throw new Error(`Path "[${namePath.join('", "')}"]
+refers to a category in a feature structure.
+Categories cannot be traced, please specify a requirement(leaf node of the feature structure) for tracing.`);
+  }
+};
+
 const addRecordToFeature = (feature: Feature, namePath: string[] | string) => {
   const { title, titlePath = [] } = Cypress.currentTest || {};
   let name = namePath;
+
+  validatePath(feature.structure, namePath);
 
   if (typeof namePath === "string" || namePath.length <= 1) {
     name = String(namePath);
