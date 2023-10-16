@@ -13,6 +13,9 @@ coverage_static
 # production
 /build
 /markdown.js
+/json.js
+/yaml.js
+/html.js
 /cypress
 
 # misc
