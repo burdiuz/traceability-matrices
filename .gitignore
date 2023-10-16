@@ -16,7 +16,6 @@ coverage_static
 /json.js
 /yaml.js
 /html.js
-/cypress
 
 # misc
 cert.pem
