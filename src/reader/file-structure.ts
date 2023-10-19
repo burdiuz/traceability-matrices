@@ -1,17 +1,6 @@
 import path from "node:path";
 import fs from "node:fs/promises";
-
-export type DirectoryInfo = {
-  path: string;
-
-  // local path starts from coverage root
-  localPath: string;
-  name: string;
-  hasFiles: boolean;
-  hasFilesDeep: boolean;
-  children: DirectoryInfo[];
-  files: string[];
-};
+import { DirectoryInfo } from "./types";
 
 export type ReadResult = { root: DirectoryInfo; list: DirectoryInfo[] };
 
@@ -53,7 +42,13 @@ const readDirectory = async (
     } else if (stat.isFile() && path.extname(value) === ".json") {
       directory.hasFiles = true;
       directory.hasFilesDeep = true;
-      directory.files.push(value);
+      directory.files.push({
+        id: "",
+        name: value,
+        path: "",
+        specName: "",
+        features: [],
+      });
     }
   }
 

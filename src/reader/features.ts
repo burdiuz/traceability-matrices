@@ -1,7 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { Feature, FeatureFileJSON, GlobalFeature } from "./types";
 import { removeExtraSpaces } from "./utils";
-import { seedStructure } from "./structure";
+import { convertRecordsListToMap, mergeFeatureRecords } from "./records";
+import { seedStructure, mergeFeatureStructure } from "./structure";
 
 const readCoverageReportFile = async (filePath: string) => {
   const data = await readFile(filePath, { encoding: "utf-8" });
@@ -9,16 +10,20 @@ const readCoverageReportFile = async (filePath: string) => {
   return JSON.parse(data) as FeatureFileJSON;
 };
 
-const getGlobalFeatureName = ({ group, title }) => `${group}-/-${title}`;
+const getGlobalFeatureName = ({
+  group,
+  title,
+}: {
+  title: string;
+  group: string;
+}) => `${group}-/-${title}`;
 
 const lookupForFeatures = (
   filePath: string,
   featureList: FeatureFileJSON,
   globalFeatures: Record<string, GlobalFeature> = {}
 ) => {
-  const features: Feature[] = [];
-
-  featureList.forEach((source) => {
+  const features: Feature[] = featureList.map((source) => {
     let global: GlobalFeature;
 
     const feature: Feature = {
@@ -57,7 +62,8 @@ const lookupForFeatures = (
 
     feature.records = convertRecordsListToMap(source.records, global.structure);
 
-    setSpecsUnique(feature.records);
+    // do this later while normalising projects
+    //setSpecsUnique(feature.records);
 
     mergeFeatureRecords(feature, global);
     global.files[filePath] = feature.records;
@@ -65,27 +71,20 @@ const lookupForFeatures = (
 
     // feature also gets one file records just to match global feature shape for easier processing
     feature.files = { [filePath]: feature.records };
+
+    return feature;
   });
 
   return features;
 };
 
-export const readRecords = async (
+export const readFeatures = async (
   filePath: string,
   globalFeatures: Record<string, GlobalFeature>
 ) => {
   const records = await readCoverageReportFile(filePath);
-  // const specFile = filePath.replace(/\.json$/, "");
 
   const features = lookupForFeatures(filePath, records, globalFeatures);
-
-  //console.log(features[0].structure['Grand requirement']);
-  /*
-  console.log(
-    features[0].requirements['PRD Requirement 3'].specs[0]
-      .requirements
-  );
-  */
 
   return features;
 };

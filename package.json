@@ -44,6 +44,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "build:cypress": "rollup --config src/cypress/rollup.config.js",
+    "build:reader": "rollup --config src/reader/rollup.config.js",
     "build:parsers": "rollup --config src/parsers/rollup.config.js",
     "prepublish": "npm run build:parsers"
   },

@@ -1,46 +1,33 @@
 import { resolve, join, basename } from "node:path";
 import { type ReadResult, readAll } from "./file-structure";
 import {
+  FileInfo,
   type Feature,
   type GlobalFeature,
-  readRecords,
-} from "./features";
-
-export type FileInfo = {
-  id: string;
-  name: string;
-  specName: string;
-  path: string;
-  features: Feature[];
-};
+  DirectoryInfo,
+} from "./types";
+import { readFeatures } from "./features";
+import { setSpecsUnique } from "./records";
 
 const readFiles = async (
   dirPath: string,
-  files: string[],
+  files: FileInfo[],
   features: Record<string, GlobalFeature>
 ) => {
-  const fileObjects: FileInfo[] = [];
-
   for (let index = 0; index < files.length; index++) {
-    const fileName = files[index];
-    const filePath = resolve(dirPath, fileName);
+    const file = files[index];
 
-    const fileFeatures = await readRecords(filePath, features);
+    file.specName = basename(file.name, ".json");
+    file.path = resolve(dirPath, file.name);
 
-    fileObjects.push({
-      id: "",
-      name: fileName,
-      specName: basename(fileName, ".json"),
-      path: filePath,
-      features: fileFeatures,
-    });
+    file.features = await readFeatures(file.path, features);
   }
 
-  return fileObjects;
+  return files;
 };
 
 const readDirectories = async (
-  list,
+  list: DirectoryInfo[],
   features: Record<string, GlobalFeature>
 ) => {
   for (let dir of list) {
@@ -49,7 +36,7 @@ const readDirectories = async (
 };
 
 const collectFiles = (roots: ReadResult[]) => {
-  const files = {};
+  const files: Record<string, FileInfo> = {};
 
   roots.forEach(({ root, list }) =>
     list.forEach((dir) => {
@@ -64,10 +51,10 @@ const collectFiles = (roots: ReadResult[]) => {
   return files;
 };
 
-const getStructureDepth = (structure, depth = 0) => {
+const getStructureDepth = (structure: object, depth = 1) => {
   let newDepth = depth;
 
-  for (key in structure) {
+  for (let key in structure) {
     const value = structure[key];
 
     if (value && typeof value === "object") {
@@ -79,38 +66,16 @@ const getStructureDepth = (structure, depth = 0) => {
 };
 
 /**
- * Adds empty recorts for requirements found in structure and not presdent in records
- * Adds requiremnts to structure which were tested(present in records) but aren't presented there.
+ * Remove duplicate specs from
  * @param {Record<string, import("./coverage-records").>} globalFeatures
  * @param {Record<string, import("./reader").FileWithFeatures>} files
  */
-const normalize = (globalFeatures: Record<string, GlobalFeature>, files) => {
-  // generate missing structure pieces from records
-  Object.values(globalFeatures).forEach((feature) => {
-    const structReqs = getStructureLeafNodes(feature.structure);
-    Object.keys(feature.records).forEach((req) => {
-      if (structReqs.indexOf(req) < 0) {
-        feature.structure[req] = {};
-      }
-    });
-  });
-
-  // add empty records from structure for global features
-  Object.values(globalFeatures).forEach((feature) => {
-    const { structure, records } = feature;
-
-    addEmptyRecordsFromStructure(structure, records);
-
-    // calculate structure depth of the feature
-    feature.depth = getStructureDepth(feature.structure);
-  });
-
-  // add empty records from requirements found in structure for partial features
-  Object.values(files).forEach(({ features }) =>
-    Object.values(features).forEach(({ global, records, depth, title }) => {
-      addEmptyRecordsFromStructure(global.structure, records);
-    })
-  );
+const normalize = (
+  globalFeatures: Record<string, GlobalFeature>,
+  files: Record<string, FileInfo>
+) => {
+  // set unique specs for global features
+  //setSpecsUnique()
 };
 
 export const readCoverage = async (

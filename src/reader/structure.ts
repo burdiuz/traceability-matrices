@@ -21,7 +21,13 @@ export const seedStructure = (structure: object) => {
   });
 };
 
-const mergeFeatureStructure = (
+const logStructuralErrorFor = (title: string) =>
+  console.error(
+    `Instances of "${title}" have srutuctural mismatch, please make sure it records similar structure in all test files.
+Possible data loss while merging feature instances.`
+  );
+
+export const mergeFeatureStructure = (
   featureTitle: string,
   source: object,
   target: object
@@ -32,18 +38,14 @@ const mergeFeatureStructure = (
 
       if (typeof children === "object") {
         if (typeof targetChildren !== "object") {
-          console.error(
-            `Instances of ${featureTitle} have srutuctural mismatch, please make sure it records similar structure in all test files.`
-          );
+          logStructuralErrorFor(featureTitle);
         } else {
           mergeFeatureStructure(featureTitle, children, targetChildren);
         }
 
         // no need to overwrite requirement id, we just check if there are no mismatch
       } else if (typeof targetChildren === "object") {
-        console.error(
-          `Different instances of ${featureTitle} have srutuctural mismatch, please make sure it records similar structure in all test files.`
-        );
+        logStructuralErrorFor(featureTitle);
       }
     } else {
       target[title] = children;
@@ -67,6 +69,7 @@ export const getStructureRequirements = (
 ) => {
   Object.entries(structure).forEach(([key, value]) => {
     const currentPath = [...path, key];
+
     if (typeof value === "object") {
       getStructureRequirements(value, requirements, currentPath);
       return;
@@ -77,6 +80,11 @@ export const getStructureRequirements = (
 
   return requirements;
 };
+
+const logPathErrorFor = (key: string) =>
+  console.error(
+    `"${key}" was recorded as a requirement and a category. Please, make sure you are tracing a requirement and not a category and run tests to generate updated coverage report.`
+  );
 
 /**
  * Find requirement id by its name or path,
@@ -107,9 +115,7 @@ export const findPathId = (keys: string[], structure: object) => {
       if (index < lastIndex) {
         // edge case when key exists in records as a requirement and category
         if (typeof value !== "object") {
-          console.error(
-            `"${key}" was recorded as a requirement and a category. Please, make sure you are tracing a requirement and not a category and run tests to generate updated coverage report.`
-          );
+          logPathErrorFor(key);
 
           // replace string with category object
           parent[key] = {};
@@ -119,9 +125,7 @@ export const findPathId = (keys: string[], structure: object) => {
       } else {
         // edge case when key exists in records as a requirement and category
         if (typeof value === "object") {
-          console.error(
-            `"${key}" was recorded as a requirement and a category. Please, make sure you are tracing a requirement and not a category and run tests to generate updated coverage report.`
-          );
+          logPathErrorFor(key);
 
           return "";
         }
