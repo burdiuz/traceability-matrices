@@ -1,15 +1,15 @@
-const Koa = require("koa");
-const https = require("https");
-const { readFile } = require("fs/promises");
-const { resolve } = require("path");
-const Router = require("@koa/router");
-const { readCoverage } = require("../reader/reader");
-const { renderFile } = require("../view/file");
-const { renderFiles } = require("../view/files");
-const { renderFeature } = require("../view/feature");
-const { renderFeatures } = require("../view/features");
-const { calculateTotals } = require("../view/totals");
-const { pageTemplate } = require("../view/page");
+import https from "node:https";
+import Koa from "koa";
+import Router from "@koa/router";
+import { readFile } from "fs/promises";
+import { resolve } from "path";
+import { readCoverage } from "../reader";
+import { renderFile } from "../view/file";
+import { renderFiles } from "../view/files";
+import { renderFeature } from "../view/feature";
+import { renderFeatures } from "../view/features";
+import { calculateTotals } from "../view/totals";
+import { listPageTemplate } from "../view/page";
 
 const inModulePath = (path) => resolve(__dirname, path);
 
@@ -21,12 +21,12 @@ const links = {
   getRefreshLink: () => "/refresh",
 };
 
-const serve = async (
-  targetDirs,
-  port,
+export const serve = async (
+  targetDirs: string[],
+  port: number,
   keyFilePath = "",
   certFilePath = "",
-  featureTableType = "default"
+  featureTableType: "default" | "compact" = "default"
 ) => {
   const useHttps = Boolean(keyFilePath && certFilePath);
   let state = await readCoverage(targetDirs);
@@ -42,7 +42,7 @@ const serve = async (
   router.get("/files", (ctx, next) => {
     const content = renderFiles(state, links);
 
-    ctx.response.body = pageTemplate({
+    ctx.response.body = listPageTemplate({
       pageTitle: "Files",
       links,
       totals,
@@ -64,7 +64,7 @@ const serve = async (
 
     const content = renderFile(file, state, links, featureTableType);
 
-    ctx.response.body = pageTemplate({
+    ctx.response.body = listPageTemplate({
       pageTitle: filePath,
       links,
       totals,
@@ -75,7 +75,7 @@ const serve = async (
   router.get("/features", (ctx, next) => {
     const content = renderFeatures(state, links);
 
-    ctx.response.body = pageTemplate({
+    ctx.response.body = listPageTemplate({
       pageTitle: "Features",
       links,
       totals,
@@ -97,7 +97,7 @@ const serve = async (
 
     const content = renderFeature(feature, state, links, featureTableType);
 
-    ctx.response.body = pageTemplate({
+    ctx.response.body = listPageTemplate({
       pageTitle: featureId,
       links,
       totals,
@@ -136,5 +136,3 @@ const serve = async (
     app.listen(port);
   }
 };
-
-module.exports.serve = serve;

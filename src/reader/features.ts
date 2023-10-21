@@ -22,17 +22,21 @@ const lookupForFeatures = (
   filePath: string,
   featureList: FeatureFileJSON,
   globalFeatures: Record<string, GlobalFeature> = {}
-) => {
-  const features: Feature[] = featureList.map((source) => {
+) =>
+  featureList.map((source) => {
     let global: GlobalFeature;
-
-    const feature: Feature = {
+    const partial = {
       id: getGlobalFeatureName(source),
       title: removeExtraSpaces(source.title || ""),
       description: removeExtraSpaces(source.description || ""),
       group: removeExtraSpaces(source.group || ""),
+      headers: source.headers,
       records: {},
       files: {},
+    };
+
+    const feature: Feature = {
+      ...partial,
       get global() {
         return global;
       },
@@ -52,7 +56,7 @@ const lookupForFeatures = (
       mergeFeatureStructure(feature.title, source.structure, global.structure);
     } else {
       global = {
-        ...feature,
+        ...partial,
         structure: source.structure,
         depth: 1,
       };
@@ -67,16 +71,12 @@ const lookupForFeatures = (
 
     mergeFeatureRecords(feature, global);
     global.files[filePath] = feature.records;
-    features.push(feature);
 
     // feature also gets one file records just to match global feature shape for easier processing
     feature.files = { [filePath]: feature.records };
 
     return feature;
   });
-
-  return features;
-};
 
 export const readFeatures = async (
   filePath: string,

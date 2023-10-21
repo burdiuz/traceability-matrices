@@ -1,5 +1,7 @@
-const { compile } = require("pug");
-const { calculateFeatureStats } = require("./totals");
+import { compile } from "pug";
+import { calculateFeatureStats } from "./totals";
+import type { Coverage, FileInfo } from "../reader";
+import type { PageLinks } from "./types";
 
 const fileStructureTemplate = compile(
   `
@@ -21,20 +23,16 @@ div.flex-vertical
   { self: true }
 );
 
-/**
- *
- * @param {import("../reader/reader").ReadCoverageResult} state
- */
-const renderFiles = (state, links) => {
+export const renderFiles = (state: Coverage, links: PageLinks) => {
   return fileStructureTemplate({
     ...state,
     links,
 
     // TODO CACHE totals per file and feature
-    listFileFeatures: (file) =>
+    listFileFeatures: (file: FileInfo) =>
       Object.values(file.features).map((feature) => {
         const totals = calculateFeatureStats(feature);
-        
+
         return {
           title: feature.title,
           ...totals,
@@ -42,5 +40,3 @@ const renderFiles = (state, links) => {
       }),
   });
 };
-
-module.exports.renderFiles = renderFiles;

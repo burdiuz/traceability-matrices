@@ -1,5 +1,5 @@
-const { readCoverage } = require("../reader/reader");
-const { calculateFeatureStats } = require("../view/totals");
+import { GlobalFeature, readCoverage } from "../reader";
+import { calculateFeatureStats } from "../view/totals";
 
 /**
  * exists with error if coverage lower thresholds
@@ -7,7 +7,11 @@ const { calculateFeatureStats } = require("../view/totals");
  * @param {number} total global coverage threshold
  * @param {number} perFeature feature minimal coverage
  */
-const applyCoverageThresholds = ({ features }, total, perFeature) => {
+const applyCoverageThresholds = (
+  features: Record<string, GlobalFeature>,
+  total: number,
+  perFeature: number
+) => {
   const list = Object.values(features);
   let featureCount = list.length;
   let error = false;
@@ -30,7 +34,11 @@ const applyCoverageThresholds = ({ features }, total, perFeature) => {
       featureCount--;
     }
 
-    const str = `${coverage.toFixed(0).padStart(4, " ")}% - ${feature.title}`;
+    const str = `${coverage
+      .toFixed(0)
+      .padStart(4, " ")}%\t${requirementsCovered}\t/ ${requirementsTotal}\t- ${
+      feature.title
+    }`;
 
     if (coverage < perFeature) {
       console.log("\x1b[31m%s\x1b[0m", str);
@@ -54,10 +62,12 @@ const applyCoverageThresholds = ({ features }, total, perFeature) => {
   process.exit(Number(error));
 };
 
-const threshold = async (targetDirs, total, perFeature) => {
-  const state = await readCoverage(targetDirs);
+export const threshold = async (
+  targetDirs: string[],
+  total: number,
+  perFeature: number
+) => {
+  const { features } = await readCoverage(targetDirs);
 
-  applyCoverageThresholds(state, total, perFeature);
+  applyCoverageThresholds(features, total, perFeature);
 };
-
-module.exports.threshold = threshold;

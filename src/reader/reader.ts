@@ -1,13 +1,14 @@
 import { resolve, join, basename } from "node:path";
 import { type ReadResult, readAll } from "./file-structure";
-import {
-  FileInfo,
-  type Feature,
-  type GlobalFeature,
-  DirectoryInfo,
-} from "./types";
+import { FileInfo, type GlobalFeature, DirectoryInfo } from "./types";
 import { readFeatures } from "./features";
 import { setSpecsUnique } from "./records";
+
+export type Coverage = {
+  roots: ReadResult[];
+  features: Record<string, GlobalFeature>;
+  files: Record<string, FileInfo>;
+};
 
 const readFiles = async (
   dirPath: string,
@@ -74,14 +75,23 @@ const normalize = (
   globalFeatures: Record<string, GlobalFeature>,
   files: Record<string, FileInfo>
 ) => {
-  // set unique specs for global features
-  //setSpecsUnique()
+  Object.values(globalFeatures).forEach((feature) => {
+    // calculate each global project depth
+    feature.depth = getStructureDepth(feature.structure);
+
+    // filter specs for global features to remove duplicate spec records for each requirement
+    setSpecsUnique(feature.records);
+  });
+
+  Object.values(files).forEach((file) =>
+    file.features.forEach((feature) => setSpecsUnique(feature.records))
+  );
 };
 
 export const readCoverage = async (
   paths: string[],
   features: Record<string, GlobalFeature> = {}
-) => {
+): Promise<Coverage> => {
   const roots = await readAll(paths);
 
   for (let item of roots) {

@@ -1,6 +1,8 @@
-const { compile } = require("pug");
-const { calculateFeatureStats } = require("./totals");
-const { renderFeatureCategoryList } = require("./feature");
+import { compile } from "pug";
+import { calculateFeatureStats } from "./totals";
+import { renderFeatureCategoryList } from "./feature";
+import { Coverage } from "../reader";
+import { PageLinks } from "./types";
 
 const featuresStructureTemplate = compile(
   `
@@ -24,11 +26,7 @@ div.flex-vertical
   { self: true, filename: "pug", basedir: __dirname }
 );
 
-/**
- *
- * @param {import("../reader/reader").ReadCoverageResult} state
- */
-const renderFeatures = (state, links) => {
+export const renderFeatures = (state: Coverage, links: PageLinks) => {
   const filePaths = Object.values(state.files).reduce(
     (res, file) => ({
       ...res,
@@ -46,7 +44,7 @@ const renderFeatures = (state, links) => {
         const { total, covered } = Object.values(requirements).reduce(
           ({ total, covered }, specs) => ({
             total: total + 1,
-            covered: covered + Boolean(specs.length),
+            covered: covered + (specs.length ? 1 : 0),
           }),
           { total: 0, covered: 0 }
         );
@@ -67,5 +65,3 @@ const renderFeatures = (state, links) => {
     links,
   });
 };
-
-module.exports.renderFeatures = renderFeatures;

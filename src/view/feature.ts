@@ -1,6 +1,11 @@
-const { basename } = require("path");
-const { compile } = require("pug");
-const { isPopulated } = require("../reader/coverage-records");
+import { basename } from "node:path";
+import { compile } from "pug";
+import type { Coverage, Feature, FeatureRecord, FileInfo } from "../reader";
+import type { PageLinks } from "./types";
+
+// at this point all requirements were assigned unique IDs, so they are all strings
+const isRequirementValue = (val: unknown): val is string =>
+  typeof val === "string";
 
 const featureTableTemplate = compile(
   `
@@ -126,30 +131,52 @@ mixin category(list, listClass)
   { self: true, filename: "pug", basedir: __dirname }
 );
 
-/**
- *
- * @param {import("../reader/coverage-records").Feature} param0
- * @returns
- */
-const buildHorizontalHeaders = ({ files }, globalFiles) => {
-  const specs = [];
-  const filesRow = [];
-  const specsRow = [];
+type FileColumn = {
+  path: string;
+  name: string;
+  title: string;
+  colspan: number;
+};
 
-  const filePaths = Object.values(globalFiles).reduce(
+type SpecColumn = {
+  name: string;
+  title: string;
+  colspan: number;
+};
+
+type HorizontalInfo = {
+  specs: FeatureRecord[];
+  filesRow: FileColumn[];
+  specsRow: SpecColumn[];
+  rows: [FileColumn[], SpecColumn[]];
+};
+
+export const buildHorizontalHeaders = (
+  { files }: Feature,
+  globalFiles: Record<string, FileInfo>
+): HorizontalInfo => {
+  const specs: FeatureRecord[] = [];
+  const fileColumns: FileColumn[] = [];
+  const specColumns: SpecColumn[] = [];
+
+  const filePaths = Object.values(globalFiles).reduce<Record<string, string>>(
     (res, { path, id }) => ({ ...res, [path]: id }),
     {}
   );
 
   // [path, records]
   Object.entries(files)
-    .map(([path, records]) => [
-      { path: filePaths[path], name: basename(path, ".json") },
-      records,
-    ])
+    .map<[{ path: string; name: string }, Record<string, FeatureRecord[]>]>(
+      ([path, records]) => [
+        { path: filePaths[path], name: basename(path, ".json") },
+        records,
+      ]
+    )
     .sort(([{ name: a }], [{ name: b }]) => (a < b ? -1 : 1))
     .forEach(([{ path, name }, records]) => {
-      const fileSpecsObj = Object.values(records).reduce(
+      const fileSpecsObj = Object.values(records).reduce<
+        Record<string, FeatureRecord>
+      >(
         (result, specs) =>
           specs.reduce((result, spec) => {
             result[spec.titlePath.join("/")] = spec;
@@ -165,7 +192,7 @@ const buildHorizontalHeaders = ({ files }, globalFiles) => {
       }
 
       // add cell for file names row
-      filesRow.push({
+      fileColumns.push({
         path,
         name: name,
         // TODO remove cypress coverage path part
@@ -177,7 +204,7 @@ const buildHorizontalHeaders = ({ files }, globalFiles) => {
         .sort(({ title: a }, { title: b }) => (a < b ? -1 : 1))
         .forEach((spec) => {
           specs.push(spec);
-          specsRow.push({
+          specColumns.push({
             name: spec.title,
             title: spec.titlePath.join(" > "),
             colspan: 1,
@@ -186,7 +213,45 @@ const buildHorizontalHeaders = ({ files }, globalFiles) => {
     });
 
   // a list of specs in indices matching to their cell indices and rows list(first for file names and second for spec names).
-  return { specs, filesRow, specsRow, rows: [filesRow, specsRow] };
+  return {
+    specs,
+    filesRow: fileColumns,
+    specsRow: specColumns,
+    rows: [fileColumns, specColumns],
+  };
+};
+
+type RequirmentInfo = {
+  title: string;
+  id: string;
+  specs: FeatureRecord[];
+};
+
+type CategoryInfo = {
+  title: string;
+  children: object;
+};
+
+type CellInfo = {
+  name: string;
+  depth: number;
+  id: string;
+  category: boolean;
+  categories?: CellInfo[];
+  requirementsTotal: number;
+  requirementsCovered: number;
+  class: string;
+  title: string;
+  colspan: number;
+  rowspan: number;
+};
+
+type VerticalInfo = {
+  requirements: RequirmentInfo[];
+  rows: CellInfo[][];
+  categories: CellInfo[];
+  requirementsCovered: number;
+  requirementsTotal: number;
 };
 
 /**
@@ -196,20 +261,34 @@ const buildHorizontalHeaders = ({ files }, globalFiles) => {
  * 3. parent nodes will rowspan by count of children
  * 4. after building all nodes returns first row so we know where to add its parent, also inform parent about count of rows
  */
-const buildVerticalHeaders = (feature) => {
+export const buildVerticalHeaders = (feature: Feature): VerticalInfo => {
   const { depth: maxDepth, structure } = feature;
 
-  const buildChildren = (children, categories = [], depth, path = "") => {
+  const buildChildren = (
+    children: object,
+    categories: CellInfo[] = [],
+    depth: number,
+    path = ""
+  ) => {
     let requirementsTotal = 0;
     let requirementsCovered = 0;
-    const childReqs = [];
-    const childRows = [];
+    const childReqs: RequirmentInfo[] = [];
+    const childRows: CellInfo[][] = [];
 
     Object.entries(children)
       .sort(([a], [b]) => (a < b ? -1 : 1))
-      .forEach(([title, children]) => {
+      .forEach(([title, value]) => {
         const child = build(
-          { title, children, specs: feature.records[title] || [] },
+          isRequirementValue(value)
+            ? {
+                title,
+                id: value,
+                specs: feature.records[value] || [],
+              }
+            : {
+                title,
+                children: value,
+              },
           categories,
           depth,
           path
@@ -231,10 +310,17 @@ const buildVerticalHeaders = (feature) => {
     };
   };
 
-  const build = (requirement, categories, depth, path = "") => {
-    const cell = {
+  const build = (
+    requirement: RequirmentInfo | CategoryInfo,
+    categories: CellInfo[],
+    depth: number,
+    path = ""
+  ) => {
+    const cell: CellInfo = {
       name: requirement.title,
       depth,
+      id: "",
+      class: "",
       category: false,
       requirementsTotal: 0,
       requirementsCovered: 0,
@@ -245,7 +331,7 @@ const buildVerticalHeaders = (feature) => {
       rowspan: 1,
     };
 
-    if (isPopulated(requirement.children)) {
+    if ("children" in requirement) {
       categories.push(cell);
       cell.category = true;
       cell.id = `${path}/${requirement.title.replace(/[^a-z0-9]+/gi, "_")}`;
@@ -265,26 +351,25 @@ const buildVerticalHeaders = (feature) => {
       children.rows[0].unshift(cell);
 
       return children;
+    } else {
+      cell.id = requirement.id;
+      cell.colspan = maxDepth - depth;
+      cell.requirementsTotal = 1;
+      cell.requirementsCovered = requirement.specs.length ? 1 : 0;
+
+      return {
+        requirements: [requirement],
+        rows: [[cell]],
+        requirementsTotal: cell.requirementsTotal,
+        requirementsCovered: cell.requirementsCovered,
+      };
     }
-
-    cell.colspan = maxDepth - depth;
-    cell.requirementsTotal = feature.records[requirement.title] ? 1 : 0;
-    cell.requirementsCovered = feature.records[requirement.title]?.length
-      ? 1
-      : 0;
-
-    return {
-      requirements: [requirement],
-      rows: [[cell]],
-      requirementsTotal: cell.requirementsTotal,
-      requirementsCovered: cell.requirementsCovered,
-    };
   };
 
   return buildChildren(structure, [], 0);
 };
 
-const buildDataRows = (vertical, horizontal) => {
+const buildDataRows = (vertical: VerticalInfo, horizontal: HorizontalInfo) => {
   const totalSpecCount = horizontal.specs.length;
   const totalRequirements = vertical.rows.length;
   let coveredRequirements = 0;
@@ -347,7 +432,7 @@ const buildDataRows = (vertical, horizontal) => {
   return { totalRequirements, coveredRequirements, totalSpecCount, rows };
 };
 
-const renderFeatureCategories = (feature, state, links) => {
+export const renderFeatureCategories = (feature, state, links) => {
   const categoriesHtml = renderFeatureCategoryList(feature, state, links);
 
   console.log(categoriesHtml);
@@ -357,7 +442,11 @@ const renderFeatureCategories = (feature, state, links) => {
   });
 };
 
-const renderFeatureCategoryList = (feature, state, { getFeatureLink }) => {
+export const renderFeatureCategoryList = (
+  feature,
+  state,
+  { getFeatureLink }
+) => {
   const { categories } = buildVerticalHeaders(feature);
 
   return featureCategoryListTemplate({
@@ -371,13 +460,18 @@ const renderFeatureCategoryList = (feature, state, { getFeatureLink }) => {
  * @param {import("../reader/coverage-records").Feature} feature
  * @param {import("../reader/reader").ReadCoverageResult} state
  */
-const renderFeature = (feature, state, links, type) => {
+export const renderFeature = (
+  feature: Feature,
+  { files }: Coverage,
+  links: PageLinks,
+  type: 'default' | 'compact'
+) => {
   /*
    * build headers
    * horizontal for specs
    * vertical for requirements
    */
-  const horizontal = buildHorizontalHeaders(feature, state.files);
+  const horizontal = buildHorizontalHeaders(feature, files);
   const vertical = buildVerticalHeaders(feature);
 
   /*
@@ -421,8 +515,3 @@ ${categoriesSectionHtml}
 ${tableHtml}
 `;
 };
-module.exports.buildVerticalHeaders = buildVerticalHeaders;
-module.exports.buildHorizontalHeaders = buildHorizontalHeaders;
-module.exports.renderFeature = renderFeature;
-module.exports.renderFeatureCategories = renderFeatureCategories;
-module.exports.renderFeatureCategoryList = renderFeatureCategoryList;

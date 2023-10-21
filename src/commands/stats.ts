@@ -1,12 +1,13 @@
-const { readCoverage } = require("../reader/reader");
-const { buildVerticalHeaders } = require("../view/feature");
+import { Coverage, readCoverage } from "../reader";
+import { buildVerticalHeaders } from "../view/feature";
 
 /**
  * displays coverage information
- * @param {import("./reader/reader").ReadCoverageResult} state
- *
  */
-const readCoverageStats = ({ features }, includeFeatures = []) => {
+export const readCoverageStats = (
+  { features }: Coverage,
+  includeFeatures = []
+) => {
   const list = Object.values(features);
   let featureCount = list.length;
   let combinedCoverage = 0;
@@ -30,13 +31,15 @@ const readCoverageStats = ({ features }, includeFeatures = []) => {
       featureCount--;
     }
 
-    /**
-     *
-     * @param {{depth: number, requirementsCovered: number, requirementsTotal: number}} param0
-     * @returns {string}
-     */
-    const score = ({ depth, requirementsCovered, requirementsTotal }) =>
-      `${" ".repeat(depth * 2)}${requirementsCovered}/${requirementsTotal}`;
+    const score = ({
+      depth,
+      requirementsCovered,
+      requirementsTotal,
+    }: {
+      depth: number;
+      requirementsCovered: number;
+      requirementsTotal: number;
+    }) => `${" ".repeat(depth * 2)}${requirementsCovered}/${requirementsTotal}`;
 
     console.log("-------------------------------------------");
     console.log(
@@ -68,10 +71,8 @@ const readCoverageStats = ({ features }, includeFeatures = []) => {
   console.log("Coverage:", `${totalCoverage.toFixed(2)}%`);
 };
 
-const stats = async (targetDirs, features) => {
+export const stats = async (targetDirs, features) => {
   const state = await readCoverage(targetDirs);
 
   readCoverageStats(state, features);
 };
-
-module.exports.stats = stats;

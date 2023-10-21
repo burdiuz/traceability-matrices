@@ -1,6 +1,6 @@
-const typescript = require("@rollup/plugin-typescript");
+import typescript from "@rollup/plugin-typescript";
 
-module.exports = [
+export default [
   {
     input: "./src/reader/index.ts",
     output: { dir: "./reader", format: 'cjs' },

@@ -22,6 +22,7 @@ export type GlobalFeature = {
   description: string;
   group: string;
   depth: number;
+  readonly headers: string[];
   readonly structure: object;
   files: Record<string, Record<string, FeatureRecord[]>>;
   records: Record<string, FeatureRecord[]>;

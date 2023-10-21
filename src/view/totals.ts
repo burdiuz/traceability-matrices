@@ -1,9 +1,6 @@
-/**
- *
- * @param {import("../reader/coverage-records").Feature} param0
- * @returns
- */
-const calculateFeatureStats = ({ title, records, structure }) => {
+import type { Coverage, GlobalFeature } from "../reader";
+
+export const calculateFeatureStats = ({ records }: GlobalFeature) => {
   const specs = new Set();
   const list = Object.values(records);
   const requirementsTotal = list.length;
@@ -29,11 +26,7 @@ const calculateFeatureStats = ({ title, records, structure }) => {
   };
 };
 
-/**
- *
- * @param {import("./reader/reader").ReadCoverageResult} state
- */
-const calculateTotals = (state) => {
+export const calculateTotals = (state: Coverage) => {
   const features = Object.values(state.features);
 
   const {
@@ -69,6 +62,3 @@ const calculateTotals = (state) => {
     coverage: ((covered / requirements) * 100).toFixed(0),
   };
 };
-
-module.exports.calculateFeatureStats = calculateFeatureStats;
-module.exports.calculateTotals = calculateTotals;
