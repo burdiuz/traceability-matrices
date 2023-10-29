@@ -27,11 +27,11 @@ html
         strong #{self.totals.features} 
         | Files 
         strong #{self.totals.files} 
-        | Specs 
+        | Total Specs 
         strong #{self.totals.specs} 
-        | Requirements 
+        | Total Requirements 
         strong #{self.totals.requirements} 
-        | Coverage 
+        | Total Coverage 
         strong #{self.totals.coverage}% 
       if self.links.getRefreshLink
         a(href=self.links.getRefreshLink() style="margin-left: auto") Refresh
@@ -61,9 +61,11 @@ html
       span
       | Specs 
       strong #{self.totals.specsCount} 
-      | Requirements 
+      | Total Requirements 
       strong #{self.totals.requirementsTotal} 
-      | Coverage 
+      | Covered Requirements 
+      strong #{self.totals.requirementsCovered} 
+      | Feature Coverage 
       strong #{self.totals.coverage}% 
       if self.links.getRefreshLink
         a(href=self.links.getRefreshLink() style="margin-left: auto") Refresh

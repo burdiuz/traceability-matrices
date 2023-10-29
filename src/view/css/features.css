@@ -63,6 +63,11 @@ div.feature-link button.toggle-feature-categories svg {
   vertical-align: bottom;
 }
 
+div.feature-link button.toggle-feature-categories.disabled {
+  cursor: auto;
+  opacity: 0.2;
+}
+
 div.feature-link button.toggle-feature-files svg {
   width: 14px;
   vertical-align: bottom;

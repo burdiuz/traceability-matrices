@@ -17,7 +17,7 @@ table.feature
 
   //- Header Rows
   tr.file-headers
-    th.feature-title(colspan=self.requirementsDepth, rowspan=self.featureHeaders.length ? 1 : 2) #{self.featureTitle} (#{self.coveredRequirements} / #{self.totalRequirements})
+    th.feature-title(colspan=self.requirementsDepth, rowspan=self.featureHeaders.length ? 1 : 2) #{self.featureTitle}
     th.spec-count(rowspan='2') Spec count
     each file in self.fileHeaders
       th.file-name(colspan=file.colspan, title=file.title)
@@ -39,7 +39,7 @@ table.feature
         th(colspan=header.colspan, rowspan=header.rowspan, class=\`requirement \${header.class || ''}\`, title=header.title)
           if header.category
             a.requirement-text(id=header.id, name=header.id) !{header.name}  
-              span.category-coverage (#{header.requirementsCovered} / #{header.requirementsTotal})
+              span.category-coverage(title=\`\${header.requirementsCovered} Covered Requirements\n\${header.requirementsTotal} Category Requirements\`) (#{header.coverage}%)
           else
             span.requirement-text !{header.name}
       each data in row.cells
@@ -64,7 +64,7 @@ table.feature.compact
 
   //- Header Rows
   tr.file-headers
-    th.feature-title(colspan=1, rowspan=self.featureHeaders.length ? 1 : 2) #{self.featureTitle} (#{self.coveredRequirements} / #{self.totalRequirements})
+    th.feature-title(colspan=1, rowspan=self.featureHeaders.length ? 1 : 2) #{self.featureTitle}
     th.spec-count(rowspan='2') Spec count
     each file in self.fileHeaders
       th.file-name(colspan=file.colspan, title=file.title) 
@@ -88,7 +88,8 @@ table.feature.compact
               include /icons/chevron-down-solid.svg
             button.toggle-visibility.expand(onClick='handleCompactCategoryExpand(this.parentElement.parentElement)', title='Expand category')
               include /icons/chevron-up-solid.svg
-            a.category-text(id=dataHeader.id, name=dataHeader.id) !{dataHeader.name} (#{dataHeader.requirementsCovered} / #{dataHeader.requirementsTotal})
+            a.category-text(id=dataHeader.id, name=dataHeader.id) !{dataHeader.name} 
+              span.category-coverage(title=\`\${dataHeader.requirementsCovered} Covered Requirements\n\${dataHeader.requirementsTotal} Category Requirements\`) (#{dataHeader.coverage}%)
       else
         tr(class=\`result \${row.class}\`, data-level=dataHeader.depth)
           th(colspan=1, rowspan=1, class=\`requirement requirement-compact requirement-level-\${dataHeader.depth} \${dataHeader.class || ''}\`, title=dataHeader.title)
@@ -123,7 +124,7 @@ mixin category(list, listClass)
     each cat in list
       li.category-listing-item
         a(href=\`\${self.categoryLinkBase}#\${cat.id}\`) !{cat.name}
-        span       (#{cat.requirementsCovered} / #{cat.requirementsTotal})
+        span       #{cat.coverage}%
         +category(cat.categories, '')
 
 +category(self.categories, 'category-listing-root')
@@ -238,6 +239,7 @@ type CellInfo = {
   categories?: CellInfo[];
   requirementsTotal: number;
   requirementsCovered: number;
+  coverage: number;
   class: string;
   title: string;
   colspan: number;
@@ -305,6 +307,9 @@ export const buildVerticalHeaders = (feature: Feature): VerticalInfo => {
       categories,
       requirementsCovered,
       requirementsTotal,
+      coverage: requirementsTotal
+        ? Math.round((requirementsCovered / requirementsTotal) * 100)
+        : 0,
     };
   };
 
@@ -322,6 +327,7 @@ export const buildVerticalHeaders = (feature: Feature): VerticalInfo => {
       category: false,
       requirementsTotal: 0,
       requirementsCovered: 0,
+      coverage: 0,
 
       // if title contains HTML -- strip tags
       title: requirement.title.replace(/<\/?[^>]+?>/gi, ""),
@@ -345,6 +351,11 @@ export const buildVerticalHeaders = (feature: Feature): VerticalInfo => {
       cell.categories = children.categories;
       cell.requirementsCovered = children.requirementsCovered;
       cell.requirementsTotal = children.requirementsTotal;
+      cell.coverage = children.requirementsTotal
+        ? Math.round(
+            (children.requirementsCovered / children.requirementsTotal) * 100
+          )
+        : 0;
 
       children.rows[0].unshift(cell);
 
@@ -360,6 +371,11 @@ export const buildVerticalHeaders = (feature: Feature): VerticalInfo => {
         rows: [[cell]],
         requirementsTotal: cell.requirementsTotal,
         requirementsCovered: cell.requirementsCovered,
+        coverage: cell.requirementsTotal
+          ? Math.round(
+              (cell.requirementsCovered / cell.requirementsTotal) * 100
+            )
+          : 0,
       };
     }
   };
@@ -484,12 +500,16 @@ export const renderFeature = (
   const renderer =
     type === "compact" ? featureCompactTemplate : featureTableTemplate;
 
-  const categoriesSectionHtml = featureCategoriesTemplate({
-    categoriesHtml: featureCategoryListTemplate({
-      categories: vertical.categories,
-      categoryLinkBase: "",
-    }),
-  });
+  let categoriesSectionHtml = "";
+
+  if (feature.depth > 1) {
+    categoriesSectionHtml = featureCategoriesTemplate({
+      categoriesHtml: featureCategoryListTemplate({
+        categories: vertical.categories,
+        categoryLinkBase: "",
+      }),
+    });
+  }
 
   const tableHtml = renderer({
     // +1 for spec counts column

@@ -5,31 +5,49 @@ import {
   wrapFeatureState,
 } from "@actualwave/traceability-matrices/cypress";
 
+// somehow "node instanceof Array" may give FALSE for parsed arrays
+const isArray = (item) =>
+  item &&
+  typeof item === "object" &&
+  (item instanceof Array ||
+    ("length" in item && typeof item.sort === "function"));
+
+const renderInnerArray = (parentNode, structure) => {
+  parentNode.forEach((node) => {
+    if (!node) {
+      return;
+    }
+
+    if (typeof node === "object") {
+      if (isArray(node)) {
+        renderInnerArray(node, structure);
+      } else {
+        renderStructure(node, structure);
+      }
+      return;
+    }
+
+    structure[String(node)] = {};
+  });
+};
+
 const renderStructure = (parentNode, structure = {}) => {
   if (!parentNode) {
     return structure;
   }
 
-  if (parentNode instanceof Array) {
-    parentNode.forEach((node) => {
-      if (!node) {
-        return;
-      }
-
-      if (typeof node === "object") {
-        renderStructure(node, structure);
-        return;
-      }
-
-      structure[String(node)] = {};
-    });
-
+  if (isArray(parentNode)) {
+    renderInnerArray(parentNode, structure);
     return structure;
   }
 
   if (typeof parentNode === "object") {
     Object.entries(parentNode).forEach(([key, node]) => {
-      structure[key] = renderStructure(node);
+      if (node && typeof node === "object") {
+        structure[key] = renderStructure(node);
+      } else {
+        structure[String(node)] = {};
+      }
     });
   }
 
@@ -61,7 +79,7 @@ const renderStructure = (parentNode, structure = {}) => {
  */
 export const parseJsonFeature = async (content) => {
   // Cypress automatically parses JSON files
-  const doc = typeof content === 'string' ? JSON.parse(content) : content;
+  const doc = typeof content === "string" ? JSON.parse(content) : content;
   const feature = createEmptyFeatureState(doc);
 
   feature.structure = renderStructure(doc.structure);

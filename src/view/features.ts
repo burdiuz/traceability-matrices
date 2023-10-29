@@ -7,14 +7,18 @@ import { PageLinks } from "./types";
 const featuresStructureTemplate = compile(
   `
 div.flex-vertical
+  - var lastGroup = ''
   each feature in self.list
+    if feature.group !== lastGroup
+      - lastGroup = feature.group
+      div.dir-root #{feature.group}
     div(class= feature.covered ? 'feature-link covered' : 'feature-link')
       div.feature-info
-        button.toggle-feature-categories(onClick='handleFeatureCategoriesToggleVisibility(this.parentElement.parentElement);', title='Show feature categories')
+        button.toggle-feature-categories(onClick='handleFeatureCategoriesToggleVisibility(this.parentElement.parentElement);', title='Show feature categories', class=feature.depth === 1 ? 'disabled' : '')
           include /icons/bars-staggered-solid.svg
         button.toggle-feature-files(onClick='handleFeatureFilesToggleVisibility(this.parentElement.parentElement)', title='Show files where feature related specs are present')
           include /icons/file-lines-solid.svg
-        span.totals #{feature.requirementsCovered} / #{feature.requirementsTotal}
+        span.totals(title=\`\${feature.requirementsCovered} Covered Requirements\n\${feature.requirementsTotal} Feature Requirements\`) #{feature.coverage}%
         a.title(href=self.links.getFeatureLink(feature.id)) #{feature.title}
       | !{feature.renderCategories()}
       ul.feature-files-list
@@ -35,32 +39,48 @@ export const renderFeatures = (state: Coverage, links: PageLinks) => {
     {}
   );
 
-  const list = Object.values(state.features).map((feature) => {
-    const stats = calculateFeatureStats(feature);
+  const list = Object.values(state.features)
+    .sort(
+      ({ title: titleA, group: groupA }, { title: titleB, group: groupB }) => {
+        if (groupA < groupB) {
+          return -1;
+        }
+        if (groupA > groupB) {
+          return 1;
+        }
 
-    return {
-      id: feature.id,
-      group: feature.group,
-      title: feature.title,
-      files: Object.entries(feature.files).map(([path, requirements]) => {
-        const { total, covered } = Object.values(requirements).reduce(
-          ({ total, covered }, specs) => ({
-            total: total + 1,
-            covered: covered + (specs.length ? 1 : 0),
-          }),
-          { total: 0, covered: 0 }
-        );
-        return {
-          path: filePaths[path].id,
-          name: filePaths[path].specName,
-          requirementsTotal: total,
-          requirementsCovered: covered,
-        };
-      }),
-      renderCategories: () => renderFeatureCategoryList(feature, state, links),
-      ...stats,
-    };
-  });
+        return titleA < titleB ? -1 : 1;
+      }
+    )
+    .map((feature) => {
+      const stats = calculateFeatureStats(feature);
+
+      return {
+        id: feature.id,
+        depth: feature.depth,
+        group: feature.group,
+        title: feature.title,
+        files: Object.entries(feature.files).map(([path, requirements]) => {
+          const { total, covered } = Object.values(requirements).reduce(
+            ({ total, covered }, specs) => ({
+              total: total + 1,
+              covered: covered + (specs.length ? 1 : 0),
+            }),
+            { total: 0, covered: 0 }
+          );
+          return {
+            path: filePaths[path].id,
+            name: filePaths[path].specName,
+            requirementsTotal: total,
+            requirementsCovered: covered,
+            coverage: total ? Math.round((covered / total) * 100) : 0,
+          };
+        }),
+        renderCategories: () =>
+          renderFeatureCategoryList(feature, state, links),
+        ...stats,
+      };
+    });
 
   return featuresStructureTemplate({
     list,
