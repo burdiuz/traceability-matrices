@@ -1,6 +1,6 @@
 import { basename } from "node:path";
 import { compile } from "pug";
-import type { Coverage, Feature, FeatureRecord, FileInfo } from "../reader";
+import type { Coverage, Feature, FileInfo, Spec } from "../reader/index";
 import type { PageLinks } from "./types";
 
 // at this point all requirements were assigned unique IDs, so they are all strings
@@ -145,7 +145,7 @@ type SpecColumn = {
 };
 
 type HorizontalInfo = {
-  specs: FeatureRecord[];
+  specs: Spec[];
   filesRow: FileColumn[];
   specsRow: SpecColumn[];
   rows: [FileColumn[], SpecColumn[]];
@@ -155,7 +155,7 @@ export const buildHorizontalHeaders = (
   { files }: Feature,
   globalFiles: Record<string, FileInfo>
 ): HorizontalInfo => {
-  const specs: FeatureRecord[] = [];
+  const specs: Spec[] = [];
   const fileColumns: FileColumn[] = [];
   const specColumns: SpecColumn[] = [];
 
@@ -166,7 +166,7 @@ export const buildHorizontalHeaders = (
 
   // [path, records]
   Object.entries(files)
-    .map<[{ path: string; name: string }, Record<string, FeatureRecord[]>]>(
+    .map<[{ path: string; name: string }, Record<string, Spec[]>]>(
       ([path, records]) => [
         { path: filePaths[path], name: basename(path, ".json") },
         records,
@@ -174,9 +174,7 @@ export const buildHorizontalHeaders = (
     )
     .sort(([{ name: a }], [{ name: b }]) => (a < b ? -1 : 1))
     .forEach(([{ path, name }, records]) => {
-      const fileSpecsObj = Object.values(records).reduce<
-        Record<string, FeatureRecord>
-      >(
+      const fileSpecsObj = Object.values(records).reduce<Record<string, Spec>>(
         (result, specs) =>
           specs.reduce((result, spec) => {
             result[spec.titlePath.join("/")] = spec;
@@ -224,7 +222,7 @@ export const buildHorizontalHeaders = (
 type RequirmentInfo = {
   title: string;
   id: string;
-  specs: FeatureRecord[];
+  specs: Spec[];
 };
 
 type CategoryInfo = {
@@ -432,7 +430,11 @@ const buildDataRows = (vertical: VerticalInfo, horizontal: HorizontalInfo) => {
   return { totalRequirements, coveredRequirements, totalSpecCount, rows };
 };
 
-export const renderFeatureCategories = (feature, state, links) => {
+export const renderFeatureCategories = (
+  feature: Feature,
+  state: Coverage,
+  links: PageLinks
+) => {
   const categoriesHtml = renderFeatureCategoryList(feature, state, links);
 
   console.log(categoriesHtml);
@@ -443,28 +445,23 @@ export const renderFeatureCategories = (feature, state, links) => {
 };
 
 export const renderFeatureCategoryList = (
-  feature,
-  state,
-  { getFeatureLink }
+  feature: Feature,
+  state: Coverage,
+  { getFeatureLink }: PageLinks
 ) => {
   const { categories } = buildVerticalHeaders(feature);
 
   return featureCategoryListTemplate({
     categories: categories,
-    categoryLinkBase: getFeatureLink(feature.title),
+    categoryLinkBase: getFeatureLink(feature.id),
   });
 };
 
-/**
- *
- * @param {import("../reader/coverage-records").Feature} feature
- * @param {import("../reader/reader").ReadCoverageResult} state
- */
 export const renderFeature = (
   feature: Feature,
   { files }: Coverage,
   links: PageLinks,
-  type: 'default' | 'compact'
+  type: "default" | "compact"
 ) => {
   /*
    * build headers

@@ -1,4 +1,4 @@
-import { Coverage, readCoverage } from "../reader";
+import { Coverage, readCoverage } from "../reader/index";
 import { buildVerticalHeaders } from "../view/feature";
 
 /**
@@ -43,7 +43,11 @@ export const readCoverageStats = (
 
     console.log("-------------------------------------------");
     console.log(
-      score(result),
+      score({
+        depth: 0,
+        requirementsCovered: result.requirementsCovered,
+        requirementsTotal: result.requirementsTotal,
+      }),
       result.requirements.length ? `${coverage.toFixed(2)}%` : "100%",
       feature.title
     );

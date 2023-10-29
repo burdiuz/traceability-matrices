@@ -1,3 +1,5 @@
+import type { Spec } from "./specs";
+
 export type FeatureRecord = {
   requirement: string | string[];
   title: string;
@@ -24,21 +26,23 @@ export type GlobalFeature = {
   depth: number;
   readonly headers: string[];
   readonly structure: object;
-  files: Record<string, Record<string, FeatureRecord[]>>;
-  records: Record<string, FeatureRecord[]>;
+  files: Record<string, Record<string, Spec[]>>;
+  records: Record<string, Spec[]>;
 };
 
-export type Feature = GlobalFeature & {
+export type LocalFeature = GlobalFeature & {
   readonly global: GlobalFeature;
   readonly depth: number;
 };
+
+export type Feature = LocalFeature | GlobalFeature;
 
 export type FileInfo = {
   id: string;
   name: string;
   specName: string;
   path: string;
-  features: Feature[];
+  features: LocalFeature[];
 };
 
 export type DirectoryInfo = {

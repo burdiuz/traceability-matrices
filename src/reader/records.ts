@@ -1,5 +1,6 @@
+import { getSpec, type Spec } from "./specs";
 import { findPathId, getStructureRequirements } from "./structure";
-import { FeatureRecord } from "./types";
+import { type FeatureRecord } from "./types";
 import { removeExtraSpaces, getUniqueRequirementId } from "./utils";
 
 /**
@@ -29,7 +30,7 @@ export const convertRecordsListToMap = (
   structure: object
 ) => {
   const requirements = getStructureRequirements(structure);
-  const records: Record<string, FeatureRecord[]> = {};
+  const records: Record<string, Spec[]> = {};
 
   list.forEach((spec) => {
     let { requirement } = spec;
@@ -82,7 +83,7 @@ cannot be used because this path was registered as a category and a requirement.
     }
 
     // store spec record under requirement id
-    records[id].push(spec);
+    records[id].push(getSpec(spec));
   });
 
   return records;
@@ -96,29 +97,28 @@ cannot be used because this path was registered as a category and a requirement.
  * multiple records of same specs are not needed.
  * @param records
  */
-export const setSpecsUnique = (records: Record<string, FeatureRecord[]>) => {
+export const setSpecsUnique = (records: Record<string, Spec[]>) => {
   Object.entries(records).forEach(([key, specs]) => {
     const uniqueSpecs: Record<string, true> = {};
 
     records[key] = specs.filter((spec) => {
-      const id = spec.titlePath.join("/");
+      const { id } = spec;
       if (uniqueSpecs[id]) {
         return false;
       }
 
       uniqueSpecs[id] = true;
+      return true;
     });
   });
 };
 
 /**
  * Used to merge file-level feature records to global feature
- * @param param0
- * @param param1
  */
 export const mergeFeatureRecords = (
-  { records: source }: { records: Record<string, FeatureRecord[]> },
-  { records: target }: { records: Record<string, FeatureRecord[]> }
+  { records: source }: { records: Record<string, Spec[]> },
+  { records: target }: { records: Record<string, Spec[]> }
 ) => {
   Object.entries(source).forEach(([requirementId, specs]) => {
     if (requirementId in target) {

@@ -1,28 +1,42 @@
 import { writeFile } from "node:fs/promises";
 import { join, basename } from "node:path";
 import { mkdirSync, existsSync } from "node:fs";
-import { readCoverage } from "../reader";
+import { type Coverage, readCoverage, Feature } from "../reader/index";
 import { renderFile } from "../view/file";
 import { renderFiles } from "../view/files";
 import { renderFeature } from "../view/feature";
 import { renderFeatures } from "../view/features";
-import { calculateTotals } from "../view/totals";
-import { listPageTemplate } from "../view/page";
+import {
+  type Totals,
+  calculateTotals,
+  calculateFeatureStats,
+} from "../view/totals";
+import { listPageTemplate, featurePageTemplate } from "../view/page";
+import type { PageLinks } from "../view/types";
 
-const getLinks = (pathBack) => ({
+const PATH_REPLACEMENTS = /[/\\:&%$#@^*]+/g;
+
+const getLinks = (pathBack: string): PageLinks => ({
   getFilesLink: () => join(pathBack, "files.html"),
   getFeaturesLink: () => join(pathBack, "features.html"),
-  getFileLink: (path) =>
+  getFileLink: (path: string) =>
     join(
       pathBack,
       "files",
-      `${basename(path.replace(/[/\\]+/g, "_"), ".json")}.html`
+      `${basename(path.replace(PATH_REPLACEMENTS, "_"), ".json")}.html`
     ),
-  getFeatureLink: (title) => join(pathBack, "features", `${title}.html`),
+  getFeatureLink: (id: string) =>
+    join(pathBack, "features", `${id}.html`.replace(PATH_REPLACEMENTS, "_")),
 });
 
 const createStaticHtmlWriter =
-  (outputDir, state, totals) => (savePath, backPath, pageTitle, renderer) => {
+  (outputDir: string, state: Coverage, totals: Totals) =>
+  (
+    savePath: string,
+    backPath: string,
+    pageTitle: string,
+    renderer: (state: Coverage, links: PageLinks) => string
+  ) => {
     const links = getLinks(backPath);
 
     return writeFile(
@@ -36,6 +50,28 @@ const createStaticHtmlWriter =
       { encoding: "utf-8" }
     );
   };
+
+const writerFeatureHtml = (
+  savePath: string,
+  pageTitle: string,
+  feature: Feature,
+  state: Coverage,
+  links: PageLinks,
+  featureTableType: "default" | "compact"
+) => {
+  const totals = calculateFeatureStats(feature);
+
+  return writeFile(
+    savePath,
+    featurePageTemplate({
+      pageTitle,
+      links,
+      totals,
+      content: renderFeature(feature, state, links, featureTableType),
+    }),
+    { encoding: "utf-8" }
+  );
+};
 
 export const generateStatic = async (
   targetDirs: string[],
@@ -74,12 +110,14 @@ export const generateStatic = async (
   }
 
   await Promise.all(
-    Object.entries(state.features).map(([featureTitle, feature]) =>
-      writeHtml(
-        getLinks(".").getFeatureLink(featureTitle),
-        "..",
-        featureTitle,
-        (state, links) => renderFeature(feature, state, links, featureTableType)
+    Object.values(state.features).map((feature) =>
+      writerFeatureHtml(
+        join(outputDir, getLinks(".").getFeatureLink(feature.id)),
+        feature.group ? `${feature.group} / ${feature.title}` : feature.title,
+        feature,
+        state,
+        getLinks(".."),
+        featureTableType
       )
     )
   );

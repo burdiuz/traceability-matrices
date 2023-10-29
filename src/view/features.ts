@@ -15,7 +15,7 @@ div.flex-vertical
         button.toggle-feature-files(onClick='handleFeatureFilesToggleVisibility(this.parentElement.parentElement)', title='Show files where feature related specs are present')
           include /icons/file-lines-solid.svg
         span.totals #{feature.requirementsCovered} / #{feature.requirementsTotal}
-        a.title(href=self.links.getFeatureLink(feature.title)) #{feature.title}
+        a.title(href=self.links.getFeatureLink(feature.id)) #{feature.title}
       | !{feature.renderCategories()}
       ul.feature-files-list
         each file in feature.files
@@ -39,6 +39,8 @@ export const renderFeatures = (state: Coverage, links: PageLinks) => {
     const stats = calculateFeatureStats(feature);
 
     return {
+      id: feature.id,
+      group: feature.group,
       title: feature.title,
       files: Object.entries(feature.files).map(([path, requirements]) => {
         const { total, covered } = Object.values(requirements).reduce(

@@ -1,8 +1,10 @@
 import { resolve, join, basename } from "node:path";
 import { type ReadResult, readAll } from "./file-structure";
-import { FileInfo, type GlobalFeature, DirectoryInfo } from "./types";
+import { FileInfo, type GlobalFeature, DirectoryInfo, Feature } from "./types";
 import { readFeatures } from "./features";
 import { setSpecsUnique } from "./records";
+import { clearSpecsCache } from "./specs";
+import { getStructureRequirements } from "./structure";
 
 export type Coverage = {
   roots: ReadResult[];
@@ -66,10 +68,19 @@ const getStructureDepth = (structure: object, depth = 1) => {
   return newDepth;
 };
 
+const fillEmptyRecords = (feature: Feature) => {
+  const requirements = getStructureRequirements(feature.structure);
+
+  Object.keys(requirements).forEach((id) => {
+    if (!feature.records[id]) {
+      feature.records[id] = [];
+    }
+  });
+};
+
 /**
- * Remove duplicate specs from
- * @param {Record<string, import("./coverage-records").>} globalFeatures
- * @param {Record<string, import("./reader").FileWithFeatures>} files
+ * Remove duplicate specs from records
+ * Add not coverred requirements to records with empty specs list
  */
 const normalize = (
   globalFeatures: Record<string, GlobalFeature>,
@@ -81,10 +92,19 @@ const normalize = (
 
     // filter specs for global features to remove duplicate spec records for each requirement
     setSpecsUnique(feature.records);
+
+    // add empty records for not tested requirements
+    fillEmptyRecords(feature);
   });
 
   Object.values(files).forEach((file) =>
-    file.features.forEach((feature) => setSpecsUnique(feature.records))
+    file.features.forEach((feature) => {
+      // filter specs for global features to remove duplicate spec records for each requirement
+      setSpecsUnique(feature.records);
+
+      // add empty records for not tested requirements
+      fillEmptyRecords(feature);
+    })
   );
 };
 
@@ -92,6 +112,7 @@ export const readCoverage = async (
   paths: string[],
   features: Record<string, GlobalFeature> = {}
 ): Promise<Coverage> => {
+  clearSpecsCache();
   const roots = await readAll(paths);
 
   for (let item of roots) {

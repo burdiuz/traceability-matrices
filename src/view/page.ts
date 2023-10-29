@@ -11,8 +11,13 @@ html
       include /css/page.css
       include /css/files.css
       include /css/features.css
+      
+      include /css/page.css
+      include /css/feature.css
     script
       include /js/features.js
+      
+      include /js/feature.js
   body
     div.nav-bar
       a(href=self.links.getFilesLink()) Files
@@ -54,16 +59,12 @@ html
       a(href=self.links.getFilesLink()) Files
       a(href=self.links.getFeaturesLink() style="margin-right: auto") Features
       span
-        | Features 
-        strong #{self.totals.features} 
-        | Files 
-        strong #{self.totals.files} 
-        | Specs 
-        strong #{self.totals.specs} 
-        | Requirements 
-        strong #{self.totals.requirements} 
-        | Coverage 
-        strong #{self.totals.coverage}% 
+      | Specs 
+      strong #{self.totals.specsCount} 
+      | Requirements 
+      strong #{self.totals.requirementsTotal} 
+      | Coverage 
+      strong #{self.totals.coverage}% 
       if self.links.getRefreshLink
         a(href=self.links.getRefreshLink() style="margin-left: auto") Refresh
       else 

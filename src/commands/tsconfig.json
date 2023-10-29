@@ -5,6 +5,7 @@
     "lib": ["es5", "es6"],
     "preserveConstEnums": true,
     "declaration": false,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node"
   }
 }

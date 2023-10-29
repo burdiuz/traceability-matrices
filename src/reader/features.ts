@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { Feature, FeatureFileJSON, GlobalFeature } from "./types";
+import type { FeatureFileJSON, GlobalFeature, LocalFeature } from "./types";
 import { removeExtraSpaces } from "./utils";
 import { convertRecordsListToMap, mergeFeatureRecords } from "./records";
 import { seedStructure, mergeFeatureStructure } from "./structure";
@@ -10,7 +10,7 @@ const readCoverageReportFile = async (filePath: string) => {
   return JSON.parse(data) as FeatureFileJSON;
 };
 
-const getGlobalFeatureName = ({
+export const getGlobalFeatureId = ({
   group,
   title,
 }: {
@@ -26,7 +26,7 @@ const lookupForFeatures = (
   featureList.map((source) => {
     let global: GlobalFeature;
     const partial = {
-      id: getGlobalFeatureName(source),
+      id: getGlobalFeatureId(source),
       title: removeExtraSpaces(source.title || ""),
       description: removeExtraSpaces(source.description || ""),
       group: removeExtraSpaces(source.group || ""),
@@ -35,7 +35,7 @@ const lookupForFeatures = (
       files: {},
     };
 
-    const feature: Feature = {
+    const feature: LocalFeature = {
       ...partial,
       get global() {
         return global;

@@ -110,7 +110,7 @@
   {
     "title": "Feature Yaml",
     "group": "",
-    "description": "My feature description with <a href=\\\"https://google.com\\\">HTML</a>",
+    "description": "My feature description with <a href=\\\"https://google.com\\\">YAML</a>",
     "structure": {
       "Optional Requirement 1": {},
       "Optional Requirement 3": {},

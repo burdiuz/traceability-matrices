@@ -1,4 +1,4 @@
-import { GlobalFeature, readCoverage } from "../reader";
+import { GlobalFeature, readCoverage } from "../reader/index";
 import { calculateFeatureStats } from "../view/totals";
 
 /**

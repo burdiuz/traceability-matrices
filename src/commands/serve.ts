@@ -3,21 +3,20 @@ import Koa from "koa";
 import Router from "@koa/router";
 import { readFile } from "fs/promises";
 import { resolve } from "path";
-import { readCoverage } from "../reader";
+import { readCoverage } from "../reader/index";
 import { renderFile } from "../view/file";
 import { renderFiles } from "../view/files";
 import { renderFeature } from "../view/feature";
 import { renderFeatures } from "../view/features";
-import { calculateTotals } from "../view/totals";
-import { listPageTemplate } from "../view/page";
-
-const inModulePath = (path) => resolve(__dirname, path);
+import { calculateFeatureStats, calculateTotals } from "../view/totals";
+import { listPageTemplate, featurePageTemplate } from "../view/page";
 
 const links = {
   getFilesLink: () => "/files",
   getFeaturesLink: () => "/features",
-  getFileLink: (id) => `/file?id=${id}`,
-  getFeatureLink: (title) => `/feature?id=${encodeURIComponent(title)}`,
+  getFileLink: (id: string) => `/file?id=${id}`,
+  getFeatureLink: (id: string) =>
+    `/feature?id=${encodeURIComponent(id)}`,
   getRefreshLink: () => "/refresh",
 };
 
@@ -97,10 +96,10 @@ export const serve = async (
 
     const content = renderFeature(feature, state, links, featureTableType);
 
-    ctx.response.body = listPageTemplate({
+    ctx.response.body = featurePageTemplate({
       pageTitle: featureId,
       links,
-      totals,
+      totals: calculateFeatureStats(feature),
       content,
     });
   });

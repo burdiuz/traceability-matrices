@@ -1,6 +1,23 @@
-import type { Coverage, GlobalFeature } from "../reader";
+import type { Coverage, Feature } from "../reader";
 
-export const calculateFeatureStats = ({ records }: GlobalFeature) => {
+export type FeatureTotals = {
+  covered: boolean;
+  coverage: number;
+  requirementsCovered: number;
+  requirementsTotal: number;
+  specsCount: number;
+};
+
+export type Totals = {
+  features: number;
+  files: number;
+  specs: number;
+  requirements: number;
+  covered: number;
+  coverage: string;
+};
+
+export const calculateFeatureStats = ({ records }: Feature): FeatureTotals => {
   const specs = new Set();
   const list = Object.values(records);
   const requirementsTotal = list.length;
@@ -13,20 +30,21 @@ export const calculateFeatureStats = ({ records }: GlobalFeature) => {
 
     requirementsCovered++;
 
-    record.forEach(({ filePath, titlePath }) => {
-      specs.add(`${filePath}:${titlePath.join("/")}`);
+    record.forEach(({ id }) => {
+      specs.add(id);
     });
   });
 
   return {
     covered: requirementsCovered >= requirementsTotal,
+    coverage: Math.round((requirementsCovered / requirementsTotal) * 100),
     requirementsCovered,
     requirementsTotal,
     specsCount: specs.size,
   };
 };
 
-export const calculateTotals = (state: Coverage) => {
+export const calculateTotals = (state: Coverage): Totals => {
   const features = Object.values(state.features);
 
   const {
