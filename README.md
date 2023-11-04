@@ -167,7 +167,7 @@ const feature = createFeature({
 });
 ```
 
-`createFeature(featureTitle: string, featureDescription?: string)` accepts feature title and optionally description. Feature titles must be unique strings. Feature description could be an HTML string, it will display on top of feature coverage table and is suitable for placing various feature links and other useful information.
+`createFeature({ title: string, description?: string, group?: string })` accepts feature title and optionally description and group. Feature titles must be unique strings. Feature description could be an HTML string, it will display on top of feature coverage table and is suitable for placing various feature links and other useful information. Group will be used in a list of features to display features under same group and visually separate them from other.
 
 ```ts
 import { createFeature } from "@actualwave/traceability-matrices/cypress";
