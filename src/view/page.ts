@@ -61,7 +61,7 @@ html
       span
       | Specs 
       strong #{self.totals.specsCount} 
-      | Total Requirements 
+      | Feature Requirements 
       strong #{self.totals.requirementsTotal} 
       | Covered Requirements 
       strong #{self.totals.requirementsCovered} 

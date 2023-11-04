@@ -9,7 +9,7 @@ import {
   getBranchOf,
   getNarrowStructure,
 } from "./structure";
-import { Feature } from "./types";
+import { Feature, MatcherFn } from "./types";
 import { cloneStructure } from "./utils";
 
 export type CreateFeatureParams = {
@@ -108,7 +108,7 @@ const createCloneApi = ({ feature }: { feature: Feature }) => {
 export const wrapFeatureState = (feature: Feature) => {
   const scope = { feature, traceToRequirementMatcher: undefined };
 
-  const setTraceToRequirementMatcher = (matcher) => {
+  const setTraceToRequirementMatcher = (matcher: MatcherFn) => {
     scope.traceToRequirementMatcher = matcher;
   };
 

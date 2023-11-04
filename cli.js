@@ -86,41 +86,59 @@ switch (command) {
         exitWithError(`Port value "${args.port}" results to NaN.`);
       }
 
-      if(keyFilePath || certFilePath) {
-        if(!keyFilePath || !certFilePath) {
-          exitWithError(`Parameters "--key" and "--cert" are both required for HTTPS server and must point to corresponding files.`);
+      if (keyFilePath || certFilePath) {
+        if (!keyFilePath || !certFilePath) {
+          exitWithError(
+            `Parameters "--key" and "--cert" are both required for HTTPS server and must point to corresponding files.`
+          );
         }
 
         keyFilePath = path.resolve(process.cwd(), keyFilePath);
 
-        if(!keyFilePath || !fs.existsSync(keyFilePath) || !fs.statSync(keyFilePath).isFile()) {
-          exitWithError(`Parameter "--key" must point at file with private key for certificate.`);
+        if (
+          !keyFilePath ||
+          !fs.existsSync(keyFilePath) ||
+          !fs.statSync(keyFilePath).isFile()
+        ) {
+          exitWithError(
+            `Parameter "--key" must point at file with private key for certificate.`
+          );
         }
 
         certFilePath = path.resolve(process.cwd(), certFilePath);
 
-        if(!certFilePath || !fs.existsSync(certFilePath) || !fs.statSync(certFilePath).isFile()) {
-          exitWithError(`Parameter "--cert" must point at file with signed certificate.`);
+        if (
+          !certFilePath ||
+          !fs.existsSync(certFilePath) ||
+          !fs.statSync(certFilePath).isFile()
+        ) {
+          exitWithError(
+            `Parameter "--cert" must point at file with signed certificate.`
+          );
         }
-        
+
         useHttps = true;
       }
 
       const { serve } = require("./commands/serve.js");
 
-      serve(targetDirs, port, keyFilePath, certFilePath, feaureTableType).then(() => {
-        import("open").then(({ default: open }) =>
-          open(
-            useHttps ? `https://localhost:${port}` : `http://localhost:${port}`
-          )
-        );
-      });
+      serve(targetDirs, port, keyFilePath, certFilePath, feaureTableType).then(
+        () => {
+          import("open").then(({ default: open }) =>
+            open(
+              useHttps
+                ? `https://localhost:${port}`
+                : `http://localhost:${port}`
+            )
+          );
+        }
+      );
     }
     break;
   case "generate":
     {
       /**
-       * generate --target-dir= --output-dir= --compact=true
+       * generate --target-dir= --output-dir= --compact=true --force-cleanup=true
        */
       const outputDir = path.resolve(process.cwd(), String(args["output-dir"]));
 
@@ -139,6 +157,34 @@ switch (command) {
       const { generateStatic } = require("./commands/generate-static.js");
 
       generateStatic(targetDirs, outputDir, feaureTableType);
+    }
+    break;
+  case "lcov":
+    {
+      /**
+       * lcov --target-dir= --output-dir= --relative-dir= --force-cleanup=true
+       */
+      const outputDir = path.resolve(process.cwd(), String(args["output-dir"]));
+
+      if (fs.existsSync(outputDir)) {
+        if (!fs.statSync(outputDir).isDirectory()) {
+          exitWithError(`"${outputDir}" exists and is not a directory.`);
+        }
+
+        if (args["force-cleanup"]) {
+          fs.rmSync(join(outputDir, "lcov"), { recursive: true, force: true });
+        }
+      } else {
+        fs.mkdirSync(outputDir);
+      }
+
+      const relativeDir = args["relative-dir"]
+        ? String(args["relative-dir"])
+        : undefined;
+
+      const { lcov } = require("./commands/lcov.js");
+
+      lcov(targetDirs, outputDir, relativeDir);
     }
     break;
   case "threshold":

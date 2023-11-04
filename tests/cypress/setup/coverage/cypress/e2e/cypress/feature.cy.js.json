@@ -1,0 +1,304 @@
+[
+  {
+    "title": "Feature",
+    "group": "Features",
+    "description": "Testing Feature API",
+    "structure": {
+      "High": {
+        "High Requirement 1": null,
+        "High Requirement 2": null,
+        "High Requirement 3": null
+      },
+      "Medium": {
+        "Medium Requirement 1": null,
+        "Medium Requirement 2": null,
+        "Medium Requirement 3": null,
+        "Sub-category": {
+          "Sub Requirement 1": null,
+          "Sub Requirement 2": null,
+          "Sub Requirement 3": null
+        }
+      },
+      "Low": {
+        "Low Requirement 1": null,
+        "Low Requirement 2": null,
+        "Low Requirement 3": {}
+      },
+      "Optional Requirement 1": null,
+      "Optional Requirement 2": null,
+      "Optional Requirement 3": null
+    },
+    "headers": [
+      "Main categories",
+      "Sub categories",
+      "Requirements"
+    ],
+    "records": []
+  },
+  {
+    "title": "Feature Narrowed to Medium Category",
+    "group": "Features",
+    "description": "Testing Feature narrowing API",
+    "structure": {
+      "Medium": {
+        "Medium Requirement 1": {},
+        "Medium Requirement 2": {},
+        "Medium Requirement 3": {},
+        "Sub-category": {
+          "Sub Requirement 1": {},
+          "Sub Requirement 2": {},
+          "Sub Requirement 3": {}
+        }
+      }
+    },
+    "headers": [
+      "Main categories",
+      "Sub categories",
+      "Requirements"
+    ],
+    "records": [
+      {
+        "requirement": "Medium Requirement 1",
+        "title": "trace main requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Narrowed",
+          "trace main requirements"
+        ]
+      },
+      {
+        "requirement": "Medium Requirement 3",
+        "title": "trace main requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Narrowed",
+          "trace main requirements"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
+          "Sub-category",
+          "Sub Requirement 1"
+        ],
+        "title": "trace sub category",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Narrowed",
+          "trace sub category"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
+          "Sub-category",
+          "Sub Requirement 3"
+        ],
+        "title": "trace sub category",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Narrowed",
+          "trace sub category"
+        ]
+      },
+      {
+        "requirement": "Custom Requirement 1",
+        "title": "trace custom requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Narrowed",
+          "trace custom requirements"
+        ]
+      },
+      {
+        "requirement": [
+          "Custom category",
+          "Custom Requirement 2"
+        ],
+        "title": "trace custom requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Narrowed",
+          "trace custom requirements"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Feature Medium branch",
+    "group": "Features",
+    "description": "Testing Feature branching API",
+    "structure": {
+      "Medium Requirement 1": {},
+      "Medium Requirement 2": {},
+      "Medium Requirement 3": {},
+      "Sub-category": {
+        "Sub Requirement 1": {},
+        "Sub Requirement 2": {},
+        "Sub Requirement 3": {}
+      }
+    },
+    "headers": [
+      "Main categories",
+      "Sub categories",
+      "Requirements"
+    ],
+    "records": [
+      {
+        "requirement": "Medium Requirement 1",
+        "title": "trace main requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Branch",
+          "trace main requirements"
+        ]
+      },
+      {
+        "requirement": "Medium Requirement 3",
+        "title": "trace main requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Branch",
+          "trace main requirements"
+        ]
+      },
+      {
+        "requirement": [
+          "Sub-category",
+          "Sub Requirement 1"
+        ],
+        "title": "trace sub category",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Branch",
+          "trace sub category"
+        ]
+      },
+      {
+        "requirement": [
+          "Sub-category",
+          "Sub Requirement 3"
+        ],
+        "title": "trace sub category",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Branch",
+          "trace sub category"
+        ]
+      },
+      {
+        "requirement": "Custom Requirement 1",
+        "title": "trace custom requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Branch",
+          "trace custom requirements"
+        ]
+      },
+      {
+        "requirement": [
+          "Custom category",
+          "Custom Requirement 2"
+        ],
+        "title": "trace custom requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Branch",
+          "trace custom requirements"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Cloned Feature",
+    "group": "Features",
+    "description": "Test Feature cloning functionality",
+    "structure": {
+      "High": {
+        "High Requirement 1": {},
+        "High Requirement 2": {},
+        "High Requirement 3": {}
+      },
+      "Medium": {
+        "Medium Requirement 1": {},
+        "Medium Requirement 2": {},
+        "Medium Requirement 3": {},
+        "Sub-category": {
+          "Sub Requirement 1": {},
+          "Sub Requirement 2": {},
+          "Sub Requirement 3": {}
+        }
+      },
+      "Low": {
+        "Low Requirement 1": {},
+        "Low Requirement 2": {},
+        "Low Requirement 3": {}
+      },
+      "Optional Requirement 1": {},
+      "Optional Requirement 2": {},
+      "Optional Requirement 3": {}
+    },
+    "headers": [
+      "Main categories",
+      "Sub categories",
+      "Requirements"
+    ],
+    "records": [
+      {
+        "requirement": "Low Requirement 1",
+        "title": "trace low requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Cloned",
+          "trace low requirements"
+        ]
+      },
+      {
+        "requirement": "Low Requirement 3",
+        "title": "trace low requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Cloned",
+          "trace low requirements"
+        ]
+      },
+      {
+        "requirement": "Cloned Custom Requirement 1",
+        "title": "trace custom requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Cloned",
+          "trace custom requirements"
+        ]
+      },
+      {
+        "requirement": [
+          "Cloned Custom category",
+          "Cloned Custom Requirement 2"
+        ],
+        "title": "trace custom requirements",
+        "filePath": "cypress/e2e/cypress/feature.cy.js",
+        "titlePath": [
+          "Feature",
+          "Cloned",
+          "trace custom requirements"
+        ]
+      }
+    ]
+  }
+]

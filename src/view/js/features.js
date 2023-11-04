@@ -14,6 +14,7 @@ function handleFeatureFilesToggleVisibility(row) {
     categories.classList.remove("visible");
   }
 }
+
 function handleFeatureCategoriesToggleVisibility(row) {
   const files = row.querySelector(".feature-files-list");
   const categories = row.querySelector(".category-listing-root");

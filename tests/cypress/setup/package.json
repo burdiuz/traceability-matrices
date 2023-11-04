@@ -1,0 +1,28 @@
+{
+  "name": "coverage-data-generator",
+  "version": "1.0.0",
+  "description": "Generates coverage data for cypress tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/cypress run",
+    "build": "./node_modules/.bin/cypress run",
+    "open": "./node_modules/.bin/cypress open",
+    "serve:default": "traceability-matrices serve --target-dir=coverage --port=3001",
+    "serve:compact": "traceability-matrices serve --target-dir=coverage --compact=true --port=3002",
+    "serve": "npm run serve:default",
+    "generate:default": "traceability-matrices generate --target-dir=coverage --output-dir=generated_coverage_default",
+    "generate:compact": "traceability-matrices generate --target-dir=coverage --output-dir=generated_coverage_compact",
+    "generate": "npm run generate:default",
+    "lcov": "traceability-matrices lcov --target-dir=coverage --output-dir=generated_coverage_lcov --relative-dir=tests/cypress/setup/generated_coverage_lcov",
+    "threshold": "traceability-matrices threshold --target-dir=coverage --total=50 --per-feature=60",
+    "stats": "traceability-matrices stats --target-dir=coverage",
+    "start": "npm run serve"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@actualwave/traceability-matrices": "file:../../../",
+    "@cypress/webpack-preprocessor": "^6.0.0",
+    "cypress": "^13.4.0"
+  }
+}

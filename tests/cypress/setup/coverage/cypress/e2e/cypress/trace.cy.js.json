@@ -1,0 +1,245 @@
+[
+  {
+    "title": "Trace",
+    "group": "Records",
+    "description": "Testing Feature tracing",
+    "structure": {
+      "High": {
+        "Requirement 1": null,
+        "Requirement 2": null,
+        "High Requirement 3": null
+      },
+      "Medium": {
+        "Medium Requirement 1": null,
+        "Medium Requirement 2": null,
+        "Medium Requirement 3": null,
+        "Sub-category": {
+          "Sub Requirement 1": null,
+          "Sub Requirement 2": null,
+          "Sub Requirement 3": null
+        }
+      },
+      "Low": {
+        "Requirement 1": null,
+        "Requirement 2": null
+      },
+      "Optional Requirement 1": null,
+      "Optional Requirement 2": null,
+      "Optional Requirement 3": null
+    },
+    "headers": [
+      "Main categories",
+      "Sub categories",
+      "Requirements"
+    ],
+    "records": [
+      {
+        "requirement": "High Requirement 3",
+        "title": "should allow tracing by requirement name",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should allow tracing by requirement name"
+        ]
+      },
+      {
+        "requirement": [
+          "High",
+          "Requirement 1"
+        ],
+        "title": "should allow tracing same requirement multiple times 1",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should allow tracing same requirement multiple times 1"
+        ]
+      },
+      {
+        "requirement": "Requirement 2",
+        "title": "should allow tracing same requirement multiple times 1",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should allow tracing same requirement multiple times 1"
+        ]
+      },
+      {
+        "requirement": [
+          "High",
+          "Requirement 2"
+        ],
+        "title": "should allow tracing same requirement multiple times 2",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should allow tracing same requirement multiple times 2"
+        ]
+      },
+      {
+        "requirement": "Requirement 2",
+        "title": "should allow tracing same requirement multiple times 3",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should allow tracing same requirement multiple times 3"
+        ]
+      },
+      {
+        "requirement": [
+          "High",
+          "Requirement 1"
+        ],
+        "title": "should allow tracing same requirement multiple times 3",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should allow tracing same requirement multiple times 3"
+        ]
+      },
+      {
+        "requirement": [
+          "High",
+          "Requirement 2"
+        ],
+        "title": "should allow tracing same requirement multiple times 4",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should allow tracing same requirement multiple times 4"
+        ]
+      },
+      {
+        "requirement": [
+          "Low",
+          "Requirement 1"
+        ],
+        "title": "should allow tracing by full path",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should allow tracing by full path"
+        ]
+      },
+      {
+        "requirement": "Medium Requirement 1",
+        "title": "should use custom matcher passed directly into trace",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should use custom matcher passed directly into trace"
+        ]
+      },
+      {
+        "requirement": "Medium Requirement 3",
+        "title": "should use custom matcher passed directly into trace",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should use custom matcher passed directly into trace"
+        ]
+      },
+      {
+        "requirement": "Custom Requirement 1",
+        "title": "should allow custom requirements",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should allow custom requirements"
+        ]
+      },
+      {
+        "requirement": [
+          "Custom Category",
+          "Custom Requirement 2"
+        ],
+        "title": "should allow custom requirements",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should allow custom requirements"
+        ]
+      },
+      {
+        "requirement": "Optional Requirement 1",
+        "title": "should call callback function and allow nesting",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should call callback function and allow nesting"
+        ]
+      },
+      {
+        "requirement": "Optional Requirement 2",
+        "title": "should call callback function and allow nesting",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should call callback function and allow nesting"
+        ]
+      },
+      {
+        "requirement": "Optional Requirement 3",
+        "title": "should call callback function and allow nesting",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "should call callback function and allow nesting"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
+          "Sub-category",
+          "Sub Requirement 1"
+        ],
+        "title": "should use matcher",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "When matcher is set",
+          "should use matcher"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
+          "Sub-category",
+          "Sub Requirement 3"
+        ],
+        "title": "should use matcher",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "When matcher is set",
+          "should use matcher"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
+          "Medium Requirement 1"
+        ],
+        "title": "should use custom matcher passed directly into trace",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "When matcher is set",
+          "should use custom matcher passed directly into trace"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
+          "Medium Requirement 3"
+        ],
+        "title": "should use custom matcher passed directly into trace",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "When matcher is set",
+          "should use custom matcher passed directly into trace"
+        ]
+      }
+    ]
+  }
+]

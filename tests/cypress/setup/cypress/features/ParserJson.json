@@ -1,0 +1,28 @@
+{
+  "title": "Feature Json",
+  "description": "My feature description with <a href=\"https://google.com\">HTML</a>",
+  "group": "Parsers",
+  "structure": {
+    "Optional Requirement 1": {},
+    "Optional Requirement 3": {},
+    "Optional Requirement 4": {},
+    "High": {
+      "High Requirement 1": {},
+      "High Requirement 2": {},
+      "High Requirement 3": {}
+    },
+    "Medium": [
+      "Medium Requirement 1",
+      ["Medium Requirement 2"],
+      { "Medium Requirement 3": {} },
+      {
+        "Sub-category <a href=\"with a link\">http://google.com</a>": {
+          "Requirement on a side with & \" ' entities 1": {},
+          "Requirement on a side 2": {},
+          "Requirement on a side 3": {}
+        }
+      }
+    ],
+    "Low": ["Low Requirement with & \" ' < > entities 1", "Low Requirement 2"]
+  }
+}

@@ -132,20 +132,20 @@ mixin category(list, listClass)
   { self: true, filename: "pug", basedir: __dirname }
 );
 
-type FileColumn = {
+export type FileColumn = {
   path: string;
   name: string;
   title: string;
   colspan: number;
 };
 
-type SpecColumn = {
+export type SpecColumn = {
   name: string;
   title: string;
   colspan: number;
 };
 
-type HorizontalInfo = {
+export type HorizontalInfo = {
   specs: Spec[];
   filesRow: FileColumn[];
   specsRow: SpecColumn[];
@@ -220,18 +220,18 @@ export const buildHorizontalHeaders = (
   };
 };
 
-type RequirmentInfo = {
+export type RequirmentInfo = {
   title: string;
   id: string;
   specs: Spec[];
 };
 
-type CategoryInfo = {
+export type CategoryInfo = {
   title: string;
   children: object;
 };
 
-type CellInfo = {
+export type CellInfo = {
   name: string;
   depth: number;
   id: string;
@@ -246,7 +246,7 @@ type CellInfo = {
   rowspan: number;
 };
 
-type VerticalInfo = {
+export type VerticalInfo = {
   requirements: RequirmentInfo[];
   rows: CellInfo[][];
   categories: CellInfo[];
@@ -452,8 +452,6 @@ export const renderFeatureCategories = (
   links: PageLinks
 ) => {
   const categoriesHtml = renderFeatureCategoryList(feature, state, links);
-
-  console.log(categoriesHtml);
 
   return featureCategoriesTemplate({
     categoriesHtml,

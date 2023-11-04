@@ -132,6 +132,7 @@ export const createFeatureFromHtmlAsync = (path) => {
               feature.headers(state.headers);
               feature.valueOf().title = state.title;
               feature.valueOf().description = state.description;
+              feature.valueOf().group = state.group;
               resolve(feature);
             })
             .catch(reject);

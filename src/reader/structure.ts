@@ -7,10 +7,11 @@ import { getUniqueRequirementId, removeExtraSpaces } from "./utils";
  */
 export const seedStructure = (structure: object) => {
   Object.entries(structure).forEach(([key, value]) => {
-    key = removeExtraSpaces(key);
     delete structure[key];
 
-    if (Object.keys(value).length) {
+    key = removeExtraSpaces(key);
+
+    if (value && typeof value === "object" && Object.keys(value).length) {
       structure[key] = value;
       seedStructure(value);
       return;

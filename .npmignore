@@ -1,11 +1,10 @@
 .history
-coverage
-cypress_coverage
-test-project
 screenshots
-__tests__
 jest.config.js
+jest.setup.js
+rollup.config.mjs
 tsconfig.json
 /src
+/tests
 key.pem
 cert.pem

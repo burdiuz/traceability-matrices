@@ -1,0 +1,105 @@
+[
+  {
+    "title": "Feature Html",
+    "group": "Parsers",
+    "description": "My feature description with\n    <a href=\"https://google.com\">HTML</a>",
+    "structure": {
+      "Optional Requirement 1": {},
+      "Optional Requirement 2": {},
+      "Optional Requirement 3": {},
+      "High": {
+        "High Requirement 1": {},
+        "High Requirement 2": {},
+        "High Requirement 3": {}
+      },
+      "Medium": {
+        "Medium Requirement 1": {},
+        "Medium Requirement 2": {},
+        "Medium Requirement 3": {},
+        "Sub-category <a href=\"http://google.com\">with a link</a>": {
+          "Requirement on a side with & \" ' entities 1": {},
+          "Requirement on a side 2": {},
+          "Requirement on a side 3": {}
+        }
+      },
+      "Low": {
+        "Low Requirement with & \" ' < > entities 1": {},
+        "Low Requirement 2": {}
+      }
+    },
+    "headers": [],
+    "records": [
+      {
+        "requirement": "Optional Requirement 1",
+        "title": "trace optional requirements",
+        "filePath": "cypress/e2e/parsers/html_feature.cy.js",
+        "titlePath": [
+          "HTML",
+          "Root requirements",
+          "trace optional requirements"
+        ]
+      },
+      {
+        "requirement": "Optional Requirement 3",
+        "title": "trace optional requirements",
+        "filePath": "cypress/e2e/parsers/html_feature.cy.js",
+        "titlePath": [
+          "HTML",
+          "Root requirements",
+          "trace optional requirements"
+        ]
+      },
+      {
+        "requirement": "High Requirement 2",
+        "title": "trace high requirements",
+        "filePath": "cypress/e2e/parsers/html_feature.cy.js",
+        "titlePath": [
+          "HTML",
+          "High requirements",
+          "trace high requirements"
+        ]
+      },
+      {
+        "requirement": "Medium Requirement 1",
+        "title": "trace medium requirements",
+        "filePath": "cypress/e2e/parsers/html_feature.cy.js",
+        "titlePath": [
+          "HTML",
+          "Medium requirements",
+          "trace medium requirements"
+        ]
+      },
+      {
+        "requirement": "Medium Requirement 3",
+        "title": "trace medium requirements",
+        "filePath": "cypress/e2e/parsers/html_feature.cy.js",
+        "titlePath": [
+          "HTML",
+          "Medium requirements",
+          "trace medium requirements"
+        ]
+      },
+      {
+        "requirement": "Requirement on a side 2",
+        "title": "trace sub-category requirements",
+        "filePath": "cypress/e2e/parsers/html_feature.cy.js",
+        "titlePath": [
+          "HTML",
+          "Medium requirements",
+          "Sub-category requirements",
+          "trace sub-category requirements"
+        ]
+      },
+      {
+        "requirement": "Low Requirement 2",
+        "title": "trace low requirements",
+        "filePath": "cypress/e2e/parsers/html_feature.cy.js",
+        "titlePath": [
+          "HTML",
+          "Low requirements",
+          "trace low requirements"
+        ]
+      }
+    ]
+  }
+]

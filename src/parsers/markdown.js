@@ -166,12 +166,16 @@ export const parseMarkdownFeature = async (content) => {
  * @param {string} path Path to markdown file from feature root
  * @returns
  */
-export const createFeatureFromMarkdown = (path) =>
+export const createFeatureFromMarkdown = (path, group = "") =>
   cy.readFile(path).then(
     (content) =>
       new Cypress.Promise((resolve, reject) => {
         parseMarkdownFeature(content)
           .then((state) => {
+            if (group) {
+              state.group = group;
+            }
+
             registerFeature(state);
             const feature = wrapFeatureState(state);
             resolve(feature);
@@ -190,11 +194,11 @@ export const createFeatureFromMarkdown = (path) =>
  * @param {string} path Path to markdown file from feature root
  * @returns FeatureApi
  */
-export const createFeatureFromMarkdownAsync = (path) => {
+export const createFeatureFromMarkdownAsync = (path, group = "") => {
   const feature = createFeature({
     title: "",
     description: "",
-    group: "",
+    group,
   });
 
   before(() => {
@@ -207,6 +211,10 @@ export const createFeatureFromMarkdownAsync = (path) => {
               feature.headers(state.headers);
               feature.valueOf().title = state.title;
               feature.valueOf().description = state.description;
+              if (!feature.valueOf().group && state.group) {
+                feature.valueOf().group = state.group;
+              }
+
               resolve(feature);
             })
             .catch(reject);

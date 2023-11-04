@@ -1,0 +1,109 @@
+[
+  {
+    "title": "Requirement",
+    "group": "Records",
+    "description": "Testing requirement() API",
+    "structure": {
+      "Hooks": {
+        "describe()": null,
+        "context()": null,
+        "suite()": null,
+        "it()": null,
+        "specify()": null,
+        "test()": null
+      },
+      "Should allow trace as usual": null,
+      "Should allow matcher function": null
+    },
+    "headers": [],
+    "records": [
+      {
+        "requirement": [
+          "Hooks",
+          "describe()"
+        ],
+        "title": "requirement().describe()",
+        "filePath": "cypress/e2e/cypress/requirement.cy.js",
+        "titlePath": [
+          "requirement().describe()"
+        ]
+      },
+      {
+        "requirement": [
+          "Hooks",
+          "context()"
+        ],
+        "title": "requirement().context()",
+        "filePath": "cypress/e2e/cypress/requirement.cy.js",
+        "titlePath": [
+          "requirement().context()"
+        ]
+      },
+      {
+        "requirement": [
+          "Hooks",
+          "suite()"
+        ],
+        "title": "requirement().suite()",
+        "filePath": "cypress/e2e/cypress/requirement.cy.js",
+        "titlePath": [
+          "requirement().suite()"
+        ]
+      },
+      {
+        "requirement": [
+          "Hooks",
+          "test()"
+        ],
+        "title": "requirement().test()",
+        "filePath": "cypress/e2e/cypress/requirement.cy.js",
+        "titlePath": [
+          "Requirement API",
+          "requirement().test()"
+        ]
+      },
+      {
+        "requirement": [
+          "Hooks",
+          "it()"
+        ],
+        "title": "requirement().it()",
+        "filePath": "cypress/e2e/cypress/requirement.cy.js",
+        "titlePath": [
+          "Requirement API",
+          "requirement().it()"
+        ]
+      },
+      {
+        "requirement": [
+          "Hooks",
+          "specify()"
+        ],
+        "title": "requirement().specify()",
+        "filePath": "cypress/e2e/cypress/requirement.cy.js",
+        "titlePath": [
+          "Requirement API",
+          "requirement().specify()"
+        ]
+      },
+      {
+        "requirement": "Should allow trace as usual",
+        "title": "requirement().trace()",
+        "filePath": "cypress/e2e/cypress/requirement.cy.js",
+        "titlePath": [
+          "Requirement API",
+          "requirement().trace()"
+        ]
+      },
+      {
+        "requirement": "Should allow matcher function",
+        "title": "should use matcher to find proper requirement",
+        "filePath": "cypress/e2e/cypress/requirement.cy.js",
+        "titlePath": [
+          "Requirement API",
+          "should use matcher to find proper requirement"
+        ]
+      }
+    ]
+  }
+]

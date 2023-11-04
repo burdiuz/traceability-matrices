@@ -1,0 +1,7 @@
+node_modules/
+cypress/video/
+cypress/screenshots/
+cypress/downloads/
+generated_coverage_default/
+generated_coverage_compact/
+generated_coverage_lcov/

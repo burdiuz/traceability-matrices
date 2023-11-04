@@ -72,17 +72,19 @@ export const getBranchOf = (structure: object, path: string[]) => {
 };
 
 export const getNarrowStructure = (structure: object, path: string[]) => {
-  const sourceStruct = getStructureBranch(structure, path);
+  const branch = getStructureBranch(structure, path);
 
-  if (!sourceStruct) {
+  if (!branch) {
     throw new Error(
       `Structure path [${
         path.length ? `"${path.join('", "')}"` : ""
       }] is not available.`
     );
   }
+  const struct = {};
+  cloneStructure(branch, addBranchTo(struct, path));
 
-  return cloneStructure(sourceStruct, addBranchTo({}, path));
+  return struct;
 };
 
 export const createStructureApi = ({ feature }: { feature: Feature }) => {

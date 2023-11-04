@@ -44,13 +44,17 @@ export const readStructureRequirements = (structure: object) => {
   const isEmpty = (structure: object, categories: string[]) => {
     let empty = true;
 
-    Object.entries(structure).forEach(([title, children]) => {
-      empty = false;
+    if (structure && typeof structure === "object") {
+      Object.entries(structure).forEach(([title, children]) => {
+        empty = false;
 
-      if (isEmpty(children, [...categories, title])) {
-        requirements.push([title, categories]);
-      }
-    });
+        const path = [...categories, title];
+
+        if (isEmpty(children, path)) {
+          requirements.push([title, path]);
+        }
+      });
+    }
 
     return empty;
   };

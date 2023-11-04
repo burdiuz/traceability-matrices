@@ -1,12 +1,15 @@
 /// <reference path="./Cypress.d.ts" />
 import { Feature, MatcherFn } from "./types";
-import { concatPath } from "./utils";
+import { concatPath, getStructureBranch } from "./utils";
+
+export type RequirementPathFn = (structure: object) => string | string[];
+export type CategoryPathFn = (structure: object) => string[];
 
 /**
  * Check of user does not try to trace a category
- * @param structure 
- * @param namePath 
- * @returns 
+ * @param structure
+ * @param namePath
+ * @returns
  */
 const validatePath = (structure: object, namePath: string | string[]) => {
   if (!structure || !(namePath instanceof Array)) {
@@ -28,8 +31,13 @@ Categories cannot be traced, please specify a requirement(leaf node of the featu
   }
 };
 
-const addRecordToFeature = (feature: Feature, namePath: string[] | string) => {
-  const { title, titlePath = [] } = Cypress.currentTest || {};
+const addRecordToFeature = (
+  feature: Feature,
+  namePath: string[] | string,
+  specInfo: { title?: string; titlePath?: string[] } = {}
+) => {
+  const { title = specInfo.title, titlePath = specInfo.titlePath || [] } =
+    Cypress.currentTest || {};
   let name = namePath;
 
   validatePath(feature.structure, namePath);
@@ -47,23 +55,38 @@ const addRecordToFeature = (feature: Feature, namePath: string[] | string) => {
 };
 
 export const createTraceFn =
-  ({
-    feature,
-    traceToRequirementMatcher,
-    categoryPath,
-  }: {
+  (scope: {
     feature: Feature;
     traceToRequirementMatcher?: MatcherFn;
     categoryPath?: string[];
   }) =>
-  (nameOrPath: string | string[], chainFn?: () => void) => {
-    nameOrPath = concatPath(categoryPath, nameOrPath);
+  (nameOrPath: RequirementPathFn | string | string[], chainFn?: () => void) => {
+    const { feature, categoryPath } = scope;
+    const structure = categoryPath
+      ? getStructureBranch(feature.structure, categoryPath)
+      : feature.structure;
 
-    if (traceToRequirementMatcher) {
-      nameOrPath = traceToRequirementMatcher(nameOrPath, feature.structure);
+    let path: string | string[];
+
+    if (typeof nameOrPath === "function") {
+      path = nameOrPath(structure);
+    } else if (scope.traceToRequirementMatcher) {
+      path = scope.traceToRequirementMatcher(nameOrPath, structure);
+    } else {
+      path = nameOrPath;
     }
 
-    addRecordToFeature(feature, nameOrPath);
+    if (categoryPath && categoryPath.length) {
+      path = concatPath(categoryPath, path);
+    }
+
+    if (path === undefined || (path instanceof Array && !path.length)) {
+      throw new Error(
+        "Requirement path is empty or undefined and cannot be used for tracing."
+      );
+    }
+
+    addRecordToFeature(feature, path);
 
     if (chainFn) {
       chainFn();
@@ -76,12 +99,34 @@ export const createRequirementApi =
     traceToRequirementMatcher?: MatcherFn;
     categoryPath?: string[];
   }) =>
-  (...path: string[]) => {
+  (...path: [RequirementPathFn] | string[]) => {
+    const [possiblyFn] = path;
     const { feature, categoryPath } = scope;
-    let namePath = concatPath(categoryPath, path);
+    const structure = categoryPath
+      ? getStructureBranch(feature.structure, categoryPath)
+      : feature.structure;
 
-    if (scope.traceToRequirementMatcher) {
-      namePath = scope.traceToRequirementMatcher(namePath, feature.structure);
+    let namePath: string | string[];
+
+    if (typeof possiblyFn === "function") {
+      namePath = possiblyFn(structure);
+    } else if (scope.traceToRequirementMatcher) {
+      namePath = scope.traceToRequirementMatcher(path as string[], structure);
+    } else {
+      namePath = path as string[];
+    }
+
+    if (categoryPath && categoryPath.length) {
+      namePath = concatPath(categoryPath, namePath);
+    }
+
+    if (
+      namePath === undefined ||
+      (namePath instanceof Array && !namePath.length)
+    ) {
+      throw new Error(
+        "Requirement path is empty or undefined and cannot be used for tracing."
+      );
     }
 
     // TODO skip adding nested calls to records
@@ -99,7 +144,10 @@ export const createRequirementApi =
       }
 
       const alteredCallback = () => {
-        addRecordToFeature(feature, namePath);
+        addRecordToFeature(feature, namePath, {
+          title: name,
+          titlePath: [name],
+        });
 
         return callback();
       };
@@ -137,18 +185,36 @@ export const createRequirementApi =
   };
 
 export const createCategoryApi =
-  (parentScope: { feature: Feature; traceToRequirementMatcher?: MatcherFn }) =>
-  (...categoryPath: string[]) => {
+  (parentScope: {
+    feature: Feature;
+    traceToRequirementMatcher?: MatcherFn;
+    categoryPath?: string[];
+  }) =>
+  (...categoryPath: [CategoryPathFn] | string[]) => {
+    let path: string[];
+    const [possiblyFn] = categoryPath;
+    const { feature, categoryPath: parentPath = [] } = parentScope;
+
+    if (typeof possiblyFn === "function") {
+      path = possiblyFn(getStructureBranch(feature.structure, parentPath));
+    } else {
+      path = categoryPath as string[];
+    }
+
     const scope: {
       feature: Feature;
       traceToRequirementMatcher: MatcherFn;
       categoryPath: string[];
-    } = Object.assign(Object.create(parentScope), { categoryPath });
+    } = Object.assign(Object.create(parentScope), {
+      categoryPath: [...parentPath, ...path],
+    });
 
+    const category = createCategoryApi(scope);
     const requirement = createRequirementApi(scope);
     const trace = createTraceFn(scope);
 
     return {
+      category,
       requirement,
       trace,
     };

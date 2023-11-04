@@ -17,7 +17,7 @@ div.flex-vertical
               a(href=self.links.getFileLink(file.id)) #{file.specName}
               div.file-features
                 each feature in self.listFileFeatures(file)
-                  span.file-feature #{feature.title} #{feature.requirementsCovered} / #{feature.requirementsTotal}
+                  span.file-feature(title=\`File coverage: \${feature.coverage}%\\nCovered requirements: \${feature.requirementsCovered}\\nTotal requirements: \${feature.requirementsTotal}\`) #{feature.title}
 
 `,
   { self: true }

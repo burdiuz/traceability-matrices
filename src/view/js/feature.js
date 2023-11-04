@@ -42,3 +42,20 @@ function handleCompactCategoryExpand(tr) {
     sibling = sibling.nextSibling;
   }
 }
+
+function handleFeatureCategoriesToggleVisibility(row) {
+  const files = row.querySelector(".feature-files-list");
+  const categories = row.querySelector(".category-listing-root");
+
+  if (categories) {
+    if (categories.classList.contains("visible")) {
+      categories.classList.remove("visible");
+    } else {
+      categories.classList.add("visible");
+    }
+  }
+
+  if(files) {
+    files.classList.remove("visible");
+  }
+}

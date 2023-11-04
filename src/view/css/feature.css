@@ -103,7 +103,6 @@ td.spec-count {
 
 table.feature th.spec-name {
   max-width: 150px;
-  text-align: justify;
 }
 
 table.feature .category-coverage {

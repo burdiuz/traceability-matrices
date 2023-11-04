@@ -6,7 +6,7 @@ import { buildVerticalHeaders } from "../view/feature";
  */
 export const readCoverageStats = (
   { features }: Coverage,
-  includeFeatures = []
+  includeFeatures: string[] = []
 ) => {
   const list = Object.values(features);
   let featureCount = list.length;
@@ -39,7 +39,15 @@ export const readCoverageStats = (
       depth: number;
       requirementsCovered: number;
       requirementsTotal: number;
-    }) => `${" ".repeat(depth * 2)}${requirementsCovered}/${requirementsTotal}`;
+    }) => {
+      const coverage = requirementsTotal
+        ? ((requirementsCovered / requirementsTotal) * 100).toFixed(0)
+        : 100;
+
+      return `${" ".repeat(
+        depth * 2
+      )}${coverage}% ${requirementsCovered}/${requirementsTotal}`;
+    };
 
     console.log("-------------------------------------------");
     console.log(
@@ -48,8 +56,7 @@ export const readCoverageStats = (
         requirementsCovered: result.requirementsCovered,
         requirementsTotal: result.requirementsTotal,
       }),
-      result.requirements.length ? `${coverage.toFixed(2)}%` : "100%",
-      feature.title
+      feature.group ? `${feature.group}: ${feature.title}` : feature.title
     );
 
     result.rows.forEach((row) =>
@@ -59,7 +66,7 @@ export const readCoverageStats = (
           return;
         }
 
-        let covered = !!feature.records[cell.name].length;
+        let covered = !!feature.records[cell.id].length;
 
         console.log(
           covered ? "\x1b[32m%s\x1b[0m" : "\x1b[31m%s\x1b[0m",
@@ -75,7 +82,7 @@ export const readCoverageStats = (
   console.log("Coverage:", `${totalCoverage.toFixed(2)}%`);
 };
 
-export const stats = async (targetDirs, features) => {
+export const stats = async (targetDirs: string[], features: string[]) => {
   const state = await readCoverage(targetDirs);
 
   readCoverageStats(state, features);

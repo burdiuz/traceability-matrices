@@ -17,13 +17,9 @@ div.file {
   display: flex;
   gap: 16px;
   align-items: center;
-  margin: 0 0 4px 16px;
-  background-color: #ddd;
+  margin: 0 0 1px 16px;
+  background-color: #fff;
   padding: 4px;
-}
-
-div.file:nth-child(odd) {
-  background-color: #eee;
 }
 
 div.file div.file-features {

@@ -1,0 +1,164 @@
+[
+  {
+    "title": "Feature A",
+    "group": "Features",
+    "description": "Testing Multifile Feature composition",
+    "structure": {},
+    "headers": [],
+    "records": [
+      {
+        "requirement": [
+          "High",
+          "Requirement 1"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      },
+      {
+        "requirement": [
+          "High",
+          "Requirement 3"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
+          "Requirement 1"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
+          "Requirement 3"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      },
+      {
+        "requirement": [
+          "Low",
+          "Requirement 1"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      },
+      {
+        "requirement": [
+          "Low",
+          "Requirement 3"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Feature C",
+    "group": "Features",
+    "description": "Testing Multifile Feature composition",
+    "structure": {},
+    "headers": [],
+    "records": [
+      {
+        "requirement": [
+          "Medium",
+          "Requirement 1"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
+          "Requirement 3"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      },
+      {
+        "requirement": [
+          "High",
+          "Requirement 1"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      },
+      {
+        "requirement": [
+          "High",
+          "Requirement 3"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      },
+      {
+        "requirement": [
+          "Low",
+          "Requirement 1"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      },
+      {
+        "requirement": [
+          "Low",
+          "Requirement 3"
+        ],
+        "title": "tracing A and C",
+        "filePath": "cypress/e2e/cypress/multi-file-2.cy.js",
+        "titlePath": [
+          "Multi-feature setup",
+          "tracing A and C"
+        ]
+      }
+    ]
+  }
+]

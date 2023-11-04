@@ -1,5 +1,5 @@
 div.feature-link {
-  background-color: #ddd;
+  background-color: #fff;
   padding: 8px 16px;
 }
 
@@ -10,11 +10,11 @@ div.feature-link div.feature-info {
 }
 
 div.feature-link.covered {
-  background-color: #eee;
+  background-color: #fff;
 }
 
 div.feature-link .title {
-  font-size: 150%;
+  font-size: 130%;
   white-space: nowrap;
 }
 
