@@ -316,15 +316,15 @@ For example, if we have this structure
 
 ```js
 {
-  "Requirment 1": null,
-  "Requirment 2": null,
+  "Requirement 1": null,
+  "Requirement 2": null,
   "Category 1": {
-    "Requirment 1": null,
-    "Requirment 2": null,
+    "Requirement 1": null,
+    "Requirement 2": null,
   },
   "Category 2": {
-    "Requirment 1": null,
-    "Requirment 2": null,
+    "Requirement 1": null,
+    "Requirement 2": null,
   },
 }
 ```
@@ -333,7 +333,7 @@ Tracing requirement `Requirement 1` from a future level will lookup for a first 
 
 ```js
 it("should trace requirement 1 from category 2", () => {
-  feature.trace("Requirment 1");
+  feature.trace("Requirement 1");
 });
 ```
 
@@ -343,7 +343,7 @@ Using `trace()` from a specific category helps to point at requirement on its le
 const category1 = feature.category("Category 2");
 
 it("should trace requirement 1 from category 2", () => {
-  category1.trace("Requirment 1");
+  category1.trace("Requirement 1");
 });
 ```
 
@@ -397,7 +397,7 @@ Feature.setTraceToRequirementMatcher((name, struct) => {
   /*
    * readStructureRequirements() reads structure and returns all requirements in a form of 2-dimensional array 
    * [
-   *   [requirment, path]
+   *   [requirement, path]
    * ]
    * 
    * where 
