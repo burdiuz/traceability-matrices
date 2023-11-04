@@ -1,6 +1,6 @@
 # @actualwave/traceability-matrices
 
-Integrate requirements into e2e/integration test code and generate [traceability matrices](https://en.wikipedia.org/wiki/Traceability_matrix) for your feature. Currently this feature has an adapter to work with [Cypress](https://www.cypress.io/) tests.
+Integrate requirements into e2e/integration test code and generate [traceability matrices](https://en.wikipedia.org/wiki/Traceability_matrix) for your project. Currently this library has an adapter to work with [Cypress](https://www.cypress.io/) tests.
 
 ![List of spec files](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/files.png?raw=true)
 
@@ -22,7 +22,7 @@ it("should do something according to requirement #1", () => {
 
 Once test run is finished, coverage report will be stored in a coverage folder specified in cypress config or environment variable. Stored file is a JSON file and is not suitable for viewing, to generate viewable information and actual matrices/tables, user should use command `traceability-matrices generate` to generate static HTML files with reports or `traceability-matrices serve` to start local HTTP server with reports.
 
-Example feature is available in [git repo](https://github.com/burdiuz/traceability-matrices/tree/master/tests/cypress/setup)
+Example project is available in [git repo](https://github.com/burdiuz/traceability-matrices/tree/master/tests/cypress/setup)
 
 ## Installation
 
@@ -116,8 +116,8 @@ Fails(exits with an error code) if coverage thresholds weren't met.
 Parameters:
 
 - `--target-dir` - required, path to directory with coverage reports.
-- `--total` - optional, defines global coverage threshold, value can be between 0 and 100. Fails command if combined coverage of all feature does not meet threshold.
-- `--per-feature` - optional, defines coverage threshold applies to every feature, value can be between 0 and 100. Fails command if at least one feature does not meet threshold.
+- `--total` - optional, defines global coverage threshold, value can be between 0 and 100. Fails command if combined coverage of all features does not meet threshold.
+- `--per-feature` - optional, defines coverage threshold applied to each feature, value can be between 0 and 100. Fails command if at least one feature does not meet threshold.
 
 Example:
 
@@ -160,7 +160,11 @@ and defining a feature in a test file
 ```js
 import { createFeature } from "@actualwave/traceability-matrices/cypress";
 
-const feature = createFeature("My Feature");
+const feature = createFeature({
+  title: "My Feature",
+  description: "This is a description of my new feature",
+  group: "Features",
+});
 ```
 
 `createFeature(featureTitle: string, featureDescription?: string)` accepts feature title and optionally description. Feature titles must be unique strings. Feature description could be an HTML string, it will display on top of feature coverage table and is suitable for placing various feature links and other useful information.
@@ -168,12 +172,13 @@ const feature = createFeature("My Feature");
 ```ts
 import { createFeature } from "@actualwave/traceability-matrices/cypress";
 
-const feature = createFeature(
-  "My Feature",
-  `
-<h1>Useful information</1>
-<a href="https://react.dev/">Learn React</a>`
-);
+const feature = createFeature({
+  title: "My Feature",
+  description: `
+<h1>Useful information</h1>
+<a href="https://react.dev/">Learn React</a>`,
+  group: "Features",
+});
 ```
 
 Created `feature` provides methods to match test specs with feature requriements and genrates test records that will be stored in a JSON file once test run is finished.
