@@ -21,9 +21,18 @@ div.file {
   background-color: #fff;
   padding: 4px;
 }
+div.file > a {
+  padding: 8px;
+  font-size: 130%;
+}
 
 div.file div.file-features {
   display: flex;
-  gap: 16px;
+  column-gap: 16px;
   margin-left: auto;
+  flex-wrap: wrap;
+}
+
+div.file div.file-features .file-feature {
+  cursor: default;
 }

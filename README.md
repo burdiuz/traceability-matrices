@@ -1,14 +1,12 @@
 # @actualwave/traceability-matrices
 
-Integrate requirements into e2e/integration test code and generate traceability matrices for your feature. Currently this feature has an adapter to work with [Cypress](https://www.cypress.io/) tests.
+Integrate requirements into e2e/integration test code and generate [traceability matrices](https://en.wikipedia.org/wiki/Traceability_matrix) for your feature. Currently this feature has an adapter to work with [Cypress](https://www.cypress.io/) tests.
 
 ![List of spec files](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/files.png?raw=true)
 
 ![List of features](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/features.png?raw=true)
 
-![One file feature](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/feature_a.png?raw=true)
-
-![Multi-file feature](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/feature_c.png?raw=true)
+![Default feature view](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/default_view.png?raw=true)
 
 ## How it works
 
@@ -24,7 +22,7 @@ it("should do something according to requirement #1", () => {
 
 Once test run is finished, coverage report will be stored in a coverage folder specified in cypress config or environment variable. Stored file is a JSON file and is not suitable for viewing, to generate viewable information and actual matrices/tables, user should use command `traceability-matrices generate` to generate static HTML files with reports or `traceability-matrices serve` to start local HTTP server with reports.
 
-Example feature is available in [git repo](https://github.com/burdiuz/traceability-matrices/tree/master/test-feature)
+Example feature is available in [git repo](https://github.com/burdiuz/traceability-matrices/tree/master/tests/cypress/setup)
 
 ## Installation
 
@@ -67,7 +65,7 @@ Also, it might be useful to add commands to package.json
   },
 ```
 
-calling `npm run tm:serve` will start local HTTP server with coveragereports and `npm run tm:generate` will generate HTML reports into `xcoverage-static` folder.
+calling `npm run tm:serve` will start local HTTP server with coveragereports and `npm run tm:generate` will generate HTML reports into `coverage-static` folder.
 
 ## Commands
 
@@ -86,11 +84,13 @@ Parameters:
 Example:
 
 ```
-traceability-matrices serve --target-dir=cypress/coverage --https=true --compact=true
+traceability-matrices serve --target-dir=cypress/coverage --compact=true
 ```
+
 ![Feature compact view](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/compact_view.png?raw=true)
 
 To run HTTPS server provide paths to key and certificate files relative to working directory
+
 ```
 traceability-matrices serve --target-dir=coverage --output-dir=statics --compact=true --key=./key.pem --cert=./cert.pem
 ```
@@ -124,6 +124,7 @@ Example:
 ```
 traceability-matrices threshold --target-dir=cypress/coverage --total=80 --per-feature=60
 ```
+
 ![Threshold command output](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/threshold.png?raw=true)
 
 ### traceability-matrices stats
@@ -135,6 +136,7 @@ Example:
 ```
 traceability-matrices stats --target-dir=cypress/coverage
 ```
+
 ![Stats command output](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/stats.png?raw=true)
 
 ## Cypress integration
@@ -302,6 +304,124 @@ req1.it('should do', () => {
 
 Both will record requirement being tested in these places.
 
+### feature.category()
+
+`category()` method allows to specify category path for traced requirements. It returns an object with `category()`, `trace()` and `requirement()` functions. If feature contains identical requirement in multiple places using `trace()` from specific category helps to locate exact requirement.
+For example, if we have this structure
+
+```js
+{
+  "Requirment 1": null,
+  "Requirment 2": null,
+  "Category 1": {
+    "Requirment 1": null,
+    "Requirment 2": null,
+  },
+  "Category 2": {
+    "Requirment 1": null,
+    "Requirment 2": null,
+  },
+}
+```
+
+Tracing requirement `Requirement 1` from a future level will lookup for a first requirement occurance, so all traces will be recorded on `Requirement 1` in a root category.
+
+```js
+it("should trace requirement 1 from category 2", () => {
+  feature.trace("Requirment 1");
+});
+```
+
+Using `trace()` from a specific category helps to point at requirement on its level.
+
+```js
+const category1 = feature.category("Category 2");
+
+it("should trace requirement 1 from category 2", () => {
+  category1.trace("Requirment 1");
+});
+```
+
+This will trace `Requirement 1` from `Category 2`.
+
+This function can be used multiple times and it accepts multiple categories for deeply nested requirements.
+
+```js
+const child = feature.category("Parent Category", "Child Category");
+```
+
+These two examples are equivalent.
+
+```js
+const parent = feature.category("Parent Category");
+const child = parent.category("Child Category");
+```
+
+### feature.setTraceToRequirementMatcher()
+In some cases it might be not comfortable to put whole requirement text into traces in test files. Using this function requirements can be looked up using unique identifiers. It accepts a custom function that will be called with traced string and a strucutre object, its purpose to identify and return requirement text or a path array `[category, ..., requirement]` that points at specific requirement in a structure.
+```js
+import {
+  createFeature,
+  readStructureRequirements,
+} from "@actualwave/traceability-matrices/cypress";
+
+const Feature = createFeature({
+  title: "Requirement matcher",
+  group: "Features",
+});
+
+Feature.structure(
+  {
+    High: {
+      "HR-1 Requirement text is so long that might be difficult to use in tests.": null,
+      "HR-2 Requirement text is so long that might be difficult to use in tests.": null,
+      "HR-3 Requirement text is so long that might be difficult to use in tests.": null,
+    },
+    "RR-1 Requirement text is so long that might be difficult to use in tests.": null,
+    "RR-2 Requirement text is so long that might be difficult to use in tests.": null,
+    "RR-3 Requirement text is so long that might be difficult to use in tests.": null,
+  },
+  ["Category", "Requirement"]
+);
+
+Feature.setTraceToRequirementMatcher((name, struct) => {
+  if (name instanceof Array) {
+    return name;
+  }
+
+  /*
+   * readStructureRequirements() reads structure and returns all requirements in a form of 2-dimensional array 
+   * [
+   *   [requirment, path]
+   * ]
+   * 
+   * where 
+   *  requirement - requirement text
+   *  path - an array or strings that identifies requirement in a structure
+   */
+  const reqs = readStructureRequirements(struct);
+  const [, path] = reqs.find(([key]) => key.startsWith(name));
+
+  return path || name;
+});
+
+describe("Matcher", () => {
+  describe("High category requirements", () => {
+    it("trace second requirement", () => {
+      /*
+       * this trace will use matcher to identify requirement using inuque identifier
+       * matcher will result with
+       *  [
+       *   "High",
+       *   "HR-2 Requirement text is so long that might be difficult to use in tests."
+       *  ]
+       */
+      Feature.trace("HR-2");
+    });
+  });
+});
+```
+
 ### feature.structure()
 
 `feature.structure()` used to specify category tree, and it should be built only with objects. Leaf objects of this structure will be identified as a testable requirements, other branches are categories and could not be tested.
@@ -362,5 +482,147 @@ Clone feature, creates a new feature with same structure and empty test records.
 
 Returns internal state of the feature
 
+## Parsers
+
+This project includes parsers that allow reading feature information from various file types. All of them return feature API object and work in a same way, just like object returned from `createFeature()`.
+
+### Markdown
+
+Markdown file structure
+
+```markdown
+# Parsers / Feature Markdown
+
+My feature description with [HTML](https://google.com)
+
+## High
+
+- High Requirement 1
+- High Requirement 2
+- High Requirement 3
+```
+
+Usage in cypress test
+
+```js
+import { createFeatureFromMarkdownAsync } from "@actualwave/traceability-matrices/markdown";
+
+const Feature = createFeatureFromMarkdownAsync(
+  "cypress/features/ParserMarkdown.md"
+);
+
+describe("Markdown", () => {
+  describe("High requirements", () => {
+    it("trace high requirements", () => {
+      Feature.trace("High Requirement 2");
+    });
+  });
+});
+```
+
+### YAML
+
+YAML file structure
+
+```yaml
+title: Feature Yaml
+description: My feature description with <a href=\"https://google.com\">HTML</a>
+group: Parsers
+structure:
+  High:
+    - High Requirement 1
+    - High Requirement 2
+    - High Requirement 3
+```
+
+Usage in cypress test
+
+```js
+import { createFeatureFromYamlAsync } from "@actualwave/traceability-matrices/yaml";
+
+const Feature = createFeatureFromYamlAsync("cypress/features/ParserYaml.yaml");
+
+describe("YAML", () => {
+  describe("High requirements", () => {
+    it("trace high requirements", () => {
+      Feature.trace("High Requirement 2");
+    });
+  });
+});
+```
+
+### HTML
+
+HTML file structure
+
+```html
+<feature>
+  <title>Feature Html</title>
+  <description
+    >My feature description with
+    <a href="https://google.com">HTML</a></description
+  >
+  <group>Parsers</group>
+  <category>
+    <name>High</name>
+    <requirement>High Requirement 1</requirement>
+    <requirement>High Requirement 2</requirement>
+    <requirement>High Requirement 3</requirement>
+  </category>
+</feature>
+```
+
+Usage in cypress test
+
+```js
+import { createFeatureFromHtmlAsync } from "@actualwave/traceability-matrices/html";
+
+const Feature = createFeatureFromHtmlAsync("cypress/features/ParserHtml.html");
+
+describe("HTML", () => {
+  describe("High requirements", () => {
+    it("trace high requirements", () => {
+      Feature.trace("High Requirement 2");
+    });
+  });
+});
+```
+
+### JSON
+
+JSON file structure
+
+```json
+{
+  "title": "Feature Json",
+  "description": "My feature description with <a href=\"https://google.com\">HTML</a>",
+  "group": "Parsers",
+  "structure": {
+    "High": {
+      "High Requirement 1": {},
+      "High Requirement 2": {},
+      "High Requirement 3": {}
+    }
+  }
+}
+```
+
+Usage in cypress test
+
+```js
+import { createFeatureFromJsonAsync } from "@actualwave/traceability-matrices/json";
+
+const Feature = createFeatureFromJsonAsync("cypress/features/ParserJson.json");
+
+describe("JSON", () => {
+  describe("High requirements", () => {
+    it("trace high requirements", () => {
+      Feature.trace("High Requirement 2");
+    });
+  });
+});
+```
+
 ## Links
+
 For latest version of reporting UI I've used couple free [FontAwesome icons](https://fontawesome.com/).

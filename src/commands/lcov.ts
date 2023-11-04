@@ -14,8 +14,8 @@ const generateFeatureLcovContent = (
 ) => {
   let lineNumber = 1;
   let blockNumber = 1;
-  const fileName = `${feature.group}_${feature.title}`.replace(
-    /[^0-9a-z_().\\\/,-\s]/gi,
+  const fileName = `${feature.group}_${feature.title}.txt`.replace(
+    /[^0-9a-z_().\\\/,-\\r\\n\\t\\v]/gi,
     "_"
   );
 
