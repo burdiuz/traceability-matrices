@@ -281,9 +281,9 @@ it("should do something according to requirement #1", () => {
 });
 ```
 
-it will be matched to leaf node of structure. If requirement not found in structure, it will be added to the root of structure when coverage is generated.
+it will be matched to a leaf node of the structure. If requirement could not be found in the structure, it will be added to the root of the structure when coverage is generated.
 
-Without structure containing all feature requirements it will have 100% coverage because there will be only requirements added from traces placed in specs(which are already marked as covered). Having structure with all feature requirements allows proper coverage calculation. For coverage calculation it does not matter(purely visual benefit) if structure is flat or organised into categories.
+Without structure containing all feature requirements, the feature will have 100% coverage because there will be only requirements added from traces placed in specs(which are already marked as covered). Having structure with all feature requirements allows proper coverage calculation. For coverage calculation it does not matter(purely visual benefit) if structure is flat or organised into categories.
 
 > Note: Categories(branches, not leaf nodes) in such structure could contain HTML markup. Using HTML markup in requirement string is also possible, it will be properly rendered but might be uncomfortable to use in test specs.
 
@@ -363,7 +363,9 @@ const child = parent.category("Child Category");
 ```
 
 ### feature.setTraceToRequirementMatcher()
+
 In some cases it might be not comfortable to put whole requirement text into traces in test files. Using this function requirements can be looked up using unique identifiers. It accepts a custom function that will be called with traced string and a strucutre object, its purpose to identify and return requirement text or a path array `[category, ..., requirement]` that points at specific requirement in a structure.
+
 ```js
 import {
   createFeature,
@@ -378,13 +380,19 @@ const Feature = createFeature({
 Feature.structure(
   {
     High: {
-      "HR-1 Requirement text is so long that might be difficult to use in tests.": null,
-      "HR-2 Requirement text is so long that might be difficult to use in tests.": null,
-      "HR-3 Requirement text is so long that might be difficult to use in tests.": null,
+      "HR-1 Requirement text is so long that might be difficult to use in tests.":
+        null,
+      "HR-2 Requirement text is so long that might be difficult to use in tests.":
+        null,
+      "HR-3 Requirement text is so long that might be difficult to use in tests.":
+        null,
     },
-    "RR-1 Requirement text is so long that might be difficult to use in tests.": null,
-    "RR-2 Requirement text is so long that might be difficult to use in tests.": null,
-    "RR-3 Requirement text is so long that might be difficult to use in tests.": null,
+    "RR-1 Requirement text is so long that might be difficult to use in tests.":
+      null,
+    "RR-2 Requirement text is so long that might be difficult to use in tests.":
+      null,
+    "RR-3 Requirement text is so long that might be difficult to use in tests.":
+      null,
   },
   ["Category", "Requirement"]
 );
@@ -395,12 +403,12 @@ Feature.setTraceToRequirementMatcher((name, struct) => {
   }
 
   /*
-   * readStructureRequirements() reads structure and returns all requirements in a form of 2-dimensional array 
+   * readStructureRequirements() reads structure and returns all requirements in a form of 2-dimensional array
    * [
    *   [requirement, path]
    * ]
-   * 
-   * where 
+   *
+   * where
    *  requirement - requirement text
    *  path - an array or strings that identifies requirement in a structure
    */
@@ -426,6 +434,19 @@ describe("Matcher", () => {
   });
 });
 ```
+
+`category()` allows setting custom matcher for its requirements and sub-category requirements.
+```js
+const RootCategory = feature.category('Root Category');
+RootCategory.setTraceToRequirementMatcher(findRootCategoryRequirement);
+
+const ChildCategory = feature.category('Root Category', 'Child Category');
+ChildCategory.setTraceToRequirementMatcher(findChildCategoryRequirement);
+
+const DescendantCategory = ChildCategory.category('Descendant Category');
+DescendantCategory.setTraceToRequirementMatcher(findDescendantCategoryRequirement);
+```
+> Removing a matcher(by setting to `undefined`) will revert to using parent category or feature matcher if set.
 
 ### feature.structure()
 
@@ -493,7 +514,90 @@ This project includes parsers that allow reading feature information from variou
 
 ### Markdown
 
-Markdown file structure
+Markdown file structure should start with 1st level header which will be parsed as a feature title. If title has a slash in it, it will be split into group and title.
+
+```markdown
+# Geature Group / Feature title
+
+This is the text of feature description, may contain images, links etc.
+```
+
+Any text without below title is used as a feature description.
+Structure of the feature marked with lower level headers and lists.
+
+```markdown
+- Requirement 1
+
+# Category
+
+- Requirement 2
+
+## Sub Category
+
+- Requirement 3
+```
+
+Converts into feature struture:
+
+- Requirement 1
+- Category
+  - Requirement 2
+  - Sub Category
+  - Requirement 3
+
+Same structure can be described with headers only
+
+```markdown
+# Requirement 1
+
+# Category
+
+## Requirement 2
+
+## Sub Category
+
+### Requirement 3
+```
+
+Or lists only
+
+```markdown
+- Requirement 1
+- Category
+  - Requirement 2
+  - Sub Category
+    - Requirement 3
+```
+
+Category defined by availability of lower level headers or lists below it.
+
+```markdown
+# This is a category
+
+## Because this lower level header exists
+```
+
+If header has no lower level headers below, it will be parsed as a requirement.
+
+```markdown
+# This is not a category because there are no lower level headers or lists under it
+
+# Category
+
+## Requirement
+```
+
+Any text under the header will be merged with requirement or category text.
+
+```markdown
+# Category
+
+More text with some details about this category
+
+## Requirement
+```
+
+Feature example
 
 ```markdown
 # Parsers / Feature Markdown
@@ -527,7 +631,26 @@ describe("Markdown", () => {
 
 ### YAML
 
-YAML file structure
+YAML should have these properties on the root level
+
+- `title: string` - Feature name, required.
+- `structure: object` - Feature structure, required.
+- `description: string` - Feature description, optional. May contain HTML tags.
+- `group: string` - Feature group, optional.
+  Structure object should contain feature requirements. Requirement field may have any primitive or an empty object as a value. It may also contain arrays or other objects with fields, these will be treated as categories.
+
+```yaml
+structure:
+  Requirement 1: null
+  Category:
+    Requirement 2:
+    Sub Category:
+      - Requirement 3
+```
+
+> Structure cannot have empty categories -- empty objects will be parsed as requirements.
+
+Feature example:
 
 ```yaml
 title: Feature Yaml
@@ -558,7 +681,55 @@ describe("YAML", () => {
 
 ### HTML
 
-HTML file structure
+HTML file structure starts with a root tag `feature`. It should contain these tags
+
+- `title` - Feature title, required.
+- `structure` - Feature structure, required.
+- `description` - Feature description, optional.
+- `group` - Feature group, optional.
+
+> Value is the text content and child nodes, tag attributes are ignored.
+
+Structure is described with two tags `category` for categories and `requirement` for requirements. Category tag should contain a `name` tag that will contain category name and `requirment` tags to specify this category requirements, it may also contain other `category` tags for sub-categories.
+
+```html
+<structure>
+  <requirement>Requirement 1</requirement>
+  <catgegory>
+    <name>Category</nme>
+    <requirement>Requirement 2</requirement>
+    <catgegory>
+      <name>Sub Category</nme>
+      <requirement>Requirement 3</requirement>
+    </category>
+  </category>
+</structure>
+```
+
+> Structure cannot contain empty categories, they will be converted into requirements.
+
+Any other tags are ignored, feature tag may not be the root tag of the document but one document must contain a single feature. Feature tags like `title`, `structure` etc. may not be direct children to the `feature` tag.
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <feature>
+      <h1><title>My Feature</title></h1>
+      <strong><description>This is my feature description</description></strong>
+      <structure>
+        <ul>
+          <li><requirement>Requirement 1</requirement></li>
+          <li><requirement>Requirement 2</requirement></li>
+          <li><requirement>Requirement 3</requirement></li>
+        </ul>
+      </structure>
+    </feature>
+  </body>
+</html>
+```
+
+Feature example:
 
 ```html
 <feature>
@@ -587,7 +758,11 @@ const Feature = createFeatureFromHtmlAsync("cypress/features/ParserHtml.html");
 describe("HTML", () => {
   describe("High requirements", () => {
     it("trace high requirements", () => {
+      Feature.trace("High Requirement 1");
       Feature.trace("High Requirement 2");
+
+      // using full path
+      Feature.trace(["High", "High Requirement 3"]);
     });
   });
 });
@@ -595,7 +770,29 @@ describe("HTML", () => {
 
 ### JSON
 
-JSON file structure
+JSON file structure should have these properties on the root level
+
+- `title: string` - Feature name, required.
+- `structure: object` - Feature structure, required.
+- `description: string` - Feature description, optional. May contain HTML tags.
+- `group: string` - Feature group, optional.
+  Structure object should contain feature requirements. Requirement field may have any primitive or an empty object as a value. It may also contain other objects with fields, these will be treated as categories.
+
+```json
+"structure": {
+  "Requirement 1": null,
+  "Category": {
+    "Requirement 2": "",
+    "Sub Category": {
+      "Requirement 3": {},
+    }
+  }
+}
+```
+
+> Structure cannot have empty categories -- empty objects will be parsed as requirements.
+
+Feature example:
 
 ```json
 {
@@ -622,7 +819,11 @@ const Feature = createFeatureFromJsonAsync("cypress/features/ParserJson.json");
 describe("JSON", () => {
   describe("High requirements", () => {
     it("trace high requirements", () => {
+      Feature.trace("High Requirement 1");
       Feature.trace("High Requirement 2");
+
+      // using full path
+      Feature.trace(["High", "High Requirement 3"]);
     });
   });
 });

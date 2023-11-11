@@ -62,9 +62,7 @@ export const getBranchOf = (structure: object, path: string[]) => {
 
   if (!branch) {
     throw new Error(
-      `Structure path [${
-        path.length ? `"${path.join('", "')}"` : ""
-      }] is not available.`
+      `Structure path ["${path.join('", "')}"] is not available.`
     );
   }
 
@@ -76,9 +74,7 @@ export const getNarrowStructure = (structure: object, path: string[]) => {
 
   if (!branch) {
     throw new Error(
-      `Structure path [${
-        path.length ? `"${path.join('", "')}"` : ""
-      }] is not available.`
+      `Structure path ["${path.join('", "')}"] is not available.`
     );
   }
   const struct = {};

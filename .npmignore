@@ -2,9 +2,11 @@
 screenshots
 jest.config.js
 jest.setup.js
+babel.config.js
 rollup.config.mjs
 tsconfig.json
 /src
 /tests
+/coverage
 key.pem
 cert.pem

@@ -9,7 +9,7 @@ import {
   getBranchOf,
   getNarrowStructure,
 } from "./structure";
-import { Feature, MatcherFn } from "./types";
+import { Feature, MatcherFn, Scope } from "./types";
 import { cloneStructure } from "./utils";
 
 export type CreateFeatureParams = {
@@ -106,10 +106,19 @@ const createCloneApi = ({ feature }: { feature: Feature }) => {
 };
 
 export const wrapFeatureState = (feature: Feature) => {
-  const scope = { feature, traceToRequirementMatcher: undefined };
+  const scope: Scope = {
+    feature,
+    categoryPath: [],
+  };
 
   const setTraceToRequirementMatcher = (matcher: MatcherFn) => {
-    scope.traceToRequirementMatcher = matcher;
+    if (matcher) {
+      scope.traceToRequirementMatcher = matcher;
+      scope.matcherInstalledFor = [];
+    } else {
+      delete scope.traceToRequirementMatcher;
+      delete scope.matcherInstalledFor;
+    }
   };
 
   const cloneProps = createCloneApi(scope);

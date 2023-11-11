@@ -1,5 +1,13 @@
+export type Scope = {
+  feature: Feature;
+  categoryPath: string[];
+  traceToRequirementMatcher?: MatcherFn;
+  matcherInstalledFor?: string[];
+};
+
 export type Record = {
   requirement: string | string[];
+  category?: string[];
   filePath: string;
   title: string;
   titlePath: string[];
@@ -15,7 +23,9 @@ export type Feature = {
   valueOf: () => Feature;
 };
 
-export type MatcherFn = (
-  name: string | string[],
-  structure: object
-) => string | string[];
+export type MatcherFn = (params: {
+  name: string | string[];
+  branch: null | object;
+  structure: object;
+  categoryPath: string[];
+}) => string | string[];

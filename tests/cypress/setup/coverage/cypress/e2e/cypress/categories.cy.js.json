@@ -30,9 +30,9 @@
     ],
     "records": [
       {
-        "requirement": [
-          "High",
-          "Requirement 1"
+        "requirement": "Requirement 1",
+        "category": [
+          "High"
         ],
         "title": "should allow High category tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -43,9 +43,9 @@
         ]
       },
       {
-        "requirement": [
-          "High",
-          "Requirement 3"
+        "requirement": "Requirement 3",
+        "category": [
+          "High"
         ],
         "title": "should allow High category tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -56,9 +56,9 @@
         ]
       },
       {
-        "requirement": [
-          "Medium",
-          "Requirement 1"
+        "requirement": "Requirement 1",
+        "category": [
+          "Medium"
         ],
         "title": "should allow Medium category tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -69,9 +69,9 @@
         ]
       },
       {
-        "requirement": [
-          "Medium",
-          "Requirement 3"
+        "requirement": "Requirement 3",
+        "category": [
+          "Medium"
         ],
         "title": "should allow Medium category tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -82,10 +82,10 @@
         ]
       },
       {
-        "requirement": [
+        "requirement": "Requirement 1",
+        "category": [
           "Medium",
-          "Sub-category",
-          "Requirement 1"
+          "Sub-category"
         ],
         "title": "should allow direct tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -96,10 +96,10 @@
         ]
       },
       {
-        "requirement": [
+        "requirement": "Requirement 3",
+        "category": [
           "Medium",
-          "Sub-category",
-          "Requirement 3"
+          "Sub-category"
         ],
         "title": "should allow direct tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -110,10 +110,10 @@
         ]
       },
       {
-        "requirement": [
+        "requirement": "Requirement 1",
+        "category": [
           "Medium",
-          "Sub-category",
-          "Requirement 1"
+          "Sub-category"
         ],
         "title": "should allow sub category tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -124,10 +124,10 @@
         ]
       },
       {
-        "requirement": [
+        "requirement": "Requirement 3",
+        "category": [
           "Medium",
-          "Sub-category",
-          "Requirement 3"
+          "Sub-category"
         ],
         "title": "should allow sub category tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -138,9 +138,9 @@
         ]
       },
       {
-        "requirement": [
-          "Low",
-          "Requirement 1"
+        "requirement": "Requirement 1",
+        "category": [
+          "Low"
         ],
         "title": "should allow direct tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -151,9 +151,9 @@
         ]
       },
       {
-        "requirement": [
-          "Low",
-          "Requirement 3"
+        "requirement": "Requirement 3",
+        "category": [
+          "Low"
         ],
         "title": "should allow direct tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -164,10 +164,10 @@
         ]
       },
       {
-        "requirement": [
+        "requirement": "Requirement 1",
+        "category": [
           "Low",
-          "Sub-category",
-          "Requirement 1"
+          "Sub-category"
         ],
         "title": "should allow sub category tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -178,10 +178,10 @@
         ]
       },
       {
-        "requirement": [
+        "requirement": "Requirement 3",
+        "category": [
           "Low",
-          "Sub-category",
-          "Requirement 3"
+          "Sub-category"
         ],
         "title": "should allow sub category tracing",
         "filePath": "cypress/e2e/cypress/categories.cy.js",
@@ -189,6 +189,109 @@
           "Category",
           "Using a custom category tracing",
           "should allow sub category tracing"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Category Matchers",
+    "group": "Records",
+    "description": "Testing Category matchers",
+    "structure": {
+      "Requirement 1": null,
+      "Requirement 2": null,
+      "Requirement 3": null,
+      "Category": {
+        "Requirement 1": null,
+        "Requirement 2": null,
+        "Requirement 3": null,
+        "Sub Category": {
+          "Requirement 1": null,
+          "Requirement 2": null,
+          "Requirement 3": null
+        }
+      }
+    },
+    "headers": [
+      "Main categories",
+      "Sub categories",
+      "Requirements"
+    ],
+    "records": [
+      {
+        "requirement": "Requirement 1",
+        "category": [],
+        "title": "should use root matcher",
+        "filePath": "cypress/e2e/cypress/categories.cy.js",
+        "titlePath": [
+          "Category",
+          "Using category matchers",
+          "should use root matcher"
+        ]
+      },
+      {
+        "requirement": "Requirement 3",
+        "category": [],
+        "title": "should use root matcher",
+        "filePath": "cypress/e2e/cypress/categories.cy.js",
+        "titlePath": [
+          "Category",
+          "Using category matchers",
+          "should use root matcher"
+        ]
+      },
+      {
+        "requirement": "Requirement 1",
+        "category": [
+          "Category"
+        ],
+        "title": "should use Category matcher",
+        "filePath": "cypress/e2e/cypress/categories.cy.js",
+        "titlePath": [
+          "Category",
+          "Using category matchers",
+          "should use Category matcher"
+        ]
+      },
+      {
+        "requirement": "Requirement 3",
+        "category": [
+          "Category"
+        ],
+        "title": "should use Category matcher",
+        "filePath": "cypress/e2e/cypress/categories.cy.js",
+        "titlePath": [
+          "Category",
+          "Using category matchers",
+          "should use Category matcher"
+        ]
+      },
+      {
+        "requirement": "Requirement 1",
+        "category": [
+          "Category",
+          "Sub Category"
+        ],
+        "title": "should use Sub Category matcher",
+        "filePath": "cypress/e2e/cypress/categories.cy.js",
+        "titlePath": [
+          "Category",
+          "Using category matchers",
+          "should use Sub Category matcher"
+        ]
+      },
+      {
+        "requirement": "Requirement 3",
+        "category": [
+          "Category",
+          "Sub Category"
+        ],
+        "title": "should use Sub Category matcher",
+        "filePath": "cypress/e2e/cypress/categories.cy.js",
+        "titlePath": [
+          "Category",
+          "Using category matchers",
+          "should use Sub Category matcher"
         ]
       }
     ]

@@ -1,4 +1,4 @@
-import { createFeature } from "@actualwave/traceability-matrices/cypress";
+import { createFeature, readStructureRequirements } from "@actualwave/traceability-matrices/cypress";
 
 const Feature = createFeature({
   title: "Category",
@@ -38,6 +38,60 @@ const Sub = Feature.category("Medium", "Sub-category");
 
 const Low = Feature.category("Low");
 
+const Matchers = createFeature({
+  title: "Category Matchers",
+  description: "Testing Category matchers",
+  group: "Records",
+});
+
+const SubCategoryStruct = {
+  "Requirement 1": null,
+  "Requirement 2": null,
+  "Requirement 3": null,
+};
+
+const CategoryStruct = {
+  "Requirement 1": null,
+  "Requirement 2": null,
+  "Requirement 3": null,
+  "Sub Category": SubCategoryStruct,
+};
+
+const MatchersStruct = {
+  "Requirement 1": null,
+  "Requirement 2": null,
+  "Requirement 3": null,
+  Category: CategoryStruct,
+};
+
+Matchers.structure(MatchersStruct, [
+  "Main categories",
+  "Sub categories",
+  "Requirements",
+]);
+
+const createMatcherFn =
+  (expectedBranch) =>
+  ({ name, branch, structure }) => {
+    expect(branch).to.eql(expectedBranch);
+    expect(structure).to.eql(MatchersStruct);
+
+    const reqs = readStructureRequirements(branch || structure);
+    const [, path] = reqs.find(([requirement]) => requirement.includes(name));
+
+    return path;
+  };
+
+Matchers.setTraceToRequirementMatcher(createMatcherFn(null));
+
+const MatchersCategory = Matchers.category("Category");
+MatchersCategory.setTraceToRequirementMatcher(createMatcherFn(CategoryStruct));
+
+const MatchersSubCategory = MatchersCategory.category("Sub Category");
+MatchersSubCategory.setTraceToRequirementMatcher(
+  createMatcherFn(SubCategoryStruct)
+);
+
 describe("Category", () => {
   describe("Using a first level category", () => {
     it("should allow High category tracing", () => {
@@ -72,6 +126,23 @@ describe("Category", () => {
     it("should allow sub category tracing", () => {
       Low.category("Sub-category").trace("Requirement 1");
       Low.category("Sub-category").requirement("Requirement 3").trace();
+    });
+  });
+
+  describe("Using category matchers", () => {
+    it("should use root matcher", () => {
+      Matchers.trace("1");
+      Matchers.trace("3");
+    });
+
+    it("should use Category matcher", () => {
+      MatchersCategory.trace("1");
+      MatchersCategory.trace("3");
+    });
+
+    it("should use Sub Category matcher", () => {
+      MatchersSubCategory.trace("1");
+      MatchersSubCategory.trace("3");
     });
   });
 });

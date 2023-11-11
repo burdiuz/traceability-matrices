@@ -33,16 +33,25 @@ export const convertRecordsListToMap = (
   const records: Record<string, Spec[]> = {};
 
   list.forEach((spec) => {
-    let { requirement } = spec;
+    let { requirement, category = [] } = spec;
     let id: string;
 
     // find out requirement id
     if (typeof requirement === "string") {
+      category = category.map(removeExtraSpaces);
       requirement = removeExtraSpaces(requirement);
 
       // look for requirement Id by its name
       const reqId = Object.keys(requirements).find((requirementId) => {
         const path = requirements[requirementId];
+
+        if (
+          category.length &&
+          category.find((key, index) => key !== path[index])
+        ) {
+          // if categoryPath does not match path
+          return false;
+        }
 
         return requirement === path[path.length - 1];
       });
@@ -54,19 +63,35 @@ export const convertRecordsListToMap = (
        */
       if (!reqId) {
         const newId = getUniqueRequirementId();
-        requirements[newId] = [requirement];
-        structure[requirement] = newId;
+        requirements[newId] = [...category, requirement];
+
+        // make sure category branch for requirement exists
+        const branch =
+          category.reduce((branch, name) => {
+            if (!branch[name]) {
+              branch[name] = {};
+            }
+
+            return branch[name];
+          }, structure) || structure;
+
+        // assign requirement to category
+        branch[requirement] = newId;
         id = newId;
       } else {
         id = reqId;
       }
     } else if (requirement instanceof Array) {
+      requirement = category.length
+        ? [...category, ...requirement]
+        : requirement;
+
       const reqId = findPathId(requirement.map(removeExtraSpaces), structure);
 
       if (!reqId) {
         console.error(
           `Coverage record
-  ${requirement.join("\n  ")}
+  ["${requirement.join('", "')}"]
 cannot be used because this path was registered as a category and a requirement.`
         );
         return;

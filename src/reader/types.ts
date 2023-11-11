@@ -2,6 +2,7 @@ import type { Spec } from "./specs";
 
 export type FeatureRecord = {
   requirement: string | string[];
+  category?: string[];
   title: string;
   filePath: string;
   titlePath: string[];
