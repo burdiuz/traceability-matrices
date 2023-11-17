@@ -11,7 +11,7 @@ div.flex-vertical
   each feature in self.list
     if feature.group !== lastGroup
       - lastGroup = feature.group
-      div.dir-root #{feature.group}
+      div.dir-root #{self.getGroupCoverage(feature.group)}% #{feature.group}
     div(class= feature.covered ? 'feature-link covered' : 'feature-link')
       div.feature-info
         button.toggle-feature-categories(onClick='handleFeatureCategoriesToggleVisibility(this.parentElement.parentElement);', title='Show feature categories', class=feature.depth === 1 ? 'disabled' : '')
@@ -73,7 +73,7 @@ export const renderFeatures = (state: Coverage, links: PageLinks) => {
             name: filePaths[path].specName,
             requirementsTotal: total,
             requirementsCovered: covered,
-            coverage: total ? Math.round((covered / total) * 100) : 0,
+            coverage: total ? Math.floor((covered / total) * 100) : 0,
           };
         }),
         renderCategories: () =>
@@ -85,5 +85,16 @@ export const renderFeatures = (state: Coverage, links: PageLinks) => {
   return featuresStructureTemplate({
     list,
     links,
+    getGroupCoverage: (currentGroup: string) => {
+      const groupedFeatures = list.filter(
+        ({ group }) => group === currentGroup
+      );
+      const groupCoverage = groupedFeatures.reduce(
+        (val, { coverage }) => val + coverage,
+        0
+      );
+
+      return Math.floor(groupCoverage / groupedFeatures.length);
+    },
   });
 };

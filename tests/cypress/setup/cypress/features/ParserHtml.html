@@ -1,36 +1,87 @@
-<feature>
-  <title>Feature Html</title>
-  <description
-    >My feature description with
-    <a href="https://google.com">HTML</a></description
-  >
-  <group>Parsers</group>
-  <requirement>Optional Requirement 1</requirement>
-  <requirement>Optional Requirement 2</requirement>
-  <requirement>Optional Requirement 3</requirement>
-  <category>
-    <name>High</name>
-    <requirement>High Requirement 1</requirement>
-    <requirement>High Requirement 2</requirement>
-    <requirement>High Requirement 3</requirement>
-  </category>
-  <category>
-    <name>Medium</name>
-    <requirement>Medium Requirement 1</requirement>
-    <requirement>Medium Requirement 2</requirement>
-    <requirement>Medium Requirement 3</requirement>
-    <category>
-      <name>Sub-category <a href="http://google.com">with a link</a></name>
-      <requirement
-        >Requirement on a side with &amp; &quot; ' entities 1</requirement
-      >
-      <requirement>Requirement on a side 2</requirement>
-      <requirement>Requirement on a side 3</requirement>
-    </category>
-  </category>
-  <category>
-    <name>Low</name>
-    <requirement>Low Requirement with &amp; " ' &lt; > entities 1</requirement>
-    <requirement>Low Requirement 2</requirement>
-  </category>
-</feature>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HTML Feature parser test</title>
+  </head>
+  <body>
+    <h1 data-feature-title="Feature Html" data-feature-group="Parsers">
+      Feature HTML
+    </h1>
+    <strong data-feature-description
+      >My feature description with <a href="https://google.com">HTML</a></strong
+    >
+    <h4>Structure</h4>
+    <ul>
+      <li data-feature-requirement="Optional Requirement 1">
+        Optional Requirement 1
+      </li>
+      <li data-feature-requirement="Optional Requirement 2">
+        Optional Requirement 2
+      </li>
+      <li data-feature-requirement="Optional Requirement 3">
+        Optional Requirement 3
+      </li>
+      <li data-feature-category="High">
+        <strong>High</strong>
+        <ul>
+          <li data-feature-requirement="High Requirement 1">
+            High Requirement 1
+          </li>
+          <li data-feature-requirement="High Requirement 2">
+            High Requirement 2
+          </li>
+          <li data-feature-requirement="High Requirement 3">
+            High Requirement 3
+          </li>
+        </ul>
+      </li>
+      <li data-feature-category="Medium">
+        <strong>Medium</strong>
+        <ul>
+          <li data-feature-requirement="Medium Requirement 1">
+            Medium Requirement 1
+          </li>
+          <li data-feature-requirement="Medium Requirement 2">
+            Medium Requirement 2
+          </li>
+          <li data-feature-requirement="Medium Requirement 3">
+            Medium Requirement 3
+          </li>
+          <li
+            data-feature-category='Sub-category &lt;a href="http://google.com">with a link&lt;/a>'
+          >
+            <strong
+              >Sub-category <a href="http://google.com">with a link</a></strong
+            >
+            <ul>
+              <li
+                data-feature-requirement="Requirement on a side with &amp; &quot; ' entities 1"
+              >
+                Requirement on a side with &amp; &quot; ' entities 1
+              </li>
+              <li data-feature-requirement="Requirement on a side 2">
+                Requirement on a side 2
+              </li>
+              <li data-feature-requirement="Requirement on a side 3">
+                Requirement on a side 3
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li data-feature-category="Low">
+        <strong>Low</strong>
+        <ul>
+          <li
+            data-feature-requirement="Low Requirement with &amp; &quot; ' &lt; > entities 1"
+          >
+            Low Requirement with &amp; " ' &lt; > entities 1
+          </li>
+          <li data-feature-requirement="Low Requirement 2">
+            Low Requirement 2
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </body>
+</html>

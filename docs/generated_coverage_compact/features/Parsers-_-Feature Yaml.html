@@ -1,0 +1,334 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Parsers / Feature Yaml</title><style>body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  background-color: #ccc;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-bar {
+  display: flex;
+  gap: 16px;
+  border-bottom: 1px solid #eee;
+  padding: 8px;
+  background-color: #fff;
+  box-shadow: 0 0 5px 0 #00000033;
+}
+
+.nav-bar strong:not(:last-child) {
+  border-right: 1px solid #ccc;
+  margin-right: 8px;
+  padding-right: 8px;
+}
+
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1px;
+  margin: 16px;
+}
+
+a,
+a:visited,
+a:active {
+  color: #000;
+}
+.feature-categories {
+  margin: 16px;
+}
+
+.feature-categories a {
+  cursor: pointer;
+}
+
+.feature-categories a svg {
+  width: 16px;
+  vertical-align: bottom;
+  margin-right: 8px;
+}
+
+.feature-categories .category-listing-root {
+  display: none;
+  padding-inline-start: 20px;
+}
+
+.feature-categories .category-listing-root.visible {
+  display: inherit;
+}
+
+.category-listing-root {
+  margin-top: 16px;
+}
+
+.category-listing-root li a {
+  text-decoration: none;
+}
+
+.category-listing-root li a:hover {
+  text-decoration: underline;
+}
+
+.category-listing-root li span {
+  white-space: nowrap;
+}
+
+table.feature {
+  border-collapse: collapse;
+  background-color: #fff;
+  margin: 16px;
+}
+
+table.feature td.feature-description {
+  padding: 16px;
+}
+
+table.feature th.feature-title,
+table.feature tr.totals {
+  font-weight: bold;
+}
+
+table.feature.compact th.feature-title {
+  width: 300px;
+  min-width: 300px;
+}
+
+table.feature th {
+  font-weight: normal;
+}
+
+table.feature th.file-name {
+  background-color: #666;
+  padding: 0 16px;
+}
+
+table.feature th.file-name a {
+  color: #fff;
+}
+
+table.feature th.spec-name {
+  width: 120px;
+}
+
+table.feature th.requirement[colspan="1"] {
+  width: 120px;
+}
+
+table.feature th.requirement[colspan="1"]:last-of-type {
+  width: 200px;
+}
+
+table.feature th,
+table.feature td {
+  height: 24px;
+}
+
+table.feature th,
+table.feature td {
+  border: 1px solid #ccc;
+  padding: 4px;
+}
+
+th.spec-count {
+  width: 55px;
+}
+
+td.spec-count {
+  text-align: center;
+}
+
+table.feature th.spec-name {
+  max-width: 150px;
+}
+
+table.feature .category-coverage {
+  white-space: nowrap;
+}
+
+td.cell.covered .cell-text {
+  display: block;
+  font-size: 0px;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  border-radius: 16px;
+  background-color: #000;
+}
+
+tr.result:nth-child(odd) td[rowspan="1"],
+tr.result:nth-child(odd) td:not([rowspan]),
+tr.result:nth-child(odd) th[rowspan="1"],
+tr.result:nth-child(odd) th:not([rowspan]) {
+  background-color: #eee;
+}
+
+tr.totals td:first-child {
+  text-align: right;
+}
+
+table.feature:not(.compact) th.category {
+  vertical-align: top;
+}
+
+table.feature:not(.compact) th.category .requirement-text {
+  display: block;
+  padding-top: 6px;
+}
+
+table.feature th.requirement,
+table.feature.compact th.requirement,
+table.feature.compact th.category {
+  text-align: left;
+}
+
+table.feature.compact th.category {
+}
+
+table.feature.compact th.category-level-0 {
+  background-color: #666;
+}
+
+table.feature.compact th.category-level-0 button.toggle-visibility {
+  fill: #fff;
+}
+
+table.feature.compact th.category-level-0 a {
+  color: #fff;
+}
+
+table.feature.compact th.category-level-1,
+table.feature.compact th.requirement-level-1 {
+  padding-left: 20px;
+}
+
+table.feature.compact th.category-level-2,
+table.feature.compact th.requirement-level-2 {
+  padding-left: 40px;
+}
+
+table.feature.compact th.category-level-3,
+table.feature.compact th.requirement-level-3 {
+  padding-left: 60px;
+}
+
+table.feature.compact th.category-level-4,
+table.feature.compact th.requirement-level-4 {
+  padding-left: 80px;
+}
+table.feature.compact th.category-level-1,
+table.feature.compact th.category-level-2,
+table.feature.compact th.category-level-3,
+table.feature.compact th.category-level-4 {
+  font-weight: bold;
+}
+
+table.feature.compact button.toggle-visibility {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+table.feature.compact button.toggle-visibility.expand {
+  display: none;
+}
+
+table.feature.compact tr.collapsed button.toggle-visibility.expand {
+  display: unset;
+}
+
+table.feature.compact tr.collapsed button.toggle-visibility.collapse {
+  display: none;
+}
+
+table.feature.compact button.toggle-visibility svg {
+  width: 16px;
+  vertical-align: bottom;
+}
+
+table.feature.compact .hidden {
+  display: none;
+}
+</style><script>function handleCompactCategoryCollapse(tr) {
+  const categoryLevel = parseInt(tr.dataset.level, 10);
+  tr.classList.add("collapsed");
+
+  let sibling = tr.nextSibling;
+
+  while (sibling) {
+    if (sibling.nodeType === Node.ELEMENT_NODE) {
+      const level = parseInt(sibling.dataset.level, 10);
+
+      if (level > categoryLevel) {
+        if (sibling.classList.contains("category-row")) {
+          sibling.classList.remove("collapsed");
+        }
+
+        sibling.classList.add("hidden");
+      } else {
+        break;
+      }
+    }
+
+    sibling = sibling.nextSibling;
+  }
+}
+function handleCompactCategoryExpand(tr) {
+  const categoryLevel = parseInt(tr.dataset.level, 10);
+  tr.classList.remove("collapsed");
+
+  let sibling = tr.nextSibling;
+
+  while (sibling) {
+    if (sibling.nodeType === Node.ELEMENT_NODE) {
+      const level = parseInt(sibling.dataset.level, 10);
+
+      if (level > categoryLevel) {
+        sibling.classList.remove("hidden");
+      } else {
+        break;
+      }
+    }
+
+    sibling = sibling.nextSibling;
+  }
+}
+
+function handleFeatureCategoriesToggleVisibility(row) {
+  const files = row.querySelector(".feature-files-list");
+  const categories = row.querySelector(".category-listing-root");
+
+  if (categories) {
+    if (categories.classList.contains("visible")) {
+      categories.classList.remove("visible");
+    } else {
+      categories.classList.add("visible");
+    }
+  }
+
+  if(files) {
+    files.classList.remove("visible");
+  }
+}
+</script></head><body><div class="nav-bar"><a href="../files.html">Files</a><a href="../features.html" style="margin-right: auto">Features</a><span></span>Specs <strong>5 </strong>Feature Requirements <strong>14 </strong>Covered Requirements <strong>7 </strong>Feature Coverage <strong>50% </strong><span style="margin-left: auto"></span></div></body>
+<div class="feature-categories"><a href="" onClick="event.preventDefault(); handleFeatureCategoriesToggleVisibility(this.parentElement)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>Feature Categories</a><ul class="category-listing category-listing-root"><li class="category-listing-item"><a href="#/High">High</a><span>      33%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Low">Low</a><span>      50%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Medium">Medium</a><span>      50%</span><ul class="category-listing "><li class="category-listing-item"><a href="#/Medium/Sub_category_a_href_with_a_link_http_google_com_a_">Sub-category <a href=\"with a link\">http://google.com</a></a><span>      33%</span><ul class="category-listing "></ul></li></ul></li></ul></div>
+<table class="feature compact"><tr><td class="feature-description" colspan="7">My feature description with <a href=\"https://google.com\">HTML</a></td></tr><tr class="file-headers"><th class="feature-title" colspan="1" rowspan="2">Feature Yaml</th><th class="spec-count" rowspan="2">Spec count</th><th class="file-name" colspan="5" title="yaml_feature.cy.js"> <a href="../files/coverage_cypress_e2e_parsers_yaml_feature.cy.js.html">yaml_feature.cy.js</a></th></tr><tr class="specs-headers"><th class="spec-name" title="YAML &gt; High requirements &gt; trace high requirements"><span class="spec-name-text">trace high requirements</span></th><th class="spec-name" title="YAML &gt; Low requirements &gt; trace low requirements"><span class="spec-name-text">trace low requirements</span></th><th class="spec-name" title="YAML &gt; Medium requirements &gt; trace medium requirements"><span class="spec-name-text">trace medium requirements</span></th><th class="spec-name" title="YAML &gt; Root requirements &gt; trace optional requirements"><span class="spec-name-text">trace optional requirements</span></th><th class="spec-name" title="YAML &gt; Medium requirements &gt; Sub-category requirements &gt; trace sub-category requirements"><span class="spec-name-text">trace sub-category requirements</span></th></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="7" title="High"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/High" name="/High">High <span class="category-coverage" title="1 Covered Requirements
+3 Category Requirements">(33%)</span></a></th></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="High Requirement 1"><span class="requirement-text">High Requirement 1</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: High Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result covered" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="High Requirement 2"><span class="requirement-text">High Requirement 2</span></th><td class="cell spec-count" title="1 specs test this requirement"> <span class="cell-text">1</span></td><td class="cell covered" title="Requirement: High Requirement 2
+Spec: YAML &gt; High requirements &gt; trace high requirements
+File: cypress/e2e/parsers/yaml_feature.cy.js"> <span class="cell-text">X</span></td><td class="cell empty" title="Requirement: High Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="High Requirement 3"><span class="requirement-text">High Requirement 3</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: High Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: High Requirement 3"> <span class="cell-text"></span></td></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="7" title="Low"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/Low" name="/Low">Low <span class="category-coverage" title="1 Covered Requirements
+2 Category Requirements">(50%)</span></a></th></tr><tr class="result covered" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Low Requirement 2"><span class="requirement-text">Low Requirement 2</span></th><td class="cell spec-count" title="1 specs test this requirement"> <span class="cell-text">1</span></td><td class="cell empty" title="Requirement: Low Requirement 2"> <span class="cell-text"></span></td><td class="cell covered" title="Requirement: Low Requirement 2
+Spec: YAML &gt; Low requirements &gt; trace low requirements
+File: cypress/e2e/parsers/yaml_feature.cy.js"> <span class="cell-text">X</span></td><td class="cell empty" title="Requirement: Low Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Low Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Low Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Low Requirement with &amp; &quot; '  entities 1"><span class="requirement-text">Low Requirement with & " ' < > entities 1</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Low Requirement with &amp; &quot; ' &lt; &gt; entities 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Low Requirement with &amp; &quot; ' &lt; &gt; entities 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Low Requirement with &amp; &quot; ' &lt; &gt; entities 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Low Requirement with &amp; &quot; ' &lt; &gt; entities 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Low Requirement with &amp; &quot; ' &lt; &gt; entities 1"> <span class="cell-text"></span></td></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="7" title="Medium"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/Medium" name="/Medium">Medium <span class="category-coverage" title="3 Covered Requirements
+6 Category Requirements">(50%)</span></a></th></tr><tr class="result covered" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Medium Requirement 1"><span class="requirement-text">Medium Requirement 1</span></th><td class="cell spec-count" title="1 specs test this requirement"> <span class="cell-text">1</span></td><td class="cell empty" title="Requirement: Medium Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Medium Requirement 1"> <span class="cell-text"></span></td><td class="cell covered" title="Requirement: Medium Requirement 1
+Spec: YAML &gt; Medium requirements &gt; trace medium requirements
+File: cypress/e2e/parsers/yaml_feature.cy.js"> <span class="cell-text">X</span></td><td class="cell empty" title="Requirement: Medium Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Medium Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Medium Requirement 2"><span class="requirement-text">Medium Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Medium Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Medium Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Medium Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Medium Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Medium Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result covered" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Medium Requirement 3"><span class="requirement-text">Medium Requirement 3</span></th><td class="cell spec-count" title="1 specs test this requirement"> <span class="cell-text">1</span></td><td class="cell empty" title="Requirement: Medium Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Medium Requirement 3"> <span class="cell-text"></span></td><td class="cell covered" title="Requirement: Medium Requirement 3
+Spec: YAML &gt; Medium requirements &gt; trace medium requirements
+File: cypress/e2e/parsers/yaml_feature.cy.js"> <span class="cell-text">X</span></td><td class="cell empty" title="Requirement: Medium Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Medium Requirement 3"> <span class="cell-text"></span></td></tr><tr class="category-row" data-level="1"><th class="category category-level-1 category" colspan="7" title="Sub-category http://google.com"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/Medium/Sub_category_a_href_with_a_link_http_google_com_a_" name="/Medium/Sub_category_a_href_with_a_link_http_google_com_a_">Sub-category <a href=\"with a link\">http://google.com</a> <span class="category-coverage" title="1 Covered Requirements
+3 Category Requirements">(33%)</span></a></th></tr><tr class="result covered" data-level="2"><th class="requirement requirement-compact requirement-level-2 " colspan="1" rowspan="1" title="Requirement on a side 2"><span class="requirement-text">Requirement on a side 2</span></th><td class="cell spec-count" title="1 specs test this requirement"> <span class="cell-text">1</span></td><td class="cell empty" title="Requirement: Requirement on a side 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side 2"> <span class="cell-text"></span></td><td class="cell covered" title="Requirement: Requirement on a side 2
+Spec: YAML &gt; Medium requirements &gt; Sub-category requirements &gt; trace sub-category requirements
+File: cypress/e2e/parsers/yaml_feature.cy.js"> <span class="cell-text">X</span></td></tr><tr class="result empty" data-level="2"><th class="requirement requirement-compact requirement-level-2 " colspan="1" rowspan="1" title="Requirement on a side 3"><span class="requirement-text">Requirement on a side 3</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement on a side 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side 3"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="2"><th class="requirement requirement-compact requirement-level-2 " colspan="1" rowspan="1" title="Requirement on a side with &amp; &quot; '' entities 1"><span class="requirement-text">Requirement on a side with & " '' entities 1</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement on a side with &amp; &quot; '' entities 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side with &amp; &quot; '' entities 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side with &amp; &quot; '' entities 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side with &amp; &quot; '' entities 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement on a side with &amp; &quot; '' entities 1"> <span class="cell-text"></span></td></tr><tr class="result covered" data-level="0"><th class="requirement requirement-compact requirement-level-0 " colspan="1" rowspan="1" title="Optional Requirement 1"><span class="requirement-text">Optional Requirement 1</span></th><td class="cell spec-count" title="1 specs test this requirement"> <span class="cell-text">1</span></td><td class="cell empty" title="Requirement: Optional Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Optional Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Optional Requirement 1"> <span class="cell-text"></span></td><td class="cell covered" title="Requirement: Optional Requirement 1
+Spec: YAML &gt; Root requirements &gt; trace optional requirements
+File: cypress/e2e/parsers/yaml_feature.cy.js"> <span class="cell-text">X</span></td><td class="cell empty" title="Requirement: Optional Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result covered" data-level="0"><th class="requirement requirement-compact requirement-level-0 " colspan="1" rowspan="1" title="Optional Requirement 3"><span class="requirement-text">Optional Requirement 3</span></th><td class="cell spec-count" title="1 specs test this requirement"> <span class="cell-text">1</span></td><td class="cell empty" title="Requirement: Optional Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Optional Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Optional Requirement 3"> <span class="cell-text"></span></td><td class="cell covered" title="Requirement: Optional Requirement 3
+Spec: YAML &gt; Root requirements &gt; trace optional requirements
+File: cypress/e2e/parsers/yaml_feature.cy.js"> <span class="cell-text">X</span></td><td class="cell empty" title="Requirement: Optional Requirement 3"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="0"><th class="requirement requirement-compact requirement-level-0 " colspan="1" rowspan="1" title="Optional Requirement 4"><span class="requirement-text">Optional Requirement 4</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Optional Requirement 4"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Optional Requirement 4"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Optional Requirement 4"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Optional Requirement 4"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Optional Requirement 4"> <span class="cell-text"></span></td></tr><tr class="totals"><td>Feature Coverage</td><td colspan="6">7 / 14</td></tr></table>
+</html>

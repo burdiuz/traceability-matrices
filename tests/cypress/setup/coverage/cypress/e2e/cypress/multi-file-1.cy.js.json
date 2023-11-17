@@ -20,6 +20,7 @@
           "High",
           "Requirement 1"
         ],
+        "category": [],
         "title": "tracing A and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -32,6 +33,7 @@
           "High",
           "Requirement 3"
         ],
+        "category": [],
         "title": "tracing A and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -44,6 +46,7 @@
           "High",
           "Requirement 1"
         ],
+        "category": [],
         "title": "tracing A and B and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -56,6 +59,7 @@
           "High",
           "Requirement 3"
         ],
+        "category": [],
         "title": "tracing A and B and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -86,6 +90,7 @@
           "Low",
           "Requirement 1"
         ],
+        "category": [],
         "title": "tracing B and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -98,6 +103,7 @@
           "Low",
           "Requirement 3"
         ],
+        "category": [],
         "title": "tracing B and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -110,6 +116,7 @@
           "Low",
           "Requirement 1"
         ],
+        "category": [],
         "title": "tracing A and B and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -122,6 +129,7 @@
           "Low",
           "Requirement 3"
         ],
+        "category": [],
         "title": "tracing A and B and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -152,6 +160,7 @@
           "Medium",
           "Requirement 1"
         ],
+        "category": [],
         "title": "tracing A and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -164,6 +173,7 @@
           "Medium",
           "Requirement 3"
         ],
+        "category": [],
         "title": "tracing A and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -176,6 +186,7 @@
           "Medium",
           "Requirement 1"
         ],
+        "category": [],
         "title": "tracing B and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -188,6 +199,7 @@
           "Medium",
           "Requirement 3"
         ],
+        "category": [],
         "title": "tracing B and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -200,6 +212,7 @@
           "Medium",
           "Requirement 1"
         ],
+        "category": [],
         "title": "tracing A and B and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [
@@ -212,6 +225,7 @@
           "Medium",
           "Requirement 3"
         ],
+        "category": [],
         "title": "tracing A and B and C",
         "filePath": "cypress/e2e/cypress/multi-file-1.cy.js",
         "titlePath": [

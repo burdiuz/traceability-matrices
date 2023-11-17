@@ -37,7 +37,7 @@ export const calculateFeatureStats = ({ records }: Feature): FeatureTotals => {
 
   return {
     covered: requirementsCovered >= requirementsTotal,
-    coverage: Math.round((requirementsCovered / requirementsTotal) * 100),
+    coverage: Math.floor((requirementsCovered / requirementsTotal) * 100),
     requirementsCovered,
     requirementsTotal,
     specsCount: specs.size,
@@ -51,18 +51,20 @@ export const calculateTotals = (state: Coverage): Totals => {
     requirementsCovered: covered,
     requirementsTotal: requirements,
     specsCount: specs,
+    coverage,
   } = features.reduce(
     (counts, feature) => {
-      const { requirementsCovered, requirementsTotal, specsCount } =
+      const { requirementsCovered, requirementsTotal, specsCount, coverage } =
         calculateFeatureStats(feature);
 
       return {
         requirementsCovered: requirementsCovered + counts.requirementsCovered,
         requirementsTotal: requirementsTotal + counts.requirementsTotal,
         specsCount: specsCount + counts.specsCount,
+        coverage: coverage + counts.coverage,
       };
     },
-    { requirementsCovered: 0, requirementsTotal: 0, specsCount: 0 }
+    { requirementsCovered: 0, requirementsTotal: 0, specsCount: 0, coverage: 0 }
   );
 
   const fileCount = state.roots.reduce(
@@ -77,6 +79,14 @@ export const calculateTotals = (state: Coverage): Totals => {
     specs,
     requirements,
     covered,
-    coverage: ((covered / requirements) * 100).toFixed(0),
+    /*
+     * one feature may have 1 requirement and give 100% and other 100 requirements and give 10%
+     * when counting features they will give 55% total coverage ( 110 / 2 )
+     * but when counting by requirements they will give 10.89% total coverage (11 / 101 * 100%)
+     */
+    // counts by features
+    coverage: String(Math.floor(coverage / features.length)),
+    // counts by requirements
+    // coverage: ((covered / requirements) * 100).toFixed(0),
   };
 };

@@ -11,12 +11,13 @@
     "serve:compact": "traceability-matrices serve --target-dir=coverage --compact=true --port=3002",
     "serve": "npm run serve:default",
     "generate:default": "traceability-matrices generate --target-dir=coverage --output-dir=generated_coverage_default",
-    "generate:compact": "traceability-matrices generate --target-dir=coverage --output-dir=generated_coverage_compact",
+    "generate:compact": "traceability-matrices generate --target-dir=coverage --compact=true --output-dir=generated_coverage_compact",
     "generate": "npm run generate:default",
-    "lcov": "traceability-matrices lcov --target-dir=coverage --output-dir=generated_coverage_lcov --relative-dir=tests/cypress/setup/generated_coverage_lcov",
+    "lcov": "traceability-matrices lcov --target-dir=coverage --output-dir=generated_coverage_lcov --relative-dir=generated_coverage_lcov",
     "threshold": "traceability-matrices threshold --target-dir=coverage --total=50 --per-feature=60",
     "stats": "traceability-matrices stats --target-dir=coverage",
-    "start": "npm run serve"
+    "start": "npm run serve",
+    "scan":"/Users/burdiuz/sonar-scanner-5.0.1.3006-macosx/bin/sonar-scanner -Dsonar.token=sqp_b663cb8ec0721f61cd5e7d2f58372d9ee96091af"
   },
   "author": "",
   "license": "ISC",

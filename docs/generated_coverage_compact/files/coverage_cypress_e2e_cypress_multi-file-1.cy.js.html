@@ -1,0 +1,565 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>coverage/cypress/e2e/cypress/multi-file-1.cy.js.json</title><style>body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  background-color: #ccc;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-bar {
+  display: flex;
+  gap: 16px;
+  border-bottom: 1px solid #eee;
+  padding: 8px;
+  background-color: #fff;
+  box-shadow: 0 0 5px 0 #00000033;
+}
+
+.nav-bar strong:not(:last-child) {
+  border-right: 1px solid #ccc;
+  margin-right: 8px;
+  padding-right: 8px;
+}
+
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1px;
+  margin: 16px;
+}
+
+a,
+a:visited,
+a:active {
+  color: #000;
+}
+div.dir-root {
+  margin: 16px 16px 0 16px;
+  color: #666;
+  font-size: 250%;
+}
+
+div.directory {
+  margin: 8px 16px;
+}
+
+div.dir-path {
+  color: #666;
+  font-size: 150%;
+}
+
+div.file {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin: 0 0 1px 16px;
+  background-color: #fff;
+  padding: 4px;
+}
+div.file > a {
+  padding: 8px;
+  font-size: 130%;
+}
+
+div.file div.file-features {
+  display: flex;
+  column-gap: 16px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+div.file div.file-features .file-feature {
+  cursor: default;
+}
+div.feature-link {
+  background-color: #fff;
+  padding: 8px 16px;
+}
+
+div.feature-link div.feature-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+div.feature-link.covered {
+  background-color: #fff;
+}
+
+div.feature-link .title {
+  font-size: 130%;
+  white-space: nowrap;
+}
+
+div.feature-link .totals {
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+div.feature-link .totals {
+  margin-top: 2px;
+}
+
+div.feature-link .category-listing-root {
+  display: none;
+  margin: 0;
+}
+
+div.feature-link .category-listing-root.visible {
+  display: inherit;
+}
+
+div.feature-link .category-listing-root a {
+  white-space: nowrap;
+}
+
+div.feature-link ul {
+  padding-inline-start: 20px;
+}
+
+div.feature-link li a {
+  white-space: break-spaces;
+}
+
+div.feature-link button.toggle-feature-categories,
+div.feature-link button.toggle-feature-files {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0 -8px;
+  align-self: center;
+}
+
+div.feature-link button.toggle-feature-categories svg {
+  width: 16px;
+  vertical-align: bottom;
+}
+
+div.feature-link button.toggle-feature-categories.disabled {
+  cursor: auto;
+  opacity: 0.2;
+}
+
+div.feature-link button.toggle-feature-files svg {
+  width: 14px;
+  vertical-align: bottom;
+}
+
+.feature-files-list {
+  display: none;
+  margin: 0;
+}
+
+.feature-files-list a {
+  white-space: nowrap;
+}
+
+.feature-files-list.visible {
+  display: inherit;
+}
+
+.feature-files-list li a {
+  text-decoration: none;
+}
+
+.feature-files-list li a:hover {
+  text-decoration: underline;
+}
+
+.feature-files-list li span {
+  white-space: nowrap;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  background-color: #ccc;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-bar {
+  display: flex;
+  gap: 16px;
+  border-bottom: 1px solid #eee;
+  padding: 8px;
+  background-color: #fff;
+  box-shadow: 0 0 5px 0 #00000033;
+}
+
+.nav-bar strong:not(:last-child) {
+  border-right: 1px solid #ccc;
+  margin-right: 8px;
+  padding-right: 8px;
+}
+
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1px;
+  margin: 16px;
+}
+
+a,
+a:visited,
+a:active {
+  color: #000;
+}
+.feature-categories {
+  margin: 16px;
+}
+
+.feature-categories a {
+  cursor: pointer;
+}
+
+.feature-categories a svg {
+  width: 16px;
+  vertical-align: bottom;
+  margin-right: 8px;
+}
+
+.feature-categories .category-listing-root {
+  display: none;
+  padding-inline-start: 20px;
+}
+
+.feature-categories .category-listing-root.visible {
+  display: inherit;
+}
+
+.category-listing-root {
+  margin-top: 16px;
+}
+
+.category-listing-root li a {
+  text-decoration: none;
+}
+
+.category-listing-root li a:hover {
+  text-decoration: underline;
+}
+
+.category-listing-root li span {
+  white-space: nowrap;
+}
+
+table.feature {
+  border-collapse: collapse;
+  background-color: #fff;
+  margin: 16px;
+}
+
+table.feature td.feature-description {
+  padding: 16px;
+}
+
+table.feature th.feature-title,
+table.feature tr.totals {
+  font-weight: bold;
+}
+
+table.feature.compact th.feature-title {
+  width: 300px;
+  min-width: 300px;
+}
+
+table.feature th {
+  font-weight: normal;
+}
+
+table.feature th.file-name {
+  background-color: #666;
+  padding: 0 16px;
+}
+
+table.feature th.file-name a {
+  color: #fff;
+}
+
+table.feature th.spec-name {
+  width: 120px;
+}
+
+table.feature th.requirement[colspan="1"] {
+  width: 120px;
+}
+
+table.feature th.requirement[colspan="1"]:last-of-type {
+  width: 200px;
+}
+
+table.feature th,
+table.feature td {
+  height: 24px;
+}
+
+table.feature th,
+table.feature td {
+  border: 1px solid #ccc;
+  padding: 4px;
+}
+
+th.spec-count {
+  width: 55px;
+}
+
+td.spec-count {
+  text-align: center;
+}
+
+table.feature th.spec-name {
+  max-width: 150px;
+}
+
+table.feature .category-coverage {
+  white-space: nowrap;
+}
+
+td.cell.covered .cell-text {
+  display: block;
+  font-size: 0px;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  border-radius: 16px;
+  background-color: #000;
+}
+
+tr.result:nth-child(odd) td[rowspan="1"],
+tr.result:nth-child(odd) td:not([rowspan]),
+tr.result:nth-child(odd) th[rowspan="1"],
+tr.result:nth-child(odd) th:not([rowspan]) {
+  background-color: #eee;
+}
+
+tr.totals td:first-child {
+  text-align: right;
+}
+
+table.feature:not(.compact) th.category {
+  vertical-align: top;
+}
+
+table.feature:not(.compact) th.category .requirement-text {
+  display: block;
+  padding-top: 6px;
+}
+
+table.feature th.requirement,
+table.feature.compact th.requirement,
+table.feature.compact th.category {
+  text-align: left;
+}
+
+table.feature.compact th.category {
+}
+
+table.feature.compact th.category-level-0 {
+  background-color: #666;
+}
+
+table.feature.compact th.category-level-0 button.toggle-visibility {
+  fill: #fff;
+}
+
+table.feature.compact th.category-level-0 a {
+  color: #fff;
+}
+
+table.feature.compact th.category-level-1,
+table.feature.compact th.requirement-level-1 {
+  padding-left: 20px;
+}
+
+table.feature.compact th.category-level-2,
+table.feature.compact th.requirement-level-2 {
+  padding-left: 40px;
+}
+
+table.feature.compact th.category-level-3,
+table.feature.compact th.requirement-level-3 {
+  padding-left: 60px;
+}
+
+table.feature.compact th.category-level-4,
+table.feature.compact th.requirement-level-4 {
+  padding-left: 80px;
+}
+table.feature.compact th.category-level-1,
+table.feature.compact th.category-level-2,
+table.feature.compact th.category-level-3,
+table.feature.compact th.category-level-4 {
+  font-weight: bold;
+}
+
+table.feature.compact button.toggle-visibility {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+table.feature.compact button.toggle-visibility.expand {
+  display: none;
+}
+
+table.feature.compact tr.collapsed button.toggle-visibility.expand {
+  display: unset;
+}
+
+table.feature.compact tr.collapsed button.toggle-visibility.collapse {
+  display: none;
+}
+
+table.feature.compact button.toggle-visibility svg {
+  width: 16px;
+  vertical-align: bottom;
+}
+
+table.feature.compact .hidden {
+  display: none;
+}
+</style><script>function handleFeatureFilesToggleVisibility(row) {
+  const files = row.querySelector(".feature-files-list");
+  const categories = row.querySelector(".category-listing-root");
+
+  if (files) {
+    if (files.classList.contains("visible")) {
+      files.classList.remove("visible");
+    } else {
+      files.classList.add("visible");
+    }
+  }
+
+  if(categories) {
+    categories.classList.remove("visible");
+  }
+}
+
+function handleFeatureCategoriesToggleVisibility(row) {
+  const files = row.querySelector(".feature-files-list");
+  const categories = row.querySelector(".category-listing-root");
+
+  if (categories) {
+    if (categories.classList.contains("visible")) {
+      categories.classList.remove("visible");
+    } else {
+      categories.classList.add("visible");
+    }
+  }
+
+  if(files) {
+    files.classList.remove("visible");
+  }
+}
+function handleCompactCategoryCollapse(tr) {
+  const categoryLevel = parseInt(tr.dataset.level, 10);
+  tr.classList.add("collapsed");
+
+  let sibling = tr.nextSibling;
+
+  while (sibling) {
+    if (sibling.nodeType === Node.ELEMENT_NODE) {
+      const level = parseInt(sibling.dataset.level, 10);
+
+      if (level > categoryLevel) {
+        if (sibling.classList.contains("category-row")) {
+          sibling.classList.remove("collapsed");
+        }
+
+        sibling.classList.add("hidden");
+      } else {
+        break;
+      }
+    }
+
+    sibling = sibling.nextSibling;
+  }
+}
+function handleCompactCategoryExpand(tr) {
+  const categoryLevel = parseInt(tr.dataset.level, 10);
+  tr.classList.remove("collapsed");
+
+  let sibling = tr.nextSibling;
+
+  while (sibling) {
+    if (sibling.nodeType === Node.ELEMENT_NODE) {
+      const level = parseInt(sibling.dataset.level, 10);
+
+      if (level > categoryLevel) {
+        sibling.classList.remove("hidden");
+      } else {
+        break;
+      }
+    }
+
+    sibling = sibling.nextSibling;
+  }
+}
+
+function handleFeatureCategoriesToggleVisibility(row) {
+  const files = row.querySelector(".feature-files-list");
+  const categories = row.querySelector(".category-listing-root");
+
+  if (categories) {
+    if (categories.classList.contains("visible")) {
+      categories.classList.remove("visible");
+    } else {
+      categories.classList.add("visible");
+    }
+  }
+
+  if(files) {
+    files.classList.remove("visible");
+  }
+}
+</script></head><body><div class="nav-bar"><a href="../files.html">Files</a><a href="../features.html" style="margin-right: auto">Features</a><span>Features <strong>16 </strong>Files <strong>12 </strong>Total Specs <strong>72 </strong>Total Requirements <strong>195 </strong>Total Coverage <strong>55% </strong></span><span style="margin-left: auto"></span></div></body>
+<div class="feature-categories"><a href="" onClick="event.preventDefault(); handleFeatureCategoriesToggleVisibility(this.parentElement)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>Feature Categories</a><ul class="category-listing category-listing-root"><li class="category-listing-item"><a href="#/High">High</a><span>      67%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Low">Low</a><span>      0%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Medium">Medium</a><span>      0%</span><ul class="category-listing "></ul></li></ul></div>
+<table class="feature compact"><tr><td class="feature-description" colspan="4">Testing Multifile Feature composition</td></tr><tr class="file-headers"><th class="feature-title" colspan="1" rowspan="1">Feature A</th><th class="spec-count" rowspan="2">Spec count</th><th class="file-name" colspan="2" title="multi-file-1.cy.js"> <a href="../files/coverage_cypress_e2e_cypress_multi-file-1.cy.js.html">multi-file-1.cy.js</a></th></tr><tr class="specs-headers"><th class="header" title="Requirements">Requirements</th><th class="spec-name" title="Multi-feature setup &gt; tracing A and B and C"><span class="spec-name-text">tracing A and B and C</span></th><th class="spec-name" title="Multi-feature setup &gt; tracing A and C"><span class="spec-name-text">tracing A and C</span></th></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="4" title="High"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/High" name="/High">High <span class="category-coverage" title="2 Covered Requirements
+3 Category Requirements">(67%)</span></a></th></tr><tr class="result covered" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="2 specs test this requirement"> <span class="cell-text">2</span></td><td class="cell covered" title="Requirement: Requirement 1
+Spec: Multi-feature setup &gt; tracing A and B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell covered" title="Requirement: Requirement 1
+Spec: Multi-feature setup &gt; tracing A and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result covered" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="2 specs test this requirement"> <span class="cell-text">2</span></td><td class="cell covered" title="Requirement: Requirement 3
+Spec: Multi-feature setup &gt; tracing A and B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell covered" title="Requirement: Requirement 3
+Spec: Multi-feature setup &gt; tracing A and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="4" title="Low"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/Low" name="/Low">Low <span class="category-coverage" title="0 Covered Requirements
+3 Category Requirements">(0%)</span></a></th></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="4" title="Medium"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/Medium" name="/Medium">Medium <span class="category-coverage" title="0 Covered Requirements
+3 Category Requirements">(0%)</span></a></th></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td></tr><tr class="totals"><td>Feature Coverage</td><td colspan="3">2 / 9</td></tr></table>
+
+<div class="feature-categories"><a href="" onClick="event.preventDefault(); handleFeatureCategoriesToggleVisibility(this.parentElement)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>Feature Categories</a><ul class="category-listing category-listing-root"><li class="category-listing-item"><a href="#/High">High</a><span>      0%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Low">Low</a><span>      67%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Medium">Medium</a><span>      0%</span><ul class="category-listing "></ul></li></ul></div>
+<table class="feature compact"><tr><td class="feature-description" colspan="4">Testing Multifile Feature composition</td></tr><tr class="file-headers"><th class="feature-title" colspan="1" rowspan="1">Feature B</th><th class="spec-count" rowspan="2">Spec count</th><th class="file-name" colspan="2" title="multi-file-1.cy.js"> <a href="../files/coverage_cypress_e2e_cypress_multi-file-1.cy.js.html">multi-file-1.cy.js</a></th></tr><tr class="specs-headers"><th class="header" title="Requirements">Requirements</th><th class="spec-name" title="Multi-feature setup &gt; tracing A and B and C"><span class="spec-name-text">tracing A and B and C</span></th><th class="spec-name" title="Multi-feature setup &gt; tracing B and C"><span class="spec-name-text">tracing B and C</span></th></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="4" title="High"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/High" name="/High">High <span class="category-coverage" title="0 Covered Requirements
+3 Category Requirements">(0%)</span></a></th></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="4" title="Low"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/Low" name="/Low">Low <span class="category-coverage" title="2 Covered Requirements
+3 Category Requirements">(67%)</span></a></th></tr><tr class="result covered" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="2 specs test this requirement"> <span class="cell-text">2</span></td><td class="cell covered" title="Requirement: Requirement 1
+Spec: Multi-feature setup &gt; tracing A and B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell covered" title="Requirement: Requirement 1
+Spec: Multi-feature setup &gt; tracing B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result covered" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="2 specs test this requirement"> <span class="cell-text">2</span></td><td class="cell covered" title="Requirement: Requirement 3
+Spec: Multi-feature setup &gt; tracing A and B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell covered" title="Requirement: Requirement 3
+Spec: Multi-feature setup &gt; tracing B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="4" title="Medium"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/Medium" name="/Medium">Medium <span class="category-coverage" title="0 Covered Requirements
+3 Category Requirements">(0%)</span></a></th></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td></tr><tr class="totals"><td>Feature Coverage</td><td colspan="3">2 / 9</td></tr></table>
+
+<div class="feature-categories"><a href="" onClick="event.preventDefault(); handleFeatureCategoriesToggleVisibility(this.parentElement)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>Feature Categories</a><ul class="category-listing category-listing-root"><li class="category-listing-item"><a href="#/High">High</a><span>      0%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Low">Low</a><span>      0%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Medium">Medium</a><span>      67%</span><ul class="category-listing "></ul></li></ul></div>
+<table class="feature compact"><tr><td class="feature-description" colspan="5">Testing Multifile Feature composition</td></tr><tr class="file-headers"><th class="feature-title" colspan="1" rowspan="1">Feature C</th><th class="spec-count" rowspan="2">Spec count</th><th class="file-name" colspan="3" title="multi-file-1.cy.js"> <a href="../files/coverage_cypress_e2e_cypress_multi-file-1.cy.js.html">multi-file-1.cy.js</a></th></tr><tr class="specs-headers"><th class="header" title="Requirements">Requirements</th><th class="spec-name" title="Multi-feature setup &gt; tracing A and B and C"><span class="spec-name-text">tracing A and B and C</span></th><th class="spec-name" title="Multi-feature setup &gt; tracing A and C"><span class="spec-name-text">tracing A and C</span></th><th class="spec-name" title="Multi-feature setup &gt; tracing B and C"><span class="spec-name-text">tracing B and C</span></th></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="5" title="High"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/High" name="/High">High <span class="category-coverage" title="0 Covered Requirements
+3 Category Requirements">(0%)</span></a></th></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="5" title="Low"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/Low" name="/Low">Low <span class="category-coverage" title="0 Covered Requirements
+3 Category Requirements">(0%)</span></a></th></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td></tr><tr class="category-row" data-level="0"><th class="category category-level-0 category" colspan="5" title="Medium"><button class="toggle-visibility collapse" onClick="handleCompactCategoryCollapse(this.parentElement.parentElement)" title="Collapse category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></button><button class="toggle-visibility expand" onClick="handleCompactCategoryExpand(this.parentElement.parentElement)" title="Expand category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg></button><a class="category-text" id="/Medium" name="/Medium">Medium <span class="category-coverage" title="2 Covered Requirements
+3 Category Requirements">(67%)</span></a></th></tr><tr class="result covered" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="3 specs test this requirement"> <span class="cell-text">3</span></td><td class="cell covered" title="Requirement: Requirement 1
+Spec: Multi-feature setup &gt; tracing A and B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell covered" title="Requirement: Requirement 1
+Spec: Multi-feature setup &gt; tracing A and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell covered" title="Requirement: Requirement 1
+Spec: Multi-feature setup &gt; tracing B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td></tr><tr class="result empty" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result covered" data-level="1"><th class="requirement requirement-compact requirement-level-1 " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="3 specs test this requirement"> <span class="cell-text">3</span></td><td class="cell covered" title="Requirement: Requirement 3
+Spec: Multi-feature setup &gt; tracing A and B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell covered" title="Requirement: Requirement 3
+Spec: Multi-feature setup &gt; tracing A and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell covered" title="Requirement: Requirement 3
+Spec: Multi-feature setup &gt; tracing B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td></tr><tr class="totals"><td>Feature Coverage</td><td colspan="4">2 / 9</td></tr></table>
+</html>

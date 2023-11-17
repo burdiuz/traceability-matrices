@@ -31,6 +31,7 @@
     "records": [
       {
         "requirement": "Optional Requirement 1",
+        "category": [],
         "title": "trace optional requirements",
         "filePath": "cypress/e2e/parsers/json_feature.cy.js",
         "titlePath": [
@@ -41,6 +42,7 @@
       },
       {
         "requirement": "Optional Requirement 3",
+        "category": [],
         "title": "trace optional requirements",
         "filePath": "cypress/e2e/parsers/json_feature.cy.js",
         "titlePath": [
@@ -51,6 +53,7 @@
       },
       {
         "requirement": "High Requirement 2",
+        "category": [],
         "title": "trace high requirements",
         "filePath": "cypress/e2e/parsers/json_feature.cy.js",
         "titlePath": [
@@ -61,6 +64,7 @@
       },
       {
         "requirement": "Medium Requirement 1",
+        "category": [],
         "title": "trace medium requirements",
         "filePath": "cypress/e2e/parsers/json_feature.cy.js",
         "titlePath": [
@@ -71,6 +75,7 @@
       },
       {
         "requirement": "Medium Requirement 3",
+        "category": [],
         "title": "trace medium requirements",
         "filePath": "cypress/e2e/parsers/json_feature.cy.js",
         "titlePath": [
@@ -81,6 +86,7 @@
       },
       {
         "requirement": "Requirement on a side 2",
+        "category": [],
         "title": "trace sub-category requirements",
         "filePath": "cypress/e2e/parsers/json_feature.cy.js",
         "titlePath": [
@@ -92,6 +98,7 @@
       },
       {
         "requirement": "Low Requirement 2",
+        "category": [],
         "title": "trace low requirements",
         "filePath": "cypress/e2e/parsers/json_feature.cy.js",
         "titlePath": [

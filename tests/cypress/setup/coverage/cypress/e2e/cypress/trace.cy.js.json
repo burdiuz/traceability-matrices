@@ -35,6 +35,7 @@
     "records": [
       {
         "requirement": "High Requirement 3",
+        "category": [],
         "title": "should allow tracing by requirement name",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -47,6 +48,7 @@
           "High",
           "Requirement 1"
         ],
+        "category": [],
         "title": "should allow tracing same requirement multiple times 1",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -56,6 +58,7 @@
       },
       {
         "requirement": "Requirement 2",
+        "category": [],
         "title": "should allow tracing same requirement multiple times 1",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -68,6 +71,7 @@
           "High",
           "Requirement 2"
         ],
+        "category": [],
         "title": "should allow tracing same requirement multiple times 2",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -77,6 +81,7 @@
       },
       {
         "requirement": "Requirement 2",
+        "category": [],
         "title": "should allow tracing same requirement multiple times 3",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -89,6 +94,7 @@
           "High",
           "Requirement 1"
         ],
+        "category": [],
         "title": "should allow tracing same requirement multiple times 3",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -101,6 +107,7 @@
           "High",
           "Requirement 2"
         ],
+        "category": [],
         "title": "should allow tracing same requirement multiple times 4",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -113,6 +120,7 @@
           "Low",
           "Requirement 1"
         ],
+        "category": [],
         "title": "should allow tracing by full path",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -122,6 +130,7 @@
       },
       {
         "requirement": "Medium Requirement 1",
+        "category": [],
         "title": "should use custom matcher passed directly into trace",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -131,6 +140,7 @@
       },
       {
         "requirement": "Medium Requirement 3",
+        "category": [],
         "title": "should use custom matcher passed directly into trace",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -140,6 +150,7 @@
       },
       {
         "requirement": "Custom Requirement 1",
+        "category": [],
         "title": "should allow custom requirements",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -152,6 +163,7 @@
           "Custom Category",
           "Custom Requirement 2"
         ],
+        "category": [],
         "title": "should allow custom requirements",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -161,6 +173,7 @@
       },
       {
         "requirement": "Optional Requirement 1",
+        "category": [],
         "title": "should call callback function and allow nesting",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -170,6 +183,7 @@
       },
       {
         "requirement": "Optional Requirement 2",
+        "category": [],
         "title": "should call callback function and allow nesting",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -179,6 +193,7 @@
       },
       {
         "requirement": "Optional Requirement 3",
+        "category": [],
         "title": "should call callback function and allow nesting",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -189,36 +204,9 @@
       {
         "requirement": [
           "Medium",
-          "Sub-category",
-          "Sub Requirement 1"
-        ],
-        "title": "should use matcher",
-        "filePath": "cypress/e2e/cypress/trace.cy.js",
-        "titlePath": [
-          "Trace",
-          "When matcher is set",
-          "should use matcher"
-        ]
-      },
-      {
-        "requirement": [
-          "Medium",
-          "Sub-category",
-          "Sub Requirement 3"
-        ],
-        "title": "should use matcher",
-        "filePath": "cypress/e2e/cypress/trace.cy.js",
-        "titlePath": [
-          "Trace",
-          "When matcher is set",
-          "should use matcher"
-        ]
-      },
-      {
-        "requirement": [
-          "Medium",
           "Medium Requirement 1"
         ],
+        "category": [],
         "title": "should use custom matcher passed directly into trace",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [
@@ -232,6 +220,7 @@
           "Medium",
           "Medium Requirement 3"
         ],
+        "category": [],
         "title": "should use custom matcher passed directly into trace",
         "filePath": "cypress/e2e/cypress/trace.cy.js",
         "titlePath": [

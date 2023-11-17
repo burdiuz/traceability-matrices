@@ -8,19 +8,29 @@ Integrate requirements into e2e/integration test code and generate [traceability
 
 ![Default feature view](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/default_view.png?raw=true)
 
+Examples of generated coverage reports can be viewed here for default coverage template and compact coverage template.
+
 ## How it works
 
-Work with this feature starts with placing traces of requirements within a test file.
+When creating E2E or integration tests engineers place special tracking commands using `trace()` function, it records which requirements of tested feature were covered and stores this information in JSON files as coverage. After tests run this coverage information can be viewed or used to generate HTML or LCOV coverage reports.
+
+This is how trace usually look like, it accepts a name of the requirement or an array of strings which contains full category path to the requirement.
 
 ```js
 it("should do something according to requirement #1", () => {
+  // by requirement name
   feature.trace("requirement #1");
+
+  // by full category path
+  feature.trace(["category", "sub category", "requirement #2"]);
 
   expect(something).toEqual(somethingElse);
 });
 ```
 
-Once test run is finished, coverage report will be stored in a coverage folder specified in cypress config or environment variable. Stored file is a JSON file and is not suitable for viewing, to generate viewable information and actual matrices/tables, user should use command `traceability-matrices generate` to generate static HTML files with reports or `traceability-matrices serve` to start local HTTP server with reports.
+The `feature` object used in the example above represents a specific feature that contains structure of its requirements. Feature object can be created in the test file, imported into test file or created by parsing a document of Markdown, YAML, XML, HTML or JSON format.
+
+The file generated after test run is a JSON file and is not suitable for viewing, to generate viewable information and actual matrices/tables, user should use command `traceability-matrices generate` to generate static HTML files with reports or `traceability-matrices serve` to start local HTTP server with reports.
 
 Example project is available in [git repo](https://github.com/burdiuz/traceability-matrices/tree/master/tests/cypress/setup)
 
@@ -102,7 +112,8 @@ Parameters:
 
 - `--target-dir` - required, path to directory with coverage reports.
 - `--output-dir` - required, path to folder where generated HTML files should be stored
-- `--compact` - optional, uses compact variant of HTML table, categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
+- `--compact=true` - optional, uses compact variant of HTML table, categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
+- `--force-cleanup=true` - will remove all contents of output folder before generating new content.
 
 Example:
 
@@ -131,6 +142,10 @@ traceability-matrices threshold --target-dir=cypress/coverage --total=80 --per-f
 
 Outputs coverage information per feature with requirements.
 
+Parameters:
+
+- `--target-dir` - required, path to directory with coverage reports.
+
 Example:
 
 ```
@@ -138,6 +153,35 @@ traceability-matrices stats --target-dir=cypress/coverage
 ```
 
 ![Stats command output](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/stats.png?raw=true)
+
+### traceability-matrices lcov
+
+Generates a LCOV file with test coverage and file stricture with features information that can be used as source files which were targets for coverage. This can be used with any coverage reader or analyser tool like [SonarQube](https://www.sonarsource.com/products/sonarqube/).
+
+Parameters:
+
+- `--target-dir`
+- `--output-dir` - Folder where to store LCOV coverage information and generated "source" files which can be used as a reference coverage reading tools.
+- `--relative-dir` - used to prepend file paths in coverage reports. By default recorded path to genrated sources will be `lcov/*`.
+- `--force-cleanup=true` - will remove all contents of output folder before generating new content.
+
+Example:
+
+```
+traceability-matrices lcov --target-dir=coverage --output-dir=generated_coverage_lcov --relative-dir=generated_coverage_lcov
+```
+
+With tools like SonarQube you can track the change of features coverage in time and setup thresholds.
+![SonarQube updates feed](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/sonarqube_coverage_change.png?raw=true)
+
+File list in SonarQube does not show any useful information except coverage percentage because generated "source" 100% consists of comments.
+![File list in SonarQube](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/sonarqube_coverage_files.png?raw=true)
+
+Contents of the feature file, SonarQube shows uncovered requirements
+![Stats command output](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/sonarqube_coverage_feature.png?raw=true)
+
+> This SonarQube configuration required to configure it to read \*.md files as JavaScript files to make it display coverage information for them.
+> Total coverage will be slightly different in SonarQube because each feature file has additional lines for comment wraps.
 
 ## Cypress integration
 
@@ -436,17 +480,36 @@ describe("Matcher", () => {
 ```
 
 `category()` allows setting custom matcher for its requirements and sub-category requirements.
+
 ```js
-const RootCategory = feature.category('Root Category');
+const RootCategory = feature.category("Root Category");
 RootCategory.setTraceToRequirementMatcher(findRootCategoryRequirement);
 
-const ChildCategory = feature.category('Root Category', 'Child Category');
+const ChildCategory = feature.category("Root Category", "Child Category");
 ChildCategory.setTraceToRequirementMatcher(findChildCategoryRequirement);
 
-const DescendantCategory = ChildCategory.category('Descendant Category');
-DescendantCategory.setTraceToRequirementMatcher(findDescendantCategoryRequirement);
+const DescendantCategory = ChildCategory.category("Descendant Category");
+DescendantCategory.setTraceToRequirementMatcher(
+  findDescendantCategoryRequirement
+);
 ```
+
 > Removing a matcher(by setting to `undefined`) will revert to using parent category or feature matcher if set.
+
+When setting matcher to a category, it is not being assigned to a category by its path, but into objects internal state.
+So, when called `category()` on same category next time returned object will not have the same matcher.
+
+```js
+const ChildCategory1 = feature.category("Root Category", "Child Category");
+// setting matcher to ChildCategory1
+ChildCategory1.setTraceToRequirementMatcher(findChildCategoryRequirement);
+
+// it does not have the matcher previously set to same category but different object,
+// you have to set it again for ChildCategory2 to make it work for this object
+const ChildCategory2 = feature.category("Root Category", "Child Category");
+// now it also has the matcher
+ChildCategory2.setTraceToRequirementMatcher(findChildCategoryRequirement);
+```
 
 ### feature.structure()
 
@@ -517,7 +580,7 @@ This project includes parsers that allow reading feature information from variou
 Markdown file structure should start with 1st level header which will be parsed as a feature title. If title has a slash in it, it will be split into group and title.
 
 ```markdown
-# Geature Group / Feature title
+# Feature Group / Feature Title
 
 This is the text of feature description, may contain images, links etc.
 ```
@@ -679,9 +742,9 @@ describe("YAML", () => {
 });
 ```
 
-### HTML
+### XML
 
-HTML file structure starts with a root tag `feature`. It should contain these tags
+XML file structure starts with a root tag `feature`. It should contain these tags
 
 - `title` - Feature title, required.
 - `structure` - Feature structure, required.
@@ -692,14 +755,14 @@ HTML file structure starts with a root tag `feature`. It should contain these ta
 
 Structure is described with two tags `category` for categories and `requirement` for requirements. Category tag should contain a `name` tag that will contain category name and `requirment` tags to specify this category requirements, it may also contain other `category` tags for sub-categories.
 
-```html
+```xml
 <structure>
   <requirement>Requirement 1</requirement>
   <catgegory>
-    <name>Category</nme>
+    <name>Category</name>
     <requirement>Requirement 2</requirement>
     <catgegory>
-      <name>Sub Category</nme>
+      <name>Sub Category</name>
       <requirement>Requirement 3</requirement>
     </category>
   </category>
@@ -708,32 +771,11 @@ Structure is described with two tags `category` for categories and `requirement`
 
 > Structure cannot contain empty categories, they will be converted into requirements.
 
-Any other tags are ignored, feature tag may not be the root tag of the document but one document must contain a single feature. Feature tags like `title`, `structure` etc. may not be direct children to the `feature` tag.
-
-```html
-<!DOCTYPE html>
-<html>
-  <body>
-    <feature>
-      <h1><title>My Feature</title></h1>
-      <strong><description>This is my feature description</description></strong>
-      <structure>
-        <ul>
-          <li><requirement>Requirement 1</requirement></li>
-          <li><requirement>Requirement 2</requirement></li>
-          <li><requirement>Requirement 3</requirement></li>
-        </ul>
-      </structure>
-    </feature>
-  </body>
-</html>
-```
-
 Feature example:
 
-```html
+```xml
 <feature>
-  <title>Feature Html</title>
+  <title>Feature Xml</title>
   <description
     >My feature description with
     <a href="https://google.com">HTML</a></description
@@ -751,11 +793,11 @@ Feature example:
 Usage in cypress test
 
 ```js
-import { createFeatureFromHtmlAsync } from "@actualwave/traceability-matrices/html";
+import { createFeatureFromXmlAsync } from "@actualwave/traceability-matrices/xml";
 
-const Feature = createFeatureFromHtmlAsync("cypress/features/ParserHtml.html");
+const Feature = createFeatureFromXmlAsync("cypress/features/ParserXml.xml");
 
-describe("HTML", () => {
+describe("XML", () => {
   describe("High requirements", () => {
     it("trace high requirements", () => {
       Feature.trace("High Requirement 1");
@@ -763,6 +805,71 @@ describe("HTML", () => {
 
       // using full path
       Feature.trace(["High", "High Requirement 3"]);
+    });
+  });
+});
+```
+
+### HTML
+
+HTML praser uses `data-` attributes to find feature-related information and may have any kind of tags. Tags without proper data-attributes are ignored.
+Supported attributes
+
+- `data-feature-title` - Feature title, should have value
+- `data-feature-group` - Feature group, shold have value and must be plaved on same element as title attribute.
+- `data-feature-description` - Feature description. If no value defined as a description will be taked HTML content of the element.
+- `data-feature-requirement` - Structure requirement, will be added to feature structure. If element with this attribute placed into category element, requirement will be added to corresponding category. Should define requirement name in the attribute value.
+- `data-feature-category` - Structure category, all requirements defined in descendants of this category element will also be descendants of this category in feature structure. Structure will repeat the structure of HTML tree ignoring all elements not containig category or requirement attributes. Should define category name in the attribute value.
+
+HTML feature example
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HTML Feature Document</title>
+  </head>
+  <body>
+    <h1 data-feature-title="Feature Html" data-feature-group="Parsers">
+      Feature HTML
+    </h1>
+    <strong data-feature-description
+      >My feature description with <a href="https://google.com">HTML</a></strong
+    >
+    <h4>Structure</h4>
+    <span data-feature-requirement="Requirement 1"
+      >Some freature requirement</span
+    >
+    <strong>Structure Category</strong>
+    <ul data-feature-category="Category">
+      <li data-feature-requirement="Requirement 2">Requirement 2</li>
+      <li data-feature-category="Sub category">
+        <strong>Sub category structure</strong>
+        <ul>
+          <li data-feature-requirement="Requirement 3">
+            Sub category Requirement 3
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </body>
+</html>
+```
+
+Usage in cypress test
+
+```js
+import { createFeatureFromHtmlAsync } from "@actualwave/traceability-matrices/html";
+
+const Feature = createFeatureFromHtmlAsync("cypress/features/ParserHtml.html");
+
+describe("HTML", () => {
+  describe("Category requirements", () => {
+    it("trace category requirements", () => {
+      Feature.trace("Requirement 2");
+
+      // using full path
+      Feature.trace(["Category", "Sub category", "Requirement 3"]);
     });
   });
 });

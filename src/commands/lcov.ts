@@ -5,33 +5,31 @@ import { type Coverage, type Feature, readCoverage } from "../reader/index";
 import { type VerticalInfo, buildVerticalHeaders } from "../view/feature";
 
 const stripTags = (text: string) =>
-  text.replace(/[,\r\n]+/gi, " ").replace(/<\/?a-z[^>]+>/gi, "");
+  text.replace(/[,\r\n\s]+/gi, " ").replace(/<\/?a-z[^>]+>/gi, "");
 
 const generateFeatureLcovContent = (
   feature: Feature,
   relativeDir: string,
   info: VerticalInfo = buildVerticalHeaders(feature)
 ) => {
-  let lineNumber = 1;
+  let lineNumber = 2;
   let blockNumber = 1;
-  const fileName = `${feature.group}_${feature.title}.txt`.replace(
-    /[^0-9a-z_().\\\/,-\\r\\n\\t\\v]/gi,
+  const fileName = `${feature.group}_${feature.title}.md`.replace(
+    /([^0-9a-z_().,\- ]+|[\\\/,\r\n\t\v]+)/gi,
     "_"
   );
 
   // test name
   const tn = (
     feature.group ? `${feature.group}: ${feature.title}` : feature.title
-  ).replace(/[\r\n]/gi, " ");
+  ).replace(/[\r\n\s]+/gi, " ");
   // file name
   const sf = join(relativeDir, "lcov", fileName);
-  const content = [tn];
+  const content = ["/*", `# ${tn}`];
 
   // functions -- high level categories
-  const fn = [`FN:1,${tn}`];
-  const fnda = [
-    `FNDA:${info.requirementsCovered},${tn.replace(/[,\r\n]+/gi, " ")}`,
-  ];
+  const fn = [`FN:${lineNumber},${tn}`];
+  const fnda = [`FNDA:${info.requirementsCovered},${tn}`];
   let fnh = info.requirementsCovered ? 1 : 0;
 
   // blocks, branches -- 2-nd level functions
@@ -43,33 +41,32 @@ const generateFeatureLcovContent = (
   let brh = info.requirementsCovered ? 1 : 0;
 
   // lines -- everything, requirements
-  const da = [`DA:${info.requirementsCovered},1`];
+  const da = [`DA:${info.requirementsCovered},${lineNumber}`];
   let lh = info.requirementsCovered ? 1 : 0;
 
   info.rows.forEach((row) => {
     row.forEach((cell) => {
       lineNumber++;
-      content[lineNumber - 1] = `${" ".repeat(cell.depth * 2)}${cell.title}`;
+      content[lineNumber - 1] = `${" ".repeat(cell.depth * 2)}- ${cell.title}`;
 
       if (cell.category) {
-        if (!cell.depth) {
           // function
           const name = stripTags(cell.title);
           fn.push(`FN:${lineNumber},${name}`);
           fnda.push(`FNDA:${cell.requirementsCovered},${name}`);
           fnh += cell.requirementsCovered ? 1 : 0;
-        }
-
-        // block
-        blockNumber++;
-        brda.push(
-          `BRDA:${lineNumber},${blockNumber},${blockNumber},${
-            cell.requirementsCovered ? cell.requirementsCovered : "-"
-          }`
-        );
-        brh += cell.requirementsCovered ? 1 : 0;
       }
 
+      // block
+      blockNumber++;
+      brda.push(
+        `BRDA:${lineNumber},${blockNumber},${blockNumber},${
+          cell.requirementsCovered ? cell.requirementsCovered : "-"
+        }`
+      );
+      brh += cell.requirementsCovered ? 1 : 0;
+
+      // line
       da.push(`DA:${cell.requirementsCovered},${lineNumber}`);
       lh += cell.requirementsCovered ? 1 : 0;
     });
@@ -94,7 +91,7 @@ end_of_record
 `,
     path: sf,
     fileName,
-    content: content.join("\n"),
+    content: [...content, "", "*/", ""].join("\n"),
   };
 };
 

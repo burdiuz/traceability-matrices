@@ -1,0 +1,331 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Features / Feature B</title><style>body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  background-color: #ccc;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-bar {
+  display: flex;
+  gap: 16px;
+  border-bottom: 1px solid #eee;
+  padding: 8px;
+  background-color: #fff;
+  box-shadow: 0 0 5px 0 #00000033;
+}
+
+.nav-bar strong:not(:last-child) {
+  border-right: 1px solid #ccc;
+  margin-right: 8px;
+  padding-right: 8px;
+}
+
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1px;
+  margin: 16px;
+}
+
+a,
+a:visited,
+a:active {
+  color: #000;
+}
+.feature-categories {
+  margin: 16px;
+}
+
+.feature-categories a {
+  cursor: pointer;
+}
+
+.feature-categories a svg {
+  width: 16px;
+  vertical-align: bottom;
+  margin-right: 8px;
+}
+
+.feature-categories .category-listing-root {
+  display: none;
+  padding-inline-start: 20px;
+}
+
+.feature-categories .category-listing-root.visible {
+  display: inherit;
+}
+
+.category-listing-root {
+  margin-top: 16px;
+}
+
+.category-listing-root li a {
+  text-decoration: none;
+}
+
+.category-listing-root li a:hover {
+  text-decoration: underline;
+}
+
+.category-listing-root li span {
+  white-space: nowrap;
+}
+
+table.feature {
+  border-collapse: collapse;
+  background-color: #fff;
+  margin: 16px;
+}
+
+table.feature td.feature-description {
+  padding: 16px;
+}
+
+table.feature th.feature-title,
+table.feature tr.totals {
+  font-weight: bold;
+}
+
+table.feature.compact th.feature-title {
+  width: 300px;
+  min-width: 300px;
+}
+
+table.feature th {
+  font-weight: normal;
+}
+
+table.feature th.file-name {
+  background-color: #666;
+  padding: 0 16px;
+}
+
+table.feature th.file-name a {
+  color: #fff;
+}
+
+table.feature th.spec-name {
+  width: 120px;
+}
+
+table.feature th.requirement[colspan="1"] {
+  width: 120px;
+}
+
+table.feature th.requirement[colspan="1"]:last-of-type {
+  width: 200px;
+}
+
+table.feature th,
+table.feature td {
+  height: 24px;
+}
+
+table.feature th,
+table.feature td {
+  border: 1px solid #ccc;
+  padding: 4px;
+}
+
+th.spec-count {
+  width: 55px;
+}
+
+td.spec-count {
+  text-align: center;
+}
+
+table.feature th.spec-name {
+  max-width: 150px;
+}
+
+table.feature .category-coverage {
+  white-space: nowrap;
+}
+
+td.cell.covered .cell-text {
+  display: block;
+  font-size: 0px;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  border-radius: 16px;
+  background-color: #000;
+}
+
+tr.result:nth-child(odd) td[rowspan="1"],
+tr.result:nth-child(odd) td:not([rowspan]),
+tr.result:nth-child(odd) th[rowspan="1"],
+tr.result:nth-child(odd) th:not([rowspan]) {
+  background-color: #eee;
+}
+
+tr.totals td:first-child {
+  text-align: right;
+}
+
+table.feature:not(.compact) th.category {
+  vertical-align: top;
+}
+
+table.feature:not(.compact) th.category .requirement-text {
+  display: block;
+  padding-top: 6px;
+}
+
+table.feature th.requirement,
+table.feature.compact th.requirement,
+table.feature.compact th.category {
+  text-align: left;
+}
+
+table.feature.compact th.category {
+}
+
+table.feature.compact th.category-level-0 {
+  background-color: #666;
+}
+
+table.feature.compact th.category-level-0 button.toggle-visibility {
+  fill: #fff;
+}
+
+table.feature.compact th.category-level-0 a {
+  color: #fff;
+}
+
+table.feature.compact th.category-level-1,
+table.feature.compact th.requirement-level-1 {
+  padding-left: 20px;
+}
+
+table.feature.compact th.category-level-2,
+table.feature.compact th.requirement-level-2 {
+  padding-left: 40px;
+}
+
+table.feature.compact th.category-level-3,
+table.feature.compact th.requirement-level-3 {
+  padding-left: 60px;
+}
+
+table.feature.compact th.category-level-4,
+table.feature.compact th.requirement-level-4 {
+  padding-left: 80px;
+}
+table.feature.compact th.category-level-1,
+table.feature.compact th.category-level-2,
+table.feature.compact th.category-level-3,
+table.feature.compact th.category-level-4 {
+  font-weight: bold;
+}
+
+table.feature.compact button.toggle-visibility {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+table.feature.compact button.toggle-visibility.expand {
+  display: none;
+}
+
+table.feature.compact tr.collapsed button.toggle-visibility.expand {
+  display: unset;
+}
+
+table.feature.compact tr.collapsed button.toggle-visibility.collapse {
+  display: none;
+}
+
+table.feature.compact button.toggle-visibility svg {
+  width: 16px;
+  vertical-align: bottom;
+}
+
+table.feature.compact .hidden {
+  display: none;
+}
+</style><script>function handleCompactCategoryCollapse(tr) {
+  const categoryLevel = parseInt(tr.dataset.level, 10);
+  tr.classList.add("collapsed");
+
+  let sibling = tr.nextSibling;
+
+  while (sibling) {
+    if (sibling.nodeType === Node.ELEMENT_NODE) {
+      const level = parseInt(sibling.dataset.level, 10);
+
+      if (level > categoryLevel) {
+        if (sibling.classList.contains("category-row")) {
+          sibling.classList.remove("collapsed");
+        }
+
+        sibling.classList.add("hidden");
+      } else {
+        break;
+      }
+    }
+
+    sibling = sibling.nextSibling;
+  }
+}
+function handleCompactCategoryExpand(tr) {
+  const categoryLevel = parseInt(tr.dataset.level, 10);
+  tr.classList.remove("collapsed");
+
+  let sibling = tr.nextSibling;
+
+  while (sibling) {
+    if (sibling.nodeType === Node.ELEMENT_NODE) {
+      const level = parseInt(sibling.dataset.level, 10);
+
+      if (level > categoryLevel) {
+        sibling.classList.remove("hidden");
+      } else {
+        break;
+      }
+    }
+
+    sibling = sibling.nextSibling;
+  }
+}
+
+function handleFeatureCategoriesToggleVisibility(row) {
+  const files = row.querySelector(".feature-files-list");
+  const categories = row.querySelector(".category-listing-root");
+
+  if (categories) {
+    if (categories.classList.contains("visible")) {
+      categories.classList.remove("visible");
+    } else {
+      categories.classList.add("visible");
+    }
+  }
+
+  if(files) {
+    files.classList.remove("visible");
+  }
+}
+</script></head><body><div class="nav-bar"><a href="../files.html">Files</a><a href="../features.html" style="margin-right: auto">Features</a><span></span>Specs <strong>3 </strong>Feature Requirements <strong>9 </strong>Covered Requirements <strong>4 </strong>Feature Coverage <strong>44% </strong><span style="margin-left: auto"></span></div></body>
+<div class="feature-categories"><a href="" onClick="event.preventDefault(); handleFeatureCategoriesToggleVisibility(this.parentElement)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>Feature Categories</a><ul class="category-listing category-listing-root"><li class="category-listing-item"><a href="#/High">High</a><span>      67%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Low">Low</a><span>      67%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Medium">Medium</a><span>      0%</span><ul class="category-listing "></ul></li></ul></div>
+<table class="feature"><tr><td class="feature-description" colspan="6">Testing Multifile Feature composition</td></tr><tr class="file-headers"><th class="feature-title" colspan="2" rowspan="1">Feature B</th><th class="spec-count" rowspan="2">Spec count</th><th class="file-name" colspan="2" title="multi-file-1.cy.js"><a href="../files/coverage_cypress_e2e_cypress_multi-file-1.cy.js.html">multi-file-1.cy.js</a></th><th class="file-name" colspan="1" title="multi-file-3.cy.js"><a href="../files/coverage_cypress_e2e_cypress_multi-file-3.cy.js.html">multi-file-3.cy.js</a></th></tr><tr class="specs-headers"><th class="header" title="Main categories">Main categories</th><th class="header" title="Requirements">Requirements</th><th class="spec-name" title="Multi-feature setup &gt; tracing A and B and C"><span class="spec-name-text">tracing A and B and C</span></th><th class="spec-name" title="Multi-feature setup &gt; tracing B and C"><span class="spec-name-text">tracing B and C</span></th><th class="spec-name" title="Multi-feature setup &gt; tracing B"><span class="spec-name-text">tracing B</span></th></tr><tr class="result covered"><th class="requirement category" colspan="1" rowspan="3" title="High"><a class="requirement-text" id="/High" name="/High">High  <span class="category-coverage" title="2 Covered Requirements
+3 Category Requirements">(67%)</span></a></th><th class="requirement " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="1 specs test this requirement"> <span class="cell-text">1</span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell covered" title="Requirement: Requirement 1
+Spec: Multi-feature setup &gt; tracing B
+File: cypress/e2e/cypress/multi-file-3.cy.js"> <span class="cell-text">X</span></td></tr><tr class="result empty"><th class="requirement " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result covered"><th class="requirement " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="1 specs test this requirement"> <span class="cell-text">1</span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell covered" title="Requirement: Requirement 3
+Spec: Multi-feature setup &gt; tracing B
+File: cypress/e2e/cypress/multi-file-3.cy.js"> <span class="cell-text">X</span></td></tr><tr class="result covered"><th class="requirement category" colspan="1" rowspan="3" title="Low"><a class="requirement-text" id="/Low" name="/Low">Low  <span class="category-coverage" title="2 Covered Requirements
+3 Category Requirements">(67%)</span></a></th><th class="requirement " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="2 specs test this requirement"> <span class="cell-text">2</span></td><td class="cell covered" title="Requirement: Requirement 1
+Spec: Multi-feature setup &gt; tracing A and B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell covered" title="Requirement: Requirement 1
+Spec: Multi-feature setup &gt; tracing B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result empty"><th class="requirement " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result covered"><th class="requirement " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="2 specs test this requirement"> <span class="cell-text">2</span></td><td class="cell covered" title="Requirement: Requirement 3
+Spec: Multi-feature setup &gt; tracing A and B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell covered" title="Requirement: Requirement 3
+Spec: Multi-feature setup &gt; tracing B and C
+File: cypress/e2e/cypress/multi-file-1.cy.js"> <span class="cell-text">X</span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td></tr><tr class="result empty"><th class="requirement category" colspan="1" rowspan="3" title="Medium"><a class="requirement-text" id="/Medium" name="/Medium">Medium  <span class="category-coverage" title="0 Covered Requirements
+3 Category Requirements">(0%)</span></a></th><th class="requirement " colspan="1" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 1"> <span class="cell-text"></span></td></tr><tr class="result empty"><th class="requirement " colspan="1" rowspan="1" title="Requirement 2"><span class="requirement-text">Requirement 2</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 2"> <span class="cell-text"></span></td></tr><tr class="result empty"><th class="requirement " colspan="1" rowspan="1" title="Requirement 3"><span class="requirement-text">Requirement 3</span></th><td class="cell spec-count" title="0 specs test this requirement"> <span class="cell-text">0</span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td><td class="cell empty" title="Requirement: Requirement 3"> <span class="cell-text"></span></td></tr><tr class="totals"><td colspan="2">Feature Coverage</td><td colspan="4">4 / 9</td></tr></table>
+</html>

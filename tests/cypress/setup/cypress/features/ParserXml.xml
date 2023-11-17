@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature>
+  <title>Feature Xml</title>
+  <description
+    >My feature description with
+    <a href="https://google.com">HTML</a></description
+  >
+  <group>Parsers</group>
+  <requirement>Optional Requirement 1</requirement>
+  <requirement>Optional Requirement 2</requirement>
+  <requirement>Optional Requirement 3</requirement>
+  <category>
+    <name>High</name>
+    <requirement>High Requirement 1</requirement>
+    <requirement>High Requirement 2</requirement>
+    <requirement>High Requirement 3</requirement>
+  </category>
+  <category>
+    <name>Medium</name>
+    <requirement>Medium Requirement 1</requirement>
+    <requirement>Medium Requirement 2</requirement>
+    <requirement>Medium Requirement 3</requirement>
+    <category>
+      <name>Sub-category <a href="http://google.com">with a link</a></name>
+      <requirement
+        >Requirement on a side with &amp; &quot; ' entities 1</requirement
+      >
+      <requirement>Requirement on a side 2</requirement>
+      <requirement>Requirement on a side 3</requirement>
+    </category>
+  </category>
+  <category>
+    <name>Low</name>
+    <requirement>Low Requirement with &amp; " ' &lt; > entities 1</requirement>
+    <requirement>Low Requirement 2</requirement>
+  </category>
+</feature>

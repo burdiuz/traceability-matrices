@@ -15,7 +15,7 @@ const parseArgs = () => {
   const args = {};
   for (let index = 3; index < process.argv.length; ++index) {
     // all arguments have same shape, always have name and value
-    const parsed = process.argv[index].match(/^--([^=]+)=(.+)$/);
+    const parsed = process.argv[index].match(/^--([^=]+)=(.*)$/);
 
     // misshaped argument breaks command line reading
     if (!parsed) {

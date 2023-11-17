@@ -6,6 +6,7 @@
 .pnp.js
 
 # testing
+.scannerwork/
 /coverage
 cypress_coverage
 coverage_static
@@ -18,6 +19,7 @@ coverage_static
 /json.js
 /yaml.js
 /html.js
+/xml.js
 
 # misc
 cert.pem

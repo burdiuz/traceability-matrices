@@ -33,6 +33,12 @@ export default [
     external,
   },
   {
+    input: "./src/parsers/xml.js",
+    output: { file: "./xml.js", format: "es" },
+    plugins,
+    external,
+  },
+  {
     input: "./src/parsers/json.js",
     output: { file: "./json.js", format: "es" },
     plugins,

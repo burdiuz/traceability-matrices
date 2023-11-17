@@ -22,6 +22,7 @@
           "Hooks",
           "describe()"
         ],
+        "category": [],
         "title": "requirement().describe()",
         "filePath": "cypress/e2e/cypress/requirement.cy.js",
         "titlePath": [
@@ -33,6 +34,7 @@
           "Hooks",
           "context()"
         ],
+        "category": [],
         "title": "requirement().context()",
         "filePath": "cypress/e2e/cypress/requirement.cy.js",
         "titlePath": [
@@ -44,6 +46,7 @@
           "Hooks",
           "suite()"
         ],
+        "category": [],
         "title": "requirement().suite()",
         "filePath": "cypress/e2e/cypress/requirement.cy.js",
         "titlePath": [
@@ -55,6 +58,7 @@
           "Hooks",
           "test()"
         ],
+        "category": [],
         "title": "requirement().test()",
         "filePath": "cypress/e2e/cypress/requirement.cy.js",
         "titlePath": [
@@ -67,6 +71,7 @@
           "Hooks",
           "it()"
         ],
+        "category": [],
         "title": "requirement().it()",
         "filePath": "cypress/e2e/cypress/requirement.cy.js",
         "titlePath": [
@@ -79,6 +84,7 @@
           "Hooks",
           "specify()"
         ],
+        "category": [],
         "title": "requirement().specify()",
         "filePath": "cypress/e2e/cypress/requirement.cy.js",
         "titlePath": [
@@ -88,6 +94,7 @@
       },
       {
         "requirement": "Should allow trace as usual",
+        "category": [],
         "title": "requirement().trace()",
         "filePath": "cypress/e2e/cypress/requirement.cy.js",
         "titlePath": [
@@ -96,7 +103,11 @@
         ]
       },
       {
-        "requirement": "Should allow matcher function",
+        "requirement": [
+          "structure",
+          "Should allow matcher function"
+        ],
+        "category": [],
         "title": "should use matcher to find proper requirement",
         "filePath": "cypress/e2e/cypress/requirement.cy.js",
         "titlePath": [

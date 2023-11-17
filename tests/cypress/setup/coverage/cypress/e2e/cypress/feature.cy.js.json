@@ -59,6 +59,7 @@
     "records": [
       {
         "requirement": "Medium Requirement 1",
+        "category": [],
         "title": "trace main requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -69,6 +70,7 @@
       },
       {
         "requirement": "Medium Requirement 3",
+        "category": [],
         "title": "trace main requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -83,6 +85,7 @@
           "Sub-category",
           "Sub Requirement 1"
         ],
+        "category": [],
         "title": "trace sub category",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -97,6 +100,7 @@
           "Sub-category",
           "Sub Requirement 3"
         ],
+        "category": [],
         "title": "trace sub category",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -107,6 +111,7 @@
       },
       {
         "requirement": "Custom Requirement 1",
+        "category": [],
         "title": "trace custom requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -120,6 +125,7 @@
           "Custom category",
           "Custom Requirement 2"
         ],
+        "category": [],
         "title": "trace custom requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -152,6 +158,7 @@
     "records": [
       {
         "requirement": "Medium Requirement 1",
+        "category": [],
         "title": "trace main requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -162,6 +169,7 @@
       },
       {
         "requirement": "Medium Requirement 3",
+        "category": [],
         "title": "trace main requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -175,6 +183,7 @@
           "Sub-category",
           "Sub Requirement 1"
         ],
+        "category": [],
         "title": "trace sub category",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -188,6 +197,7 @@
           "Sub-category",
           "Sub Requirement 3"
         ],
+        "category": [],
         "title": "trace sub category",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -198,6 +208,7 @@
       },
       {
         "requirement": "Custom Requirement 1",
+        "category": [],
         "title": "trace custom requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -211,6 +222,7 @@
           "Custom category",
           "Custom Requirement 2"
         ],
+        "category": [],
         "title": "trace custom requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -258,6 +270,7 @@
     "records": [
       {
         "requirement": "Low Requirement 1",
+        "category": [],
         "title": "trace low requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -268,6 +281,7 @@
       },
       {
         "requirement": "Low Requirement 3",
+        "category": [],
         "title": "trace low requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -278,6 +292,7 @@
       },
       {
         "requirement": "Cloned Custom Requirement 1",
+        "category": [],
         "title": "trace custom requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [
@@ -291,6 +306,7 @@
           "Cloned Custom category",
           "Cloned Custom Requirement 2"
         ],
+        "category": [],
         "title": "trace custom requirements",
         "filePath": "cypress/e2e/cypress/feature.cy.js",
         "titlePath": [

@@ -11,7 +11,7 @@ const createEmptyFeatureState = ({ title, description = "", group = "" }) => ({
 });
 
 (async () => {
-  const content = fs.readFileSync("./FeatureHtml.html");
+  const content = fs.readFileSync("./ParserHtml.html");
 
   // ---------------------- html.js parser code starts
 
@@ -27,61 +27,46 @@ const createEmptyFeatureState = ({ title, description = "", group = "" }) => ({
     return hasElements ? node.innerHTML.trim() : node.textContent.trim();
   };
 
-  const createCategory = (parentNode, structure = {}) => {
-    if (parentNode?.nodeType !== 1) {
-      return;
-    }
-
-    let name = "";
-    parentNode.childNodes.forEach((node) => {
-      if (node.nodeType !== 1) {
+  const buildStructureFromHtmlNodes = (node, parent = {}) => {
+    node.childNodes.forEach((child) => {
+      if (child.nodeType !== 1) {
         return;
       }
 
-      switch (node.tagName.toLowerCase()) {
-        case "category":
-          {
-            const [name, children] = createCategory(node);
-            structure[name] = children;
-          }
-          break;
-        case "name":
-          {
-            name = getNodeContent(node);
-          }
-          break;
-        case "requirement":
-          {
-            structure[getNodeContent(node)] = {};
-          }
-          break;
+      if (child.hasAttribute("data-feature-category")) {
+        const category = {};
+        parent[child.getAttribute("data-feature-category")] = category;
+        buildStructureFromHtmlNodes(child, category);
+      } else if (child.hasAttribute("data-feature-requirement")) {
+        parent[child.getAttribute("data-feature-requirement")] = {};
+      } else {
+        buildStructureFromHtmlNodes(child, parent);
       }
     });
 
-    return [name, structure];
+    return parent;
   };
 
   const parseHtmlFeature = async (content) => {
     const dom = parse(content);
-    const titleNode = dom.querySelector("feature > title");
-    const descriptionNode = dom.querySelector("feature > description");
-    const groupNode = dom.querySelector("feature > group");
+    const titleNode = dom.querySelector("[data-feature-title]");
+    const descriptionNode = dom.querySelector("[data-feature-description]");
     const feature = createEmptyFeatureState({
-      title: getNodeContent(titleNode),
-      group: getNodeContent(groupNode),
-      description: getNodeContent(descriptionNode),
+      title: titleNode.getAttribute("data-feature-title"),
+      group: titleNode.getAttribute("data-feature-group") || "",
+      description:
+        descriptionNode?.getAttribute("data-feature-description") ||
+        getNodeContent(descriptionNode),
     });
-  
-    const rootNode = dom.querySelector("feature");
-    const [, structure] = createCategory(rootNode);
-    feature.structure = structure;
+
+    feature.structure = buildStructureFromHtmlNodes(dom);
 
     return feature;
-  }
+  };
 
   // ---------------------- html.js parser code ends
 
-   const feature = await parseHtmlFeature(content);
+  const feature = await parseHtmlFeature(content);
 
-   console.log(feature.structure);
+  console.log(feature);
 })();
