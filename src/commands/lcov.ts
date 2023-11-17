@@ -28,20 +28,20 @@ const generateFeatureLcovContent = (
   const content = ["/*", `# ${tn}`];
 
   // functions -- high level categories
-  const fn = [`FN:${lineNumber},${tn}`];
-  const fnda = [`FNDA:${info.requirementsCovered},${tn}`];
+  const fn = []; // [`FN:${lineNumber},${tn}`]; -- add feature title to coverage as function
+  const fnda = []; // [`FNDA:${info.requirementsCovered},${tn}`]; -- cover feature title
   let fnh = info.requirementsCovered ? 1 : 0;
 
-  // blocks, branches -- 2-nd level functions
-  const brda = [
+  // blocks, branches -- only requirements
+  const brda = []; /*[
     `BRDA:${lineNumber},${blockNumber},${blockNumber},${
       info.requirementsCovered ? info.requirementsCovered : "-"
     }`,
-  ];
+  ] -- cover feature title */
   let brh = info.requirementsCovered ? 1 : 0;
 
-  // lines -- everything, requirements
-  const da = [`DA:${info.requirementsCovered},${lineNumber}`];
+  // lines -- only requirements
+  const da = []; // [`DA:${info.requirementsCovered},${lineNumber}`]; -- cover feature title
   let lh = info.requirementsCovered ? 1 : 0;
 
   info.rows.forEach((row) => {
@@ -50,11 +50,12 @@ const generateFeatureLcovContent = (
       content[lineNumber - 1] = `${" ".repeat(cell.depth * 2)}- ${cell.title}`;
 
       if (cell.category) {
-          // function
-          const name = stripTags(cell.title);
-          fn.push(`FN:${lineNumber},${name}`);
-          fnda.push(`FNDA:${cell.requirementsCovered},${name}`);
-          fnh += cell.requirementsCovered ? 1 : 0;
+        // function
+        const name = stripTags(cell.title);
+        fn.push(`FN:${lineNumber},${name}`);
+        fnda.push(`FNDA:${cell.requirementsCovered},${name}`);
+        fnh += cell.requirementsCovered ? 1 : 0;
+        return;
       }
 
       // block

@@ -8,7 +8,7 @@ Integrate requirements into e2e/integration test code and generate [traceability
 
 ![Default feature view](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/default_view.png?raw=true)
 
-Examples of generated coverage reports can be viewed here for default coverage template and compact coverage template.
+Examples of generated coverage reports can be viewed here for [default coverage template](https://burdiuz.github.io/traceability-matrices/generated_coverage_default/features.html) and [compact coverage template](https://burdiuz.github.io/traceability-matrices/generated_coverage_compact/features.html).
 
 ## How it works
 
@@ -89,7 +89,7 @@ Parameters:
 - `--target-dir` - required, path to directory with coverage reports
 - `--port` - port for HTTP/S server, 8477 by default
 - `--key` and `--cert` - should point at private key and signed certificate files to start HTTPS server, by default starts HTTP server
-- `--compact` - optional, uses compact variant of HTML table, categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
+- `--compact` - optional, uses [compact variant of HTML table](https://burdiuz.github.io/traceability-matrices/generated_coverage_compact/features/Records-_-Category.html), categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
 
 Example:
 
@@ -112,7 +112,7 @@ Parameters:
 
 - `--target-dir` - required, path to directory with coverage reports.
 - `--output-dir` - required, path to folder where generated HTML files should be stored
-- `--compact=true` - optional, uses compact variant of HTML table, categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
+- `--compact=true` - optional, uses [compact variant of HTML table](https://burdiuz.github.io/traceability-matrices/generated_coverage_compact/features/Records-_-Category.html), categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
 - `--force-cleanup=true` - will remove all contents of output folder before generating new content.
 
 Example:
@@ -181,7 +181,6 @@ Contents of the feature file, SonarQube shows uncovered requirements
 ![Stats command output](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/sonarqube_coverage_feature.png?raw=true)
 
 > This SonarQube configuration required to configure it to read \*.md files as JavaScript files to make it display coverage information for them.
-> Total coverage will be slightly different in SonarQube because each feature file has additional lines for comment wraps.
 
 ## Cypress integration
 
@@ -441,7 +440,10 @@ Feature.structure(
   ["Category", "Requirement"]
 );
 
-Feature.setTraceToRequirementMatcher((name, struct) => {
+Feature.setTraceToRequirementMatcher(({
+  name,
+  structure
+}) => {
   if (name instanceof Array) {
     return name;
   }
@@ -456,7 +458,7 @@ Feature.setTraceToRequirementMatcher((name, struct) => {
    *  requirement - requirement text
    *  path - an array or strings that identifies requirement in a structure
    */
-  const reqs = readStructureRequirements(struct);
+  const reqs = readStructureRequirements(structure);
   const [, path] = reqs.find(([key]) => key.startsWith(name));
 
   return path || name;

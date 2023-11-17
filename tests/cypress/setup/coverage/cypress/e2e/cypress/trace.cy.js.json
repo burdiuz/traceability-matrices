@@ -204,6 +204,36 @@
       {
         "requirement": [
           "Medium",
+          "Sub-category",
+          "Sub Requirement 1"
+        ],
+        "category": [],
+        "title": "should use matcher",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "When matcher is set",
+          "should use matcher"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
+          "Sub-category",
+          "Sub Requirement 3"
+        ],
+        "category": [],
+        "title": "should use matcher",
+        "filePath": "cypress/e2e/cypress/trace.cy.js",
+        "titlePath": [
+          "Trace",
+          "When matcher is set",
+          "should use matcher"
+        ]
+      },
+      {
+        "requirement": [
+          "Medium",
           "Medium Requirement 1"
         ],
         "category": [],

@@ -90,12 +90,12 @@ describe("Trace", () => {
 
   describe("When matcher is set", () => {
     beforeEach(() => {
-      Feature.setTraceToRequirementMatcher((name, struct) => {
+      Feature.setTraceToRequirementMatcher(({ name, structure }) => {
         if (name instanceof Array) {
           return name;
         }
 
-        const reqs = readStructureRequirements(struct);
+        const reqs = readStructureRequirements(structure);
         const rgx = new RegExp(`^Sub\\s.*${name}`);
         const [, path] = reqs.find(([key]) => rgx.test(key));
 
