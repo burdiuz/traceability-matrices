@@ -1,4 +1,4 @@
-import { join, relative } from "node:path";
+import { join } from "node:path";
 import { existsSync, mkdirSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 import { type Coverage, type Feature, readCoverage } from "../reader/index";
@@ -7,6 +7,23 @@ import { type VerticalInfo, buildVerticalHeaders } from "../view/feature";
 const stripTags = (text: string) =>
   text.replace(/[,\r\n\s]+/gi, " ").replace(/<\/?a-z[^>]+>/gi, "");
 
+/*
+TN:<test name> usually empty
+SF:<absolute path to the source file>
+FN:<line number of function start>,<function name>
+FNDA:<execution count>,<function name>
+FNF:<number of functions found>
+FNH:<number of function hit>
+BRDA:<line number>,<block number>,<branch number>,<taken>
+BRF:<number of branches found>
+BRH:<number of branches hit>
+DA:<line number>,<execution count>
+LH:<number of lines with a non-zero execution count>
+LF:<number of instrumented lines>
+end_of_record
+
+ Reference https://xujihui1985.github.io/test/2015/10/06/lcovinfo
+ */
 const generateFeatureLcovContent = (
   feature: Feature,
   relativeDir: string,
@@ -41,7 +58,7 @@ const generateFeatureLcovContent = (
   let brh = info.requirementsCovered ? 1 : 0;
 
   // lines -- only requirements
-  const da = []; // [`DA:${info.requirementsCovered},${lineNumber}`]; -- cover feature title
+  const da = []; // [`DA:${lineNumber},${info.requirementsCovered}`]; -- cover feature title
   let lh = info.requirementsCovered ? 1 : 0;
 
   info.rows.forEach((row) => {
@@ -68,7 +85,7 @@ const generateFeatureLcovContent = (
       brh += cell.requirementsCovered ? 1 : 0;
 
       // line
-      da.push(`DA:${cell.requirementsCovered},${lineNumber}`);
+      da.push(`DA:${lineNumber},${cell.requirementsCovered}`);
       lh += cell.requirementsCovered ? 1 : 0;
     });
   });

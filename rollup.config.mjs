@@ -57,6 +57,8 @@ export default [
       serve: "./src/commands/serve.ts",
       stats: "./src/commands/stats.ts",
       threshold: "./src/commands/threshold.ts",
+      scan_features: "./src/commands/scan_features.ts",
+      help: "./src/commands/help.ts",
     },
     output: { dir: "./commands", format: "cjs" },
     plugins: [

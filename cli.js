@@ -35,32 +35,37 @@ const parseArgs = () => {
 
 const { command, args } = parseArgs();
 
-let targetDirs = args["target-dir"] || [];
-// validate target first, must be at least one, all must be dirs
+const getFullDirPaths = (dirs) =>
+  dirs.map((target) => {
+    const fullPath = path.resolve(process.cwd(), String(target));
+
+    if (!fullPath) {
+      exitWithError(`Path "${target}" could not be resolved.`);
+    }
+
+    if (!fs.existsSync(fullPath)) {
+      exitWithError(`Directory "${fullPath}" does not exist.`);
+    }
+
+    return fullPath;
+  });
+
+// validate targets, must be at least one, all must be dirs
+const validateTargetDirs = () => {
+  if (!targetDirs.length) {
+    exitWithError(
+      "No target directories were provided, please use --target-dir argument to specify at least one target directory."
+    );
+  }
+};
+
 const exitWithError = (message) => {
   console.error(message);
   process.exit(1);
 };
 
-if (!targetDirs.length) {
-  exitWithError(
-    "No target directories were provided, please use --target-dir argument to specify at least one target directory."
-  );
-}
-
-targetDirs = targetDirs.map((target) => {
-  const fullPath = path.resolve(process.cwd(), String(target));
-
-  if (!fullPath) {
-    exitWithError(`Path "${target}" could not be resolved.`);
-  }
-
-  if (!fs.existsSync(fullPath)) {
-    exitWithError(`Target directory "${fullPath}" does not exist.`);
-  }
-
-  return fullPath;
-});
+let targetDirs = args["target-dir"] || [];
+targetDirs = getFullDirPaths(targetDirs);
 
 // TM char codes 84 and 77
 const DEFAULT_PORT = 8477;
@@ -77,6 +82,7 @@ switch (command) {
       /**
        * serve --target-dir= --port= --key= --cert= --compact=true
        */
+      validateTargetDirs();
       const port = args.port ? parseInt(String(args.port), 10) : DEFAULT_PORT;
       let keyFilePath = (args.key || [])[0];
       let certFilePath = (args.cert || [])[0];
@@ -140,6 +146,7 @@ switch (command) {
       /**
        * generate --target-dir= --output-dir= --compact=true --force-cleanup=true
        */
+      validateTargetDirs();
       const outputDir = path.resolve(process.cwd(), String(args["output-dir"]));
 
       if (fs.existsSync(outputDir)) {
@@ -164,6 +171,7 @@ switch (command) {
       /**
        * lcov --target-dir= --output-dir= --relative-dir= --force-cleanup=true
        */
+      validateTargetDirs();
       const outputDir = path.resolve(process.cwd(), String(args["output-dir"]));
 
       if (fs.existsSync(outputDir)) {
@@ -189,7 +197,10 @@ switch (command) {
     break;
   case "threshold":
     {
-      // threshold --target-dir= --total=80 --per-feature=40
+      /**
+       * threshold --target-dir= --total=80 --per-feature=40
+       */
+      validateTargetDirs();
       const total =
         args["total"] === undefined ? 100 : parseInt(args["total"], 10);
       const perFeature =
@@ -210,8 +221,10 @@ switch (command) {
     break;
   case "stats":
     {
-      // stats --target-dir= --feature=
-
+      /**
+       * stats --target-dir= --feature=
+       */
+      validateTargetDirs();
       const features = args["feature"] || [];
 
       const { stats } = require("./commands/stats.js");
@@ -219,7 +232,28 @@ switch (command) {
       stats(targetDirs, features);
     }
     break;
+  case "scan":
+    {
+      /**
+       * Scan features dirs for any feature descriptions and store in target dir where all coverage reports.
+       * scan --features-dir= --target-dir=
+       */
+      validateTargetDirs();
+      const featureDirs = getFullDirPaths(args["features-dir"] || []);
+
+      const { scanFeatures } = require("./commands/scan_features.js");
+
+      scanFeatures(featureDirs, targetDirs[0]);
+    }
+    break;
   case "help":
-    // TODO
+    /**
+     * help --command=
+     */
+    const command = args["command"]?.[0] || "";
+
+    const { help } = require("./commands/help.js");
+
+    help(command);
     break;
 }

@@ -17,6 +17,7 @@
     "threshold": "traceability-matrices threshold --target-dir=coverage --total=50 --per-feature=60",
     "stats": "traceability-matrices stats --target-dir=coverage",
     "start": "npm run serve",
+    "scan-features": "traceability-matrices scan --features-dir=./cypress/features --target-dir=coverage",
     "scan":"/Users/burdiuz/sonar-scanner-5.0.1.3006-macosx/bin/sonar-scanner -Dsonar.token=sqp_b663cb8ec0721f61cd5e7d2f58372d9ee96091af"
   },
   "author": "",
