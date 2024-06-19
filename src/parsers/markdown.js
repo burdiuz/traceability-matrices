@@ -3,7 +3,7 @@ import {
   createEmptyFeatureState,
   registerFeature,
   wrapFeatureState,
-} from "@actualwave/traceability-matrices/cypress";
+} from "./cypress";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkHtml from "remark-html";

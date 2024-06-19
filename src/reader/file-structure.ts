@@ -4,17 +4,21 @@ import { DirectoryInfo } from "./types";
 
 export type ReadResult = { root: DirectoryInfo; list: DirectoryInfo[] };
 
+const FEATURE_DIR = ".$features";
+
 const readDirectory = async (
   rootPath: string,
   dirPath: string,
   list: DirectoryInfo[] = []
 ) => {
+  const name = path.basename(dirPath);
   const contents = await fs.readdir(dirPath);
 
   const directory: DirectoryInfo = {
     path: dirPath,
     localPath: dirPath.substr(rootPath.length + 1),
-    name: path.basename(dirPath),
+    name,
+    hidden: name === FEATURE_DIR,
     hasFiles: false,
     hasFilesDeep: false,
     children: [],
@@ -22,7 +26,10 @@ const readDirectory = async (
   };
 
   for (let value of contents) {
-    if (value.charAt(0) === ".") continue;
+    if (value.charAt(0) === "." && value !== FEATURE_DIR) {
+      continue;
+    }
+
     const valuePath = path.resolve(dirPath, value);
     const stat = await fs.stat(valuePath);
 

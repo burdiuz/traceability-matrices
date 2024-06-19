@@ -52,6 +52,7 @@ export type DirectoryInfo = {
   // local path starts from coverage root
   localPath: string;
   name: string;
+  hidden: boolean;
   hasFiles: boolean;
   hasFilesDeep: boolean;
   children: DirectoryInfo[];

@@ -3,7 +3,7 @@ import {
   createEmptyFeatureState,
   registerFeature,
   wrapFeatureState,
-} from "@actualwave/traceability-matrices/cypress";
+} from "./cypress";
 import { parse } from "node-html-parser";
 
 const getNodeContent = (node) => {

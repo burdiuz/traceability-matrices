@@ -9,7 +9,7 @@ div.flex-vertical
   each result in self.roots
     div.dir-root #{result.root.name}
     each dir in result.list
-      if dir.files.length
+      if dir.files.length && !dir.hidden
         div.directory
           div.dir-path #{dir.localPath}
           each file in dir.files

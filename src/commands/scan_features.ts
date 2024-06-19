@@ -13,39 +13,33 @@ import { resolve, extname, relative, join } from "node:path";
 const FORMATS: Record<
   string,
   () => Promise<
-    (content: string) => Promise<object & { title: String; group: string }>
+    (
+      content: string
+    ) => Promise<
+      object & { title: String; group: string; }
+    >
   >
 > = {
   // TODO replace with package path @actualwave/traceability-matrices/****.js
   html: async () => {
-    const { parseHtmlFeature } = await import(
-      "@actualwave/traceability-matrices/html"
-    );
+    const { parseHtmlFeature } = await import("./parsers/html.js");
 
     return parseHtmlFeature;
   },
   json: async () => {
-    const { parseJsonFeature } = await import(
-      "@actualwave/traceability-matrices/json"
-    );
+    const { parseJsonFeature } = await import("./parsers/json.js");
     return parseJsonFeature;
   },
   markdown: async () => {
-    const { parseMarkdownFeature } = await import(
-      "@actualwave/traceability-matrices/markdown"
-    );
+    const { parseMarkdownFeature } = await import("./parsers/markdown.js");
     return parseMarkdownFeature;
   },
   xml: async () => {
-    const { parseXmlFeature } = await import(
-      "@actualwave/traceability-matrices/xml"
-    );
+    const { parseXmlFeature } = await import("./parsers/xml.js");
     return parseXmlFeature;
   },
   yaml: async () => {
-    const { parseYamlFeature } = await import(
-      "@actualwave/traceability-matrices/yaml"
-    );
+    const { parseYamlFeature } = await import("./parsers/yaml.js");
     return parseYamlFeature;
   },
 };
@@ -141,7 +135,7 @@ const parseFeature = async (
 
   const filePath = join(featureDir, `${fileName}.json`);
 
-  await writeFile(filePath, JSON.stringify(feature, null, 2));
+  await writeFile(filePath, JSON.stringify([feature], null, 2));
 
   console.log(
     `Feature recorded: ${

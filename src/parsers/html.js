@@ -3,7 +3,7 @@ import {
   createEmptyFeatureState,
   registerFeature,
   wrapFeatureState,
-} from "@actualwave/traceability-matrices/cypress";
+} from "./cypress";
 import { parse } from "node-html-parser";
 
 const getNodeContent = (node) => {
@@ -43,7 +43,7 @@ const buildStructureFromHtmlNodes = (node, parent = {}) => {
  * data-feature-description - Feature description, if attribute does not have value, element contents will be taken.
  * data-feature-category - Structure category.
  * data-feature-requirement - Structure requirement.
- * 
+ *
  * The structure of html file could be like this:
  * <div data-feature-title="Feature title" data-feature-group="Feature group">
  *   <p data-feature-description>Feature description</p>

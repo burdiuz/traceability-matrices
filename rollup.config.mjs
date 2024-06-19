@@ -8,6 +8,7 @@ const plugins = [resolve(), commonjs()];
 const external = [
   "@actualwave/traceability-matrices",
   "@actualwave/traceability-matrices/cypress",
+  "./cypress",
 ];
 
 export default [
@@ -21,35 +22,26 @@ export default [
     ],
   },
   {
-    input: "./src/parsers/markdown.js",
-    output: { file: "./markdown.js", format: "es" },
-    plugins,
-    external,
+    input: "./src/cypress/index.ts",
+    output: { dir: "./commands/parsers/cypress", format: "cjs" },
+    plugins: [typescript()],
   },
-  {
-    input: "./src/parsers/html.js",
-    output: { file: "./html.js", format: "es" },
-    plugins,
-    external,
-  },
-  {
-    input: "./src/parsers/xml.js",
-    output: { file: "./xml.js", format: "es" },
-    plugins,
-    external,
-  },
-  {
-    input: "./src/parsers/json.js",
-    output: { file: "./json.js", format: "es" },
-    plugins,
-    external,
-  },
-  {
-    input: "./src/parsers/yaml.js",
-    output: { file: "./yaml.js", format: "es" },
-    plugins,
-    external,
-  },
+  ...["html", "json", "markdown", "xml", "yaml"]
+    .map((parser) => [
+      {
+        input: `./src/parsers/${parser}.js`,
+        output: { file: `./${parser}.js`, format: "es" },
+        plugins,
+        external,
+      },
+      {
+        input: `./src/parsers/${parser}.js`,
+        output: { file: `./commands/parsers/${parser}.js`, format: "cjs" },
+        plugins,
+        external,
+      },
+    ])
+    .flat(),
   {
     input: {
       "generate-static": "./src/commands/generate-static.ts",
@@ -75,6 +67,15 @@ export default [
         ],
       }),
     ],
-    external: ["pug", "koa", "@koa/router"],
+    external: [
+      "pug",
+      "koa",
+      "@koa/router",
+      "./parsers/html.js",
+      "./parsers/json.js",
+      "./parsers/markdown.js",
+      "./parsers/xml.js",
+      "./parsers/yaml.js",
+    ],
   },
 ];

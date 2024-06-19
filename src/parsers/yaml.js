@@ -3,7 +3,7 @@ import {
   createEmptyFeatureState,
   registerFeature,
   wrapFeatureState,
-} from "@actualwave/traceability-matrices/cypress";
+} from "./cypress";
 import { load } from "js-yaml";
 
 const renderStructure = (parentNode, structure = {}) => {

@@ -3,7 +3,7 @@ import {
   createEmptyFeatureState,
   registerFeature,
   wrapFeatureState,
-} from "@actualwave/traceability-matrices/cypress";
+} from "./cypress";
 
 // somehow "node instanceof Array" may give FALSE for parsed arrays
 const isArray = (item) =>

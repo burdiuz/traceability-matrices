@@ -74,9 +74,30 @@ export const createEmptyFeatureState = ({
   },
 });
 
+export type FeatureApi = {
+  valueOf: () => Feature;
+  structure: ReturnType<typeof createStructureApi>;
+  headers: ReturnType<typeof createHeadersApi>;
+  category: ReturnType<typeof createCategoryApi>;
+  requirement: ReturnType<typeof createRequirementApi>;
+  trace: ReturnType<typeof createTraceFn>;
+  setTraceToRequirementMatcher: (matcher: MatcherFn) => void;
+  clone: (params: CreateFeatureParams) => FeatureApi;
+  branch: (
+    params: CreateFeatureParams & {
+      path: string[];
+    }
+  ) => FeatureApi;
+  narrow: (
+    params: CreateFeatureParams & {
+      path: string[];
+    }
+  ) => FeatureApi;
+};
+
 const createCloneApi = ({ feature }: { feature: Feature }) => {
   return {
-    clone: (params: CreateFeatureParams) => {
+    clone: (params: CreateFeatureParams): FeatureApi => {
       const subFeature = createFeature(params);
       const structure = cloneStructure(feature.structure);
 
@@ -84,7 +105,7 @@ const createCloneApi = ({ feature }: { feature: Feature }) => {
 
       return subFeature;
     },
-    branch: (params: CreateFeatureParams & { path: string[] }) => {
+    branch: (params: CreateFeatureParams & { path: string[] }): FeatureApi => {
       const { path, ...featureParams } = params;
       const subFeature = createFeature(featureParams);
       const branch = getBranchOf(feature.structure, path);
@@ -93,7 +114,7 @@ const createCloneApi = ({ feature }: { feature: Feature }) => {
 
       return subFeature;
     },
-    narrow: (params: CreateFeatureParams & { path: string[] }) => {
+    narrow: (params: CreateFeatureParams & { path: string[] }): FeatureApi => {
       const { path, ...featureParams } = params;
       const subFeature = createFeature(featureParams);
       const struct = getNarrowStructure(feature.structure, path);
@@ -105,7 +126,7 @@ const createCloneApi = ({ feature }: { feature: Feature }) => {
   };
 };
 
-export const wrapFeatureState = (feature: Feature) => {
+export const wrapFeatureState = (feature: Feature): FeatureApi => {
   const scope: Scope = {
     feature,
     categoryPath: [],
@@ -140,12 +161,10 @@ export const wrapFeatureState = (feature: Feature) => {
   };
 };
 
-export type FeatureApi = ReturnType<typeof wrapFeatureState>;
-
 export const registerFeature = (feature: Feature | FeatureApi) =>
   features.push(feature.valueOf());
 
-export const createFeature = (params: CreateFeatureParams) => {
+export const createFeature = (params: CreateFeatureParams): FeatureApi => {
   const feature = createEmptyFeatureState(params);
 
   registerFeature(feature);
