@@ -135,6 +135,7 @@ const parseFeature = async (
 
   const filePath = join(featureDir, `${fileName}.json`);
 
+  // TODO verify if it doesn't save current feature with all previous because of global features object
   await writeFile(filePath, JSON.stringify([feature], null, 2));
 
   console.log(

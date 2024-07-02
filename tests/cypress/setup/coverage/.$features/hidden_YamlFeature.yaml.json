@@ -1,0 +1,19 @@
+[
+  {
+    "title": "Yaml Feature",
+    "group": "Hidden",
+    "description": "This YAML feature wasn't added to any test and can be discovered using scan command.",
+    "structure": {
+      "Required Requirement 1": {},
+      "Required Requirement 3": {},
+      "Required Requirement 4": {},
+      "Optional": {
+        "Optional Requirement 1": {},
+        "Optional Requirement 2": {},
+        "Optional Requirement 3": {}
+      }
+    },
+    "headers": [],
+    "records": []
+  }
+]

@@ -86,10 +86,10 @@ This package supports multiple commands to work with generated coverage reports 
 Run HTTP/S server with coverage reports and open in default browser.  
 Parameters:
 
-- `--target-dir` - required, path to directory with coverage reports
-- `--port` - port for HTTP/S server, 8477 by default
-- `--key` and `--cert` - should point at private key and signed certificate files to start HTTPS server, by default starts HTTP server
-- `--compact` - optional, uses [compact variant of HTML table](https://burdiuz.github.io/traceability-matrices/generated_coverage_compact/features/Records-_-Category.html), categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
+- `--target-dir` - Required, path to directory with coverage reports
+- `--port` - Port for HTTP/S server, 8477 by default
+- `--key` and `--cert` - Should point at private key and signed certificate files to start HTTPS server, by default starts HTTP server
+- `--compact` - Optional, uses [compact variant of HTML table](https://burdiuz.github.io/traceability-matrices/generated_coverage_compact/features/Records-_-Category.html), categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
 
 Example:
 
@@ -110,10 +110,10 @@ traceability-matrices serve --target-dir=coverage --output-dir=statics --compact
 Generate static HTML files with coverage reports.  
 Parameters:
 
-- `--target-dir` - required, path to directory with coverage reports.
-- `--output-dir` - required, path to folder where generated HTML files should be stored
-- `--compact=true` - optional, uses [compact variant of HTML table](https://burdiuz.github.io/traceability-matrices/generated_coverage_compact/features/Records-_-Category.html), categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
-- `--force-cleanup=true` - will remove all contents of output folder before generating new content.
+- `--target-dir` - Required, path to directory with coverage reports.
+- `--output-dir` - Required, path to folder where generated HTML files should be stored
+- `--compact=true` - Optional, uses [compact variant of HTML table](https://burdiuz.github.io/traceability-matrices/generated_coverage_compact/features/Records-_-Category.html), categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
+- `--force-cleanup=true` - Will remove all contents of output folder before generating new content.
 
 Example:
 
@@ -126,9 +126,9 @@ traceability-matrices generate --target-dir=cypress/coverage --output-dir=covera
 Fails(exits with an error code) if coverage thresholds weren't met.  
 Parameters:
 
-- `--target-dir` - required, path to directory with coverage reports.
-- `--total` - optional, defines global coverage threshold, value can be between 0 and 100. Fails command if combined coverage of all features does not meet threshold.
-- `--per-feature` - optional, defines coverage threshold applied to each feature, value can be between 0 and 100. Fails command if at least one feature does not meet threshold.
+- `--target-dir` - Required, path to directory with coverage reports.
+- `--total` - Optional, defines global coverage threshold, value can be between 0 and 100. Fails command if combined coverage of all features does not meet threshold.
+- `--per-feature` - Optional, defines coverage threshold applied to each feature, value can be between 0 and 100. Fails command if at least one feature does not meet threshold.
 
 Example:
 
@@ -144,7 +144,7 @@ Outputs coverage information per feature with requirements.
 
 Parameters:
 
-- `--target-dir` - required, path to directory with coverage reports.
+- `--target-dir` - Required, path to directory with coverage reports.
 
 Example:
 
@@ -160,10 +160,10 @@ Generates a LCOV file with test coverage and file stricture with features inform
 
 Parameters:
 
-- `--target-dir`
+- `--target-dir` - Required, path to directory with coverage reports.
 - `--output-dir` - Folder where to store LCOV coverage information and generated "source" files which can be used as a reference coverage reading tools.
-- `--relative-dir` - used to prepend file paths in coverage reports. By default recorded path to genrated sources will be `lcov/*`.
-- `--force-cleanup=true` - will remove all contents of output folder before generating new content.
+- `--relative-dir` - Used to prepend file paths in coverage reports. By default recorded path to genrated sources will be `lcov/*`.
+- `--force-cleanup=true` - Will remove all contents of output folder before generating new content.
 
 Example:
 
@@ -181,6 +181,22 @@ Contents of the feature file, SonarQube shows uncovered requirements
 ![Stats command output](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/sonarqube_coverage_feature.png?raw=true)
 
 > This SonarQube configuration required to configure it to read \*.md files as JavaScript files to make it display coverage information for them.
+
+### traceability-matrices scan
+
+Searches provided directories for supported feature files and creates report in target dir. Created report is a hidden coverage report with no coverage, this way all found features will be added to report even if they weren't used in tests.
+
+Parameters:
+
+- `--features-dir` - Required, path to a directory with feature files, can be added multiple times if features stored in different folders. Sub-directories will also be scanned recursively.
+- `--target-dir` - Required, path to a directory with coverage reports.
+
+Example:
+
+```
+traceability-matrices scan --features-dir=./cypress/features --target-dir=coverage
+```
+
 
 ## Cypress integration
 
