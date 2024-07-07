@@ -8,5 +8,6 @@ tsconfig.json
 /src
 /tests
 /coverage
+/docs
 key.pem
 cert.pem
