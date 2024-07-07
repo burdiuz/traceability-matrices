@@ -10,17 +10,12 @@ import {
 } from "node:fs/promises";
 import { resolve, extname, relative, join } from "node:path";
 
+type FeatureObj = object & { title: String; group: string };
+
 const FORMATS: Record<
   string,
-  () => Promise<
-    (
-      content: string
-    ) => Promise<
-      object & { title: String; group: string; }
-    >
-  >
+  () => Promise<(content: string) => Promise<FeatureObj>>
 > = {
-  // TODO replace with package path @actualwave/traceability-matrices/****.js
   html: async () => {
     const { parseHtmlFeature } = await import("./parsers/html.js");
 
@@ -114,14 +109,20 @@ const parseFeature = async (
     return;
   }
 
+  let content: string;
+  let feature: FeatureObj;
+
   try {
-    await access(path, constants.R_OK);
+    content = await readFile(path, { encoding: "utf-8" });
   } catch (err) {
     console.log(`Can't read file:\n  ${path}`);
   }
 
-  const content = await readFile(path, { encoding: "utf-8" });
-  const feature = await parser(content);
+  try {
+    feature = await parser(content);
+  } catch (err) {
+    console.log(`Can't parse file:\n  ${path}`);
+  }
 
   const featureDir = join(targetDir, ".$features");
 
@@ -135,14 +136,18 @@ const parseFeature = async (
 
   const filePath = join(featureDir, `${fileName}.json`);
 
-  // TODO verify if it doesn't save current feature with all previous because of global features object
-  await writeFile(filePath, JSON.stringify([feature], null, 2));
+  try {
+    // TODO verify if it doesn't save current feature with all previous because of global features object
+    await writeFile(filePath, JSON.stringify([feature], null, 2));
 
-  console.log(
-    `Feature recorded: ${
-      feature.group ? `${feature.group}/${feature.title}` : feature.title
-    }`
-  );
+    console.log(
+      `Feature recorded: ${
+        feature.group ? `${feature.group}/${feature.title}` : feature.title
+      }`
+    );
+  } catch (err) {
+    console.log(`Can't write file:\n  ${filePath}`);
+  }
 };
 
 // A stub for Cypress after() hook which is used in src/cypress to save coverage recordings
