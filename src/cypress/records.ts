@@ -1,4 +1,5 @@
 /// <reference path="./Cypress.d.ts" />
+import { FeatureApi } from "./feature";
 import { Feature, MatcherFn, Scope } from "./types";
 import { concatPath, getStructureBranch } from "./utils";
 
@@ -195,8 +196,20 @@ export const createRequirementApi =
     };
   };
 
+export interface CategoryLenseFn {
+  (pathFn: CategoryPathFn): FeatureCategory;
+  (...path: string[]): FeatureCategory;
+}
+
+export type FeatureCategory = {
+  category: CategoryLenseFn;
+  requirement: ReturnType<typeof createRequirementApi>;
+  trace: ReturnType<typeof createTraceFn>;
+  setTraceToRequirementMatcher: (matcher: MatcherFn) => void;
+};
+
 export const createCategoryApi =
-  (parentScope: Scope) =>
+  (parentScope: Scope): CategoryLenseFn =>
   (nameOrFn: string | CategoryPathFn, ...path: string[]) => {
     let categoryPath: string[];
     const { feature, categoryPath: parentPath = [] } = parentScope;
