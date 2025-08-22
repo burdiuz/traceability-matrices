@@ -1,4 +1,4 @@
-import https from "node:https";
+import * as https from "node:https";
 import Koa from "koa";
 import Router from "@koa/router";
 import { readFile } from "fs/promises";

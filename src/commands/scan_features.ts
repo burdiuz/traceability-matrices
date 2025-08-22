@@ -150,6 +150,8 @@ const parseFeature = async (
   }
 };
 
+declare const global: { after: () => void };
+
 // A stub for Cypress after() hook which is used in src/cypress to save coverage recordings
 // it is being called on initialisation
 global.after = () => {};

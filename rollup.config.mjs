@@ -24,7 +24,9 @@ export default [
   {
     input: "./src/cypress/index.ts",
     output: { dir: "./commands/parsers/cypress", format: "cjs" },
-    plugins: [typescript()],
+    plugins: [typescript({
+      allowSyntheticDefaultImports: true,
+    })],
   },
   ...["html", "json", "markdown", "xml", "yaml"]
     .map((parser) => [
