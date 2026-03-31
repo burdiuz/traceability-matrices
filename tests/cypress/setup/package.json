@@ -14,6 +14,8 @@
     "generate:compact": "traceability-matrices generate --target-dir=coverage --compact=true --output-dir=generated_coverage_compact",
     "generate": "npm run generate:default",
     "lcov": "traceability-matrices lcov --target-dir=coverage --output-dir=generated_coverage_lcov --relative-dir=generated_coverage_lcov",
+    "lcov:md": "traceability-matrices lcov --target-dir=coverage --output-dir=generated_coverage_lcov --relative-dir=generated_coverage_lcov --format=md",
+    "lcov:js": "traceability-matrices lcov --target-dir=coverage --output-dir=generated_coverage_lcov --relative-dir=generated_coverage_lcov --format:js",
     "threshold": "traceability-matrices threshold --target-dir=coverage --total=50 --per-feature=60",
     "stats": "traceability-matrices stats --target-dir=coverage",
     "start": "npm run serve",

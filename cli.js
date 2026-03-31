@@ -169,7 +169,7 @@ switch (command) {
   case "lcov":
     {
       /**
-       * lcov --target-dir= --output-dir= --relative-dir= --force-cleanup=true
+       * lcov --target-dir= --output-dir= --relative-dir= --force-cleanup=true --format=md/js
        */
       validateTargetDirs();
       const outputDir = path.resolve(process.cwd(), String(args["output-dir"]));
@@ -186,13 +186,14 @@ switch (command) {
         fs.mkdirSync(outputDir);
       }
 
+      const format = args["format"]?.toLowerCase() || "js";
       const relativeDir = args["relative-dir"]
         ? String(args["relative-dir"])
         : undefined;
 
       const { lcov } = require("./commands/lcov.js");
 
-      lcov(targetDirs, outputDir, relativeDir);
+      lcov(targetDirs, outputDir, relativeDir, format);
     }
     break;
   case "threshold":

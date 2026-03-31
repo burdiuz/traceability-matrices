@@ -7,6 +7,41 @@ import { type VerticalInfo, buildVerticalHeaders } from "../view/feature";
 const stripTags = (text: string) =>
   text.replace(/[,\r\n\s]+/gi, " ").replace(/<\/?a-z[^>]+>/gi, "");
 
+const generateFileName = (feature: Feature, format?: string) => {
+  const fileName = `${feature.group}_${feature.title}`.replace(
+    /([^0-9a-z_().,\- ]+|[\\\/,\r\n\t\v]+)/gi,
+    "_"
+  );
+
+  switch (format) {
+    case "md":
+      return `${fileName}.md`;
+    case "js":
+    default:
+      return `${fileName}.js`;
+  }
+};
+
+const generateOpening = (format?: string) => {
+  switch (format) {
+    case "md":
+      return "/*";
+    case "js":
+    default:
+      return "export default {/*";
+  }
+};
+
+const generateEnding = (format?: string) => {
+  switch (format) {
+    case "md":
+      return "*/";
+    case "js":
+    default:
+      return "*/};";
+  }
+};
+
 /*
 TN:<test name> usually empty
 SF:<absolute path to the source file>
@@ -27,14 +62,12 @@ end_of_record
 const generateFeatureLcovContent = (
   feature: Feature,
   relativeDir: string,
+  format?: string,
   info: VerticalInfo = buildVerticalHeaders(feature)
 ) => {
   let lineNumber = 2;
   let blockNumber = 1;
-  const fileName = `${feature.group}_${feature.title}.md`.replace(
-    /([^0-9a-z_().,\- ]+|[\\\/,\r\n\t\v]+)/gi,
-    "_"
-  );
+  const fileName = generateFileName(feature, format);
 
   // test name
   const tn = (
@@ -42,7 +75,7 @@ const generateFeatureLcovContent = (
   ).replace(/[\r\n\s]+/gi, " ");
   // file name
   const sf = join(relativeDir, "lcov", fileName);
-  const content = ["/*", `# ${tn}`];
+  const content = [generateOpening(format), `# ${tn}`];
 
   // functions -- high level categories
   const fn = []; // [`FN:${lineNumber},${tn}`]; -- add feature title to coverage as function
@@ -109,7 +142,7 @@ end_of_record
 `,
     path: sf,
     fileName,
-    content: [...content, "", "*/", ""].join("\n"),
+    content: [...content, "", generateEnding(format), ""].join("\n"),
   };
 };
 
@@ -118,14 +151,15 @@ end_of_record
  */
 export const readCoverageStats = (
   { features }: Coverage,
-  relativeDir: string
+  relativeDir: string,
+  format?: string
 ) => {
   const list = Object.values(features);
   let lcov = "";
   const files: Record<string, string> = {};
 
   list.forEach((feature) => {
-    const data = generateFeatureLcovContent(feature, relativeDir);
+    const data = generateFeatureLcovContent(feature, relativeDir, format);
     lcov += `${data.lcov}\n`;
     files[data.fileName] = data.content;
   });
@@ -136,13 +170,15 @@ export const readCoverageStats = (
 export const lcov = async (
   targetDirs: string[],
   outputDir: string,
-  relativeDir?: string
+  relativeDir?: string,
+  format?: string
 ) => {
   const state = await readCoverage(targetDirs);
 
   const { lcov, files } = readCoverageStats(
     state,
-    relativeDir === undefined ? outputDir : relativeDir
+    relativeDir === undefined ? outputDir : relativeDir,
+    format
   );
 
   // write lcov info
