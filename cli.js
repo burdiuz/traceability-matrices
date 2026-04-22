@@ -70,6 +70,7 @@ targetDirs = getFullDirPaths(targetDirs);
 // TM char codes 84 and 77
 const DEFAULT_PORT = 8477;
 
+const theme = String(args.theme || 'light').trim();
 let feaureTableType = "default";
 
 if (String(args.compact) === "true") {
@@ -80,7 +81,7 @@ switch (command) {
   case "serve":
     {
       /**
-       * serve --target-dir= --port= --key= --cert= --compact=true
+       * serve --target-dir= --port= --key= --cert= --compact=true --theme=light|dark|hc-light|hc-dark
        */
       validateTargetDirs();
       const port = args.port ? parseInt(String(args.port), 10) : DEFAULT_PORT;
@@ -128,7 +129,7 @@ switch (command) {
 
       const { serve } = require("./commands/serve.js");
 
-      serve(targetDirs, port, keyFilePath, certFilePath, feaureTableType).then(
+      serve(targetDirs, port, keyFilePath, certFilePath, feaureTableType, theme).then(
         () => {
           import("open").then(({ default: open }) =>
             open(
@@ -144,7 +145,7 @@ switch (command) {
   case "generate":
     {
       /**
-       * generate --target-dir= --output-dir= --compact=true --force-cleanup=true
+       * generate --target-dir= --output-dir= --compact=true --force-cleanup=true --theme=light|dark|hc-light|hc-dark
        */
       validateTargetDirs();
       const outputDir = path.resolve(process.cwd(), String(args["output-dir"]));
@@ -163,7 +164,7 @@ switch (command) {
 
       const { generateStatic } = require("./commands/generate-static.js");
 
-      generateStatic(targetDirs, outputDir, feaureTableType);
+      generateStatic(targetDirs, outputDir, feaureTableType, theme);
     }
     break;
   case "lcov":

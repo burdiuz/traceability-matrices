@@ -3,11 +3,12 @@ import { compile } from "pug";
 export const listPageTemplate = compile(
   `
 doctype
-html
+html(data-theme=self.theme)
   head
     meta(charset='UTF-8')
     title #{self.pageTitle}
     style
+      include /css/themes.css
       include /css/page.css
       include /css/files.css
       include /css/features.css
@@ -45,11 +46,12 @@ html
 export const featurePageTemplate = compile(
   `
 doctype
-html
+html(data-theme=self.theme)
   head
     meta(charset='UTF-8')
     title #{self.pageTitle}
     style
+      include /css/themes.css
       include /css/page.css
       include /css/feature.css
     script

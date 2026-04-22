@@ -23,19 +23,19 @@ const getLinks = (pathBack: string): PageLinks => ({
     join(
       pathBack,
       "files",
-      `${basename(path.replace(PATH_REPLACEMENTS, "_"), ".json")}.html`
+      `${basename(path.replace(PATH_REPLACEMENTS, "_"), ".json")}.html`,
     ),
   getFeatureLink: (id: string) =>
     join(pathBack, "features", `${id}.html`.replace(PATH_REPLACEMENTS, "_")),
 });
 
 const createStaticHtmlWriter =
-  (outputDir: string, state: Coverage, totals: Totals) =>
+  (outputDir: string, theme: string, state: Coverage, totals: Totals) =>
   (
     savePath: string,
     backPath: string,
     pageTitle: string,
-    renderer: (state: Coverage, links: PageLinks) => string
+    renderer: (state: Coverage, links: PageLinks) => string,
   ) => {
     const links = getLinks(backPath);
 
@@ -43,21 +43,23 @@ const createStaticHtmlWriter =
       join(outputDir, savePath),
       listPageTemplate({
         pageTitle,
+        theme,
         links,
         totals,
         content: renderer(state, links),
       }),
-      { encoding: "utf-8" }
+      { encoding: "utf-8" },
     );
   };
 
 const writerFeatureHtml = (
   savePath: string,
   pageTitle: string,
+  theme: string,
   feature: Feature,
   state: Coverage,
   links: PageLinks,
-  featureTableType: "default" | "compact"
+  featureTableType: "default" | "compact",
 ) => {
   const totals = calculateFeatureStats(feature);
 
@@ -65,22 +67,24 @@ const writerFeatureHtml = (
     savePath,
     featurePageTemplate({
       pageTitle,
+      theme,
       links,
       totals,
       content: renderFeature(feature, state, links, featureTableType),
     }),
-    { encoding: "utf-8" }
+    { encoding: "utf-8" },
   );
 };
 
 export const generateStatic = async (
   targetDirs: string[],
   outputDir: string,
-  featureTableType: "default" | "compact"
+  featureTableType: "default" | "compact",
+  theme = "light",
 ) => {
   const state = await readCoverage(targetDirs);
   const totals = calculateTotals(state);
-  const writeHtml = createStaticHtmlWriter(outputDir, state, totals);
+  const writeHtml = createStaticHtmlWriter(outputDir, theme, state, totals);
 
   // files
   const filesDir = join(outputDir, "files");
@@ -95,9 +99,9 @@ export const generateStatic = async (
         getLinks(".").getFileLink(filePath),
         "..",
         filePath,
-        (state, links) => renderFile(file, state, links, featureTableType)
-      )
-    )
+        (state, links) => renderFile(file, state, links, featureTableType),
+      ),
+    ),
   );
 
   await writeHtml("files.html", ".", "Files", renderFiles);
@@ -114,12 +118,13 @@ export const generateStatic = async (
       writerFeatureHtml(
         join(outputDir, getLinks(".").getFeatureLink(feature.id)),
         feature.group ? `${feature.group} / ${feature.title}` : feature.title,
+        theme,
         feature,
         state,
         getLinks(".."),
-        featureTableType
-      )
-    )
+        featureTableType,
+      ),
+    ),
   );
 
   await writeHtml("features.html", ".", "Features", renderFeatures);

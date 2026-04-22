@@ -1,6 +1,24 @@
+/* =============================================================================
+   FEATURES.CSS  —  feature list / index page
+   Requires themes.css to be loaded first.
+============================================================================= */
+
 div.feature-link {
-  background-color: #fff;
-  padding: 8px 16px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+div.feature-link:hover {
+  background-color: var(--bg-elevated);
+  border-color: var(--border-strong);
+}
+
+/* Covered feature: accent stripe on left using success colour */
+div.feature-link.covered {
+  border-left: 3px solid var(--success);
 }
 
 div.feature-link div.feature-info {
@@ -9,22 +27,28 @@ div.feature-link div.feature-info {
   gap: 16px;
 }
 
-div.feature-link.covered {
-  background-color: #fff;
-}
-
 div.feature-link .title {
-  font-size: 130%;
+  font-size: 125%;
   white-space: nowrap;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+[data-theme="hc-dark"] div.feature-link .title,
+[data-theme="hc-light"] div.feature-link .title {
+  font-weight: 700;
 }
 
 div.feature-link .totals {
-  font-size: 16px;
+  font-size: 12px;
   white-space: nowrap;
-}
-
-div.feature-link .totals {
-  margin-top: 2px;
+  margin-top: 3px;
+  color: var(--text-secondary);
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  padding: 2px 10px;
 }
 
 div.feature-link .category-listing-root {
@@ -38,6 +62,9 @@ div.feature-link .category-listing-root.visible {
 
 div.feature-link .category-listing-root a {
   white-space: nowrap;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
 div.feature-link ul {
@@ -52,34 +79,49 @@ div.feature-link button.toggle-feature-categories,
 div.feature-link button.toggle-feature-files {
   appearance: none;
   background: none;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
   margin: 0 -8px;
   align-self: center;
+  opacity: 0.5;
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  transition: opacity 0.15s, border-color 0.15s;
+}
+
+div.feature-link button.toggle-feature-categories:hover,
+div.feature-link button.toggle-feature-files:hover {
+  opacity: 1;
+  border-color: var(--accent);
 }
 
 div.feature-link button.toggle-feature-categories svg {
   width: 16px;
   vertical-align: bottom;
+  fill: var(--text-primary);
 }
 
 div.feature-link button.toggle-feature-categories.disabled {
   cursor: auto;
-  opacity: 0.2;
+  opacity: 0.15;
 }
 
 div.feature-link button.toggle-feature-files svg {
   width: 14px;
   vertical-align: bottom;
+  fill: var(--text-primary);
 }
 
 .feature-files-list {
   display: none;
-  margin: 0;
+  margin: 8px 0 0 0;
 }
 
 .feature-files-list a {
   white-space: nowrap;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
 .feature-files-list.visible {
@@ -87,13 +129,19 @@ div.feature-link button.toggle-feature-files svg {
 }
 
 .feature-files-list li a {
-  text-decoration: none;
+  text-decoration: var(--link-decoration);
 }
 
 .feature-files-list li a:hover {
-  text-decoration: underline;
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
 }
 
 .feature-files-list li span {
   white-space: nowrap;
+  color: var(--text-muted);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  margin-left: 4px;
 }

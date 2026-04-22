@@ -1,36 +1,103 @@
+/* =============================================================================
+   PAGE.CSS  —  base layout & global element styles
+   Requires themes.css to be loaded first.
+============================================================================= */
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'IBM Plex Sans', Arial, Helvetica, sans-serif;
   font-size: 12px;
-  background-color: #ccc;
+  background-color: var(--bg-base);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  transition: background-color 0.2s, color 0.2s;
 }
 
+/* -----------------------------------------------------------------------------
+   Navigation bar
+----------------------------------------------------------------------------- */
 .nav-bar {
   display: flex;
   gap: 16px;
-  border-bottom: 1px solid #eee;
-  padding: 8px;
-  background-color: #fff;
-  box-shadow: 0 0 5px 0 #00000033;
+  align-items: center;
+  border-bottom: var(--nav-border-size) solid var(--border-strong);
+  padding: 10px 16px;
+  background-color: var(--nav-bg);
+  backdrop-filter: var(--nav-backdrop);
+  box-shadow: var(--shadow-nav);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-bar a {
+  color: var(--text-secondary);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  font-weight: 500;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-bar a:hover {
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
+}
+
+/* HC themes: nav links use accent colour + underline like all other links */
+[data-theme="hc-dark"] .nav-bar a,
+[data-theme="hc-light"] .nav-bar a {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .nav-bar strong:not(:last-child) {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--border-strong);
   margin-right: 8px;
   padding-right: 8px;
+  color: var(--text-secondary);
 }
 
+.nav-bar strong {
+  color: var(--accent);
+}
+
+.nav-bar span {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+/* -----------------------------------------------------------------------------
+   Layout utilities
+----------------------------------------------------------------------------- */
 .flex-vertical {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 1px;
-  margin: 16px;
+  gap: 2px;
+  margin: 20px;
 }
 
+/* -----------------------------------------------------------------------------
+   Global link styles
+----------------------------------------------------------------------------- */
 a,
 a:visited,
 a:active {
-  color: #000;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  transition: color 0.15s, background 0.15s;
+}
+
+a:hover {
+  color: var(--link-hover-color);
+  background-color: var(--link-hover-bg);
+  text-decoration: none;
 }

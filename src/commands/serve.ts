@@ -15,8 +15,7 @@ const links = {
   getFilesLink: () => "/files",
   getFeaturesLink: () => "/features",
   getFileLink: (id: string) => `/file?id=${id}`,
-  getFeatureLink: (id: string) =>
-    `/feature?id=${encodeURIComponent(id)}`,
+  getFeatureLink: (id: string) => `/feature?id=${encodeURIComponent(id)}`,
   getRefreshLink: () => "/refresh",
 };
 
@@ -25,7 +24,8 @@ export const serve = async (
   port: number,
   keyFilePath = "",
   certFilePath = "",
-  featureTableType: "default" | "compact" = "default"
+  featureTableType: "default" | "compact" = "default",
+  theme = "light",
 ) => {
   const useHttps = Boolean(keyFilePath && certFilePath);
   let state = await readCoverage(targetDirs);
@@ -43,6 +43,7 @@ export const serve = async (
 
     ctx.response.body = listPageTemplate({
       pageTitle: "Files",
+      theme,
       links,
       totals,
       content,
@@ -53,7 +54,7 @@ export const serve = async (
   router.get("/file", (ctx, next) => {
     const [, searchParamsStr] = ctx.request.url.match(/^[^?]+\?(.+)$/) || [];
     const searchParams = new URLSearchParams(searchParamsStr);
-    const filePath = searchParams.get("id");
+    const filePath = searchParams.get("id") || "";
     const { [filePath]: file } = state.files;
 
     if (!file) {
@@ -65,6 +66,7 @@ export const serve = async (
 
     ctx.response.body = listPageTemplate({
       pageTitle: filePath,
+      theme,
       links,
       totals,
       content,
@@ -76,6 +78,7 @@ export const serve = async (
 
     ctx.response.body = listPageTemplate({
       pageTitle: "Features",
+      theme,
       links,
       totals,
       content,
@@ -86,7 +89,7 @@ export const serve = async (
   router.get("/feature", (ctx, next) => {
     const [, searchParamsStr] = ctx.request.url.match(/^[^?]+\?(.+)$/) || [];
     const searchParams = new URLSearchParams(searchParamsStr);
-    const featureId = searchParams.get("id");
+    const featureId = searchParams.get("id") || "";
     const { [featureId]: feature } = state.features;
 
     if (!feature) {
@@ -98,6 +101,7 @@ export const serve = async (
 
     ctx.response.body = featurePageTemplate({
       pageTitle: featureId,
+      theme,
       links,
       totals: calculateFeatureStats(feature),
       content,
@@ -128,7 +132,7 @@ export const serve = async (
           key: await readFile(keyFilePath),
           cert: await readFile(certFilePath),
         },
-        app.callback()
+        app.callback(),
       )
       .listen(port);
   } else {

@@ -1,15 +1,35 @@
+/* =============================================================================
+   FEATURE.CSS  —  feature detail table & category sidebar
+   Requires themes.css to be loaded first.
+============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   Category sidebar
+----------------------------------------------------------------------------- */
 .feature-categories {
-  margin: 16px;
+  margin: 20px;
 }
 
 .feature-categories a {
   cursor: pointer;
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  transition: color 0.15s, background 0.15s;
+}
+
+.feature-categories a:hover {
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
 }
 
 .feature-categories a svg {
   width: 16px;
   vertical-align: bottom;
   margin-right: 8px;
+  fill: var(--accent);
 }
 
 .feature-categories .category-listing-root {
@@ -26,30 +46,63 @@
 }
 
 .category-listing-root li a {
-  text-decoration: none;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
 .category-listing-root li a:hover {
-  text-decoration: underline;
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
 }
 
 .category-listing-root li span {
   white-space: nowrap;
+  color: var(--text-muted);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  margin-left: 4px;
 }
 
+/* -----------------------------------------------------------------------------
+   Feature table — base
+----------------------------------------------------------------------------- */
 table.feature {
   border-collapse: collapse;
-  background-color: #fff;
+  background-color: var(--bg-surface);
   margin: 16px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: var(--border-size) solid var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* HC themes: no border-radius, heavier border */
+[data-theme="hc-dark"] table.feature,
+[data-theme="hc-light"] table.feature {
+  border-radius: 0;
+  border-width: 2px;
+  box-shadow: none;
 }
 
 table.feature td.feature-description {
   padding: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 table.feature th.feature-title,
 table.feature tr.totals {
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+[data-theme="hc-dark"] table.feature th.feature-title,
+[data-theme="hc-dark"] table.feature tr.totals,
+[data-theme="hc-light"] table.feature th.feature-title,
+[data-theme="hc-light"] table.feature tr.totals {
+  font-weight: 700;
 }
 
 table.feature.compact th.feature-title {
@@ -58,78 +111,163 @@ table.feature.compact th.feature-title {
 }
 
 table.feature th {
-  font-weight: normal;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 table.feature th.file-name {
-  background-color: #666;
+  background-color: var(--bg-elevated);
   padding: 0 16px;
+  border-bottom: 2px solid var(--accent-soft);
+}
+
+[data-theme="hc-dark"] table.feature th.file-name,
+[data-theme="hc-light"] table.feature th.file-name {
+  border-bottom-color: var(--accent);
 }
 
 table.feature th.file-name a {
-  color: #fff;
+  color: var(--accent);
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
-table.feature th.spec-name {
-  width: 120px;
-}
-
-table.feature th.requirement[colspan="1"] {
-  width: 120px;
-}
-
-table.feature th.requirement[colspan="1"]:last-of-type {
-  width: 200px;
-}
+table.feature th.spec-name    { width: 120px; }
+table.feature th.requirement[colspan="1"] { width: 120px; }
+table.feature th.requirement[colspan="1"]:last-of-type { width: 200px; }
 
 table.feature th,
 table.feature td {
-  height: 24px;
+  height: 26px;
+  border: 1px solid var(--border);
+  padding: 4px 8px;
 }
 
-table.feature th,
-table.feature td {
-  border: 1px solid #ccc;
-  padding: 4px;
+[data-theme="hc-dark"] table.feature th,
+[data-theme="hc-dark"] table.feature td,
+[data-theme="hc-light"] table.feature th,
+[data-theme="hc-light"] table.feature td {
+  border-color: var(--border-strong);
 }
 
-th.spec-count {
-  width: 55px;
-}
-
-td.spec-count {
+th.spec-count  { width: 55px; }
+td.spec-count  {
   text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text-secondary);
 }
 
-table.feature th.spec-name {
-  max-width: 150px;
-}
+table.feature th.spec-name { max-width: 150px; }
 
 table.feature .category-coverage {
   white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* -----------------------------------------------------------------------------
+   Coverage cells
+   Standard themes: coloured dot.
+   HC themes: coloured filled square + text symbol via --cell-covered-symbol /
+   --cell-empty-symbol so meaning is never carried by colour alone.
+----------------------------------------------------------------------------- */
+td.cell.covered {
+  background-color: var(--success-dim);
 }
 
 td.cell.covered .cell-text {
   display: block;
-  font-size: 0px;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   margin: auto;
-  border-radius: 16px;
-  background-color: #000;
+  border-radius: 50%;
+  background-color: var(--success);
+  font-size: 0;        /* hide any text content in standard themes */
+  box-shadow: 0 0 5px color-mix(in srgb, var(--success) 50%, transparent);
 }
 
+td.cell.empty .cell-text {
+  display: block;
+  width: 14px;
+  height: 14px;
+  margin: auto;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1px solid var(--border-strong);
+  font-size: 0;
+}
+
+/* HC overrides: square shape + visible symbol */
+[data-theme="hc-dark"] td.cell.covered .cell-text,
+[data-theme="hc-light"] td.cell.covered .cell-text {
+  border-radius: 3px;
+  box-shadow: none;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 14px;
+  color: var(--text-on-accent);
+  text-align: center;
+}
+
+[data-theme="hc-dark"] td.cell.covered .cell-text::after,
+[data-theme="hc-light"] td.cell.covered .cell-text::after {
+  content: var(--cell-covered-symbol);
+}
+
+[data-theme="hc-dark"] td.cell.empty .cell-text,
+[data-theme="hc-light"] td.cell.empty .cell-text {
+  border-radius: 3px;
+  border-color: var(--border-strong);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 14px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+[data-theme="hc-dark"] td.cell.empty .cell-text::after,
+[data-theme="hc-light"] td.cell.empty .cell-text::after {
+  content: var(--cell-empty-symbol);
+}
+
+/* -----------------------------------------------------------------------------
+   Row striping & totals
+----------------------------------------------------------------------------- */
 tr.result:nth-child(odd) td[rowspan="1"],
 tr.result:nth-child(odd) td:not([rowspan]),
 tr.result:nth-child(odd) th[rowspan="1"],
 tr.result:nth-child(odd) th:not([rowspan]) {
-  background-color: #eee;
+  background-color: var(--bg-elevated);
+}
+
+tr.result.covered td,
+tr.result.covered th {
+  background-color: var(--success-dim) !important;
+}
+
+tr.totals {
+  background-color: var(--bg-elevated);
+  border-top: 2px solid var(--border-strong);
 }
 
 tr.totals td:first-child {
   text-align: right;
+  color: var(--text-secondary);
+  font-style: italic;
 }
 
+tr.totals td {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* -----------------------------------------------------------------------------
+   Category headers (non-compact)
+----------------------------------------------------------------------------- */
 table.feature:not(.compact) th.category {
   vertical-align: top;
 }
@@ -145,45 +283,40 @@ table.feature.compact th.category {
   text-align: left;
 }
 
-table.feature.compact th.category {
-}
-
+/* -----------------------------------------------------------------------------
+   Compact mode — collapsible category hierarchy
+----------------------------------------------------------------------------- */
 table.feature.compact th.category-level-0 {
-  background-color: #666;
+  background-color: var(--bg-elevated);
+  border-left: 3px solid var(--accent);
 }
 
 table.feature.compact th.category-level-0 button.toggle-visibility {
-  fill: #fff;
+  fill: var(--accent);
 }
 
 table.feature.compact th.category-level-0 a {
-  color: #fff;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
 table.feature.compact th.category-level-1,
-table.feature.compact th.requirement-level-1 {
-  padding-left: 20px;
-}
-
+table.feature.compact th.requirement-level-1 { padding-left: 20px; }
 table.feature.compact th.category-level-2,
-table.feature.compact th.requirement-level-2 {
-  padding-left: 40px;
-}
-
+table.feature.compact th.requirement-level-2 { padding-left: 40px; }
 table.feature.compact th.category-level-3,
-table.feature.compact th.requirement-level-3 {
-  padding-left: 60px;
-}
-
+table.feature.compact th.requirement-level-3 { padding-left: 60px; }
 table.feature.compact th.category-level-4,
-table.feature.compact th.requirement-level-4 {
-  padding-left: 80px;
-}
+table.feature.compact th.requirement-level-4 { padding-left: 80px; }
+
 table.feature.compact th.category-level-1,
 table.feature.compact th.category-level-2,
 table.feature.compact th.category-level-3,
 table.feature.compact th.category-level-4 {
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 table.feature.compact button.toggle-visibility {
@@ -191,25 +324,23 @@ table.feature.compact button.toggle-visibility {
   background: none;
   border: none;
   cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+  padding: 0;
 }
 
-table.feature.compact button.toggle-visibility.expand {
-  display: none;
+table.feature.compact button.toggle-visibility:hover {
+  opacity: 1;
 }
 
-table.feature.compact tr.collapsed button.toggle-visibility.expand {
-  display: unset;
-}
-
-table.feature.compact tr.collapsed button.toggle-visibility.collapse {
-  display: none;
-}
+table.feature.compact button.toggle-visibility.expand        { display: none; }
+table.feature.compact tr.collapsed button.toggle-visibility.expand   { display: unset; }
+table.feature.compact tr.collapsed button.toggle-visibility.collapse { display: none; }
 
 table.feature.compact button.toggle-visibility svg {
   width: 16px;
   vertical-align: bottom;
+  fill: var(--text-primary);
 }
 
-table.feature.compact .hidden {
-  display: none;
-}
+table.feature.compact .hidden { display: none; }
