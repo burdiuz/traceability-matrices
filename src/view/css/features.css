@@ -8,7 +8,9 @@ div.feature-link {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 10px 16px;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 
 div.feature-link:hover {
@@ -31,7 +33,14 @@ div.feature-link .title {
   font-size: 125%;
   white-space: nowrap;
   font-weight: 600;
-  color: var(--text-primary);
+  /*color: var(--text-primary);*/
+  color: var(--accent);
+}
+
+div.feature-link .title:hover {
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
 }
 
 [data-theme="hc-dark"] div.feature-link .title,
@@ -44,7 +53,7 @@ div.feature-link .totals {
   white-space: nowrap;
   margin-top: 3px;
   color: var(--text-secondary);
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: "IBM Plex Mono", monospace;
   background: var(--bg-elevated);
   border: 1px solid var(--border-strong);
   border-radius: 20px;
@@ -86,7 +95,9 @@ div.feature-link button.toggle-feature-files {
   opacity: 0.5;
   border-radius: var(--radius-sm);
   padding: 2px;
-  transition: opacity 0.15s, border-color 0.15s;
+  transition:
+    opacity 0.15s,
+    border-color 0.15s;
 }
 
 div.feature-link button.toggle-feature-categories:hover,
@@ -141,7 +152,7 @@ div.feature-link button.toggle-feature-files svg {
 .feature-files-list li span {
   white-space: nowrap;
   color: var(--text-muted);
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 11px;
   margin-left: 4px;
 }

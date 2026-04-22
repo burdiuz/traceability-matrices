@@ -90,11 +90,12 @@ Parameters:
 - `--port` - Port for HTTP/S server, 8477 by default
 - `--key` and `--cert` - Should point at private key and signed certificate files to start HTTPS server, by default starts HTTP server
 - `--compact` - Optional, uses [compact variant of HTML table](https://burdiuz.github.io/traceability-matrices/generated_coverage_compact/features/Records-_-Category.html), categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
+ - `--theme` - Sets UI theme, supported values are "light", "dark", "hc-light" and "hc-dark". "light" is the default theme.
 
 Example:
 
 ```
-traceability-matrices serve --target-dir=cypress/coverage --compact=true
+traceability-matrices serve --target-dir=cypress/coverage --compact=true --theme=dark
 ```
 
 ![Feature compact view](https://github.com/burdiuz/traceability-matrices/blob/master/screenshots/compact_view.png?raw=true)
@@ -114,6 +115,7 @@ Parameters:
 - `--output-dir` - Required, path to folder where generated HTML files should be stored
 - `--compact=true` - Optional, uses [compact variant of HTML table](https://burdiuz.github.io/traceability-matrices/generated_coverage_compact/features/Records-_-Category.html), categories displayed as rows instead of columns. Default value is false. Might be preferable way of rendering features with deep structures.
 - `--force-cleanup=true` - Will remove all contents of output folder before generating new content.
+- `--theme` - Sets UI theme, supported values are "light", "dark", "hc-light" and "hc-dark". "light" is the default theme.
 
 Example:
 
