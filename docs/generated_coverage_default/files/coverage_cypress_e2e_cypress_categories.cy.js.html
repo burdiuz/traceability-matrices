@@ -1,80 +1,481 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>coverage/cypress/e2e/cypress/categories.cy.js.json</title><style>body {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
-  background-color: #ccc;
-  margin: 0;
-  padding: 0;
+<!DOCTYPE html><html data-theme="light"><head><meta charset="UTF-8"><title>coverage/cypress/e2e/cypress/categories.cy.js.json</title><style>/* =============================================================================
+   THEMES.CSS
+   All colour tokens live here. Include this file once before any other CSS.
+   Control the active theme by setting data-theme on <html>, <body>, or any
+   ancestor element:
+
+     data-theme="dark"      → dark
+     data-theme="light"     → light
+     data-theme="hc-dark"   → high-contrast dark  (CVD-safe)
+     data-theme="hc-light"  → high-contrast light (CVD-safe)
+
+   Child elements inherit the nearest ancestor's theme, so you can scope
+   themes to individual components if needed.
+============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+/* -----------------------------------------------------------------------------
+   DARK
+   Deep navy surfaces, indigo accent, emerald success.
+----------------------------------------------------------------------------- */
+[data-theme="dark"] {
+  --bg-base:     #0f1117;
+  --bg-surface:  #1a1d27;
+  --bg-elevated: #22263a;
+  --bg-hover:    #2a2f47;
+
+  --accent:      #6c8ef5;
+  --accent-soft: #3d4f8a;
+  --accent-dim:  rgba(108, 142, 245, 0.15);
+
+  --success:     #34d399;
+  --success-dim: rgba(52, 211, 153, 0.12);
+
+  --warning:     #fbbf24;
+  --danger:      #f87171;
+
+  --text-primary:   #e8eaf0;
+  --text-secondary: #8b90a8;
+  --text-muted:     #555a75;
+  --text-on-accent: #ffffff;
+
+  --border:        #2e3248;
+  --border-strong: #3d4260;
+
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-nav: 0 1px 0 var(--border), 0 4px 24px rgba(0, 0, 0, 0.4);
+
+  --nav-bg:          rgba(26, 29, 39, 0.95);
+  --nav-backdrop:    blur(12px);
+  --nav-border-size: 1px;
+
+  --link-decoration:        none;
+  --link-underline-offset:  unset;
+  --link-hover-bg:          transparent;
+  --link-hover-color:       var(--text-primary);
+
+  --focus-outline:        2px solid var(--accent);
+  --focus-outline-offset: 2px;
+
+  --border-size:   1px;
+  --cell-covered-symbol: '';   /* dot via border-radius, no text symbol */
+  --cell-empty-symbol:   '';
+
+  --bg-gradient:
+    radial-gradient(ellipse at 20% 0%,   rgba(108, 142, 245, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(52,  211, 153, 0.04) 0%, transparent 60%);
 }
 
+/* -----------------------------------------------------------------------------
+   LIGHT
+   Cool off-white base, indigo accent, teal success.
+----------------------------------------------------------------------------- */
+[data-theme="light"] {
+  --bg-base:     #f0f2f7;
+  --bg-surface:  #ffffff;
+  --bg-elevated: #f5f6fa;
+  --bg-hover:    #eaecf4;
+
+  --accent:      #3b5bdb;
+  --accent-soft: #c5d0f5;
+  --accent-dim:  rgba(59, 91, 219, 0.08);
+
+  --success:     #0ca678;
+  --success-dim: rgba(12, 166, 120, 0.09);
+
+  --warning:     #e67700;
+  --danger:      #c92a2a;
+
+  --text-primary:   #1a1d2e;
+  --text-secondary: #4a4f6a;
+  --text-muted:     #9095b0;
+  --text-on-accent: #ffffff;
+
+  --border:        #dde1ef;
+  --border-strong: #c4c9e0;
+
+  --shadow-sm:  0 1px 3px rgba(59, 91, 219, 0.06);
+  --shadow-md:  0 4px 16px rgba(59, 91, 219, 0.08);
+  --shadow-nav: 0 1px 0 var(--border), 0 2px 12px rgba(59, 91, 219, 0.07);
+
+  --nav-bg:          rgba(255, 255, 255, 0.92);
+  --nav-backdrop:    blur(12px);
+  --nav-border-size: 1px;
+
+  --link-decoration:       none;
+  --link-underline-offset: unset;
+  --link-hover-bg:         transparent;
+  --link-hover-color:      var(--text-primary);
+
+  --focus-outline:        2px solid var(--accent);
+  --focus-outline-offset: 2px;
+
+  --border-size:   1px;
+  --cell-covered-symbol: '';
+  --cell-empty-symbol:   '';
+
+  --bg-gradient:
+    radial-gradient(ellipse at 15% 0%,   rgba(59,  91, 219, 0.05) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 100%, rgba(12, 166, 120, 0.04) 0%, transparent 55%);
+}
+
+/* -----------------------------------------------------------------------------
+   HC-DARK  (high-contrast dark, CVD-safe)
+   Pure black base. Yellow accent (safe across all CVD types). Cyan success.
+   Links always underlined. Covered cells use ✓ symbol, not just colour.
+----------------------------------------------------------------------------- */
+[data-theme="hc-dark"] {
+  --bg-base:     #000000;
+  --bg-surface:  #0d0d0d;
+  --bg-elevated: #1a1a1a;
+  --bg-hover:    #252525;
+
+  --accent:      #f5c800;   /* yellow — safe for deuteranopia, protanopia, tritanopia */
+  --accent-soft: #3d3000;
+  --accent-dim:  rgba(245, 200, 0, 0.12);
+
+  --success:     #00d4f5;   /* cyan — replaces green entirely */
+  --success-dim: rgba(0, 212, 245, 0.12);
+
+  --warning:     #ff8c00;   /* orange — distinct from yellow and cyan */
+  --danger:      #ff4fd8;   /* magenta — distinct from all others */
+
+  --text-primary:   #ffffff;
+  --text-secondary: #c8c8c8;
+  --text-muted:     #888888;
+  --text-on-accent: #000000;   /* black on yellow for contrast */
+
+  --border:        #3a3a3a;
+  --border-strong: #606060;
+
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.8);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.9);
+  --shadow-nav: 0 2px 0 var(--border-strong);
+
+  --nav-bg:          #000000;
+  --nav-backdrop:    none;
+  --nav-border-size: 2px;
+
+  --link-decoration:       underline;
+  --link-underline-offset: 3px;
+  --link-hover-bg:         var(--accent);
+  --link-hover-color:      #000000;
+
+  --focus-outline:        3px solid var(--accent);
+  --focus-outline-offset: 2px;
+
+  --border-size:   1px;   /* component overrides below bump headers to 2px */
+  --cell-covered-symbol: '✓';
+  --cell-empty-symbol:   '–';
+
+  --bg-gradient: none;
+}
+
+/* -----------------------------------------------------------------------------
+   HC-LIGHT  (high-contrast light, CVD-safe)
+   Pure white base. Deep navy accent (max contrast on white). Teal success.
+   Links always underlined. Same symbol-based cell indicators as hc-dark.
+----------------------------------------------------------------------------- */
+[data-theme="hc-light"] {
+  --bg-base:     #ffffff;
+  --bg-surface:  #ffffff;
+  --bg-elevated: #f0f0f0;
+  --bg-hover:    #e0e0e0;
+
+  --accent:      #0035a0;   /* deep navy — 9.5:1 on white */
+  --accent-soft: #ccd8f5;
+  --accent-dim:  rgba(0, 53, 160, 0.08);
+
+  --success:     #007a5a;   /* deep teal — 5.5:1 on white, CVD-safe */
+  --success-dim: rgba(0, 122, 90, 0.1);
+
+  --warning:     #7a3a00;   /* dark orange — distinct on white */
+  --danger:      #9a0000;   /* deep red — sufficient contrast on white */
+
+  --text-primary:   #000000;
+  --text-secondary: #1a1a1a;
+  --text-muted:     #555555;
+  --text-on-accent: #ffffff;   /* white on navy */
+
+  --border:        #767676;   /* WCAG AA minimum for UI components */
+  --border-strong: #333333;
+
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.15);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-nav: 0 2px 0 var(--border-strong);
+
+  --nav-bg:          #ffffff;
+  --nav-backdrop:    none;
+  --nav-border-size: 2px;
+
+  --link-decoration:       underline;
+  --link-underline-offset: 3px;
+  --link-hover-bg:         var(--accent);
+  --link-hover-color:      #ffffff;
+
+  --focus-outline:        3px solid var(--accent);
+  --focus-outline-offset: 2px;
+
+  --border-size:   1px;
+  --cell-covered-symbol: '✓';
+  --cell-empty-symbol:   '–';
+
+  --bg-gradient: none;
+}
+
+/* =============================================================================
+   GLOBAL RESETS  (theme-agnostic, applied once)
+============================================================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+*:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+/* =============================================================================
+   PAGE.CSS  —  base layout & global element styles
+   Requires themes.css to be loaded first.
+============================================================================= */
+
+body {
+  font-family: 'IBM Plex Sans', Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  background-color: var(--bg-base);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* -----------------------------------------------------------------------------
+   Navigation bar
+----------------------------------------------------------------------------- */
 .nav-bar {
   display: flex;
   gap: 16px;
-  border-bottom: 1px solid #eee;
-  padding: 8px;
-  background-color: #fff;
-  box-shadow: 0 0 5px 0 #00000033;
+  align-items: center;
+  border-bottom: var(--nav-border-size) solid var(--border-strong);
+  padding: 10px 16px;
+  background-color: var(--nav-bg);
+  backdrop-filter: var(--nav-backdrop);
+  box-shadow: var(--shadow-nav);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-bar a {
+  color: var(--text-secondary);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  font-weight: 500;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-bar a:hover {
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
+}
+
+/* HC themes: nav links use accent colour + underline like all other links */
+[data-theme="hc-dark"] .nav-bar a,
+[data-theme="hc-light"] .nav-bar a {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .nav-bar strong:not(:last-child) {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--border-strong);
   margin-right: 8px;
   padding-right: 8px;
+  color: var(--text-secondary);
 }
 
+.nav-bar strong {
+  color: var(--accent);
+}
+
+.nav-bar span {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+/* -----------------------------------------------------------------------------
+   Layout utilities
+----------------------------------------------------------------------------- */
 .flex-vertical {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 1px;
-  margin: 16px;
+  gap: 2px;
+  margin: 20px;
 }
 
+/* -----------------------------------------------------------------------------
+   Global link styles
+----------------------------------------------------------------------------- */
 a,
 a:visited,
 a:active {
-  color: #000;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  transition: color 0.15s, background 0.15s;
 }
+
+a:hover {
+  color: var(--link-hover-color);
+  background-color: var(--link-hover-bg);
+  text-decoration: none;
+}
+/* =============================================================================
+   FILES.CSS  —  file browser / directory listing
+   Requires themes.css to be loaded first.
+============================================================================= */
+
 div.dir-root {
-  margin: 16px 16px 0 16px;
-  color: #666;
-  font-size: 250%;
+  margin: 20px 20px 4px 20px;
+  color: var(--text-muted);
+  font-size: 220%;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  letter-spacing: -0.5px;
 }
 
 div.directory {
-  margin: 8px 16px;
+  margin: 12px 20px;
 }
 
 div.dir-path {
-  color: #666;
-  font-size: 150%;
+  color: var(--accent);
+  font-size: 120%;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  margin-bottom: 6px;
+  padding: 6px 10px;
+  background: var(--accent-dim);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  display: inline-block;
+}
+
+[data-theme="hc-dark"] div.dir-path,
+[data-theme="hc-light"] div.dir-path {
+  font-weight: 600;
+  border-radius: 0;
 }
 
 div.file {
   display: flex;
   gap: 16px;
   align-items: center;
-  margin: 0 0 1px 16px;
-  background-color: #fff;
-  padding: 4px;
+  margin: 0 0 2px 0;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  transition: background 0.15s, border-color 0.15s;
 }
+
+[data-theme="hc-dark"] div.file,
+[data-theme="hc-light"] div.file {
+  border-color: var(--border-strong);
+  border-radius: 0;
+}
+
+div.file:hover {
+  background-color: var(--bg-elevated);
+  border-color: var(--accent);
+}
+
 div.file > a {
-  padding: 8px;
-  font-size: 130%;
+  padding: 4px 6px;
+  font-size: 120%;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+}
+
+[data-theme="hc-dark"] div.file > a,
+[data-theme="hc-light"] div.file > a {
+  font-weight: 600;
+}
+
+div.file > a:hover {
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
 }
 
 div.file div.file-features {
   display: flex;
-  column-gap: 16px;
+  column-gap: 8px;
   margin-left: auto;
   flex-wrap: wrap;
+  row-gap: 4px;
 }
 
 div.file div.file-features .file-feature {
   cursor: default;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
+
+/* HC themes: square pill (border-radius 3px) so shape isn't confused with status dots */
+[data-theme="hc-dark"] div.file div.file-features .file-feature,
+[data-theme="hc-light"] div.file div.file-features .file-feature {
+  border-radius: 3px;
+}
+
+div.file div.file-features .file-feature:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+/* =============================================================================
+   FEATURES.CSS  —  feature list / index page
+   Requires themes.css to be loaded first.
+============================================================================= */
+
 div.feature-link {
-  background-color: #fff;
-  padding: 8px 16px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+div.feature-link:hover {
+  background-color: var(--bg-elevated);
+  border-color: var(--border-strong);
+}
+
+/* Covered feature: accent stripe on left using success colour */
+div.feature-link.covered {
+  border-left: 3px solid var(--success);
 }
 
 div.feature-link div.feature-info {
@@ -83,22 +484,35 @@ div.feature-link div.feature-info {
   gap: 16px;
 }
 
-div.feature-link.covered {
-  background-color: #fff;
-}
-
 div.feature-link .title {
-  font-size: 130%;
+  font-size: 125%;
   white-space: nowrap;
+  font-weight: 600;
+  /*color: var(--text-primary);*/
+  color: var(--accent);
+}
+
+div.feature-link .title:hover {
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
+}
+
+[data-theme="hc-dark"] div.feature-link .title,
+[data-theme="hc-light"] div.feature-link .title {
+  font-weight: 700;
 }
 
 div.feature-link .totals {
-  font-size: 16px;
+  font-size: 12px;
   white-space: nowrap;
-}
-
-div.feature-link .totals {
-  margin-top: 2px;
+  margin-top: 3px;
+  color: var(--text-secondary);
+  font-family: "IBM Plex Mono", monospace;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  padding: 2px 10px;
 }
 
 div.feature-link .category-listing-root {
@@ -112,6 +526,9 @@ div.feature-link .category-listing-root.visible {
 
 div.feature-link .category-listing-root a {
   white-space: nowrap;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
 div.feature-link ul {
@@ -126,34 +543,51 @@ div.feature-link button.toggle-feature-categories,
 div.feature-link button.toggle-feature-files {
   appearance: none;
   background: none;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
   margin: 0 -8px;
   align-self: center;
+  opacity: 0.5;
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  transition:
+    opacity 0.15s,
+    border-color 0.15s;
+}
+
+div.feature-link button.toggle-feature-categories:hover,
+div.feature-link button.toggle-feature-files:hover {
+  opacity: 1;
+  border-color: var(--accent);
 }
 
 div.feature-link button.toggle-feature-categories svg {
   width: 16px;
   vertical-align: bottom;
+  fill: var(--text-primary);
 }
 
 div.feature-link button.toggle-feature-categories.disabled {
   cursor: auto;
-  opacity: 0.2;
+  opacity: 0.15;
 }
 
 div.feature-link button.toggle-feature-files svg {
   width: 14px;
   vertical-align: bottom;
+  fill: var(--text-primary);
 }
 
 .feature-files-list {
   display: none;
-  margin: 0;
+  margin: 8px 0 0 0;
 }
 
 .feature-files-list a {
   white-space: nowrap;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
 .feature-files-list.visible {
@@ -161,64 +595,157 @@ div.feature-link button.toggle-feature-files svg {
 }
 
 .feature-files-list li a {
-  text-decoration: none;
+  text-decoration: var(--link-decoration);
 }
 
 .feature-files-list li a:hover {
-  text-decoration: underline;
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
 }
 
 .feature-files-list li span {
   white-space: nowrap;
+  color: var(--text-muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  margin-left: 4px;
 }
+/* =============================================================================
+   PAGE.CSS  —  base layout & global element styles
+   Requires themes.css to be loaded first.
+============================================================================= */
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'IBM Plex Sans', Arial, Helvetica, sans-serif;
   font-size: 12px;
-  background-color: #ccc;
+  background-color: var(--bg-base);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  transition: background-color 0.2s, color 0.2s;
 }
 
+/* -----------------------------------------------------------------------------
+   Navigation bar
+----------------------------------------------------------------------------- */
 .nav-bar {
   display: flex;
   gap: 16px;
-  border-bottom: 1px solid #eee;
-  padding: 8px;
-  background-color: #fff;
-  box-shadow: 0 0 5px 0 #00000033;
+  align-items: center;
+  border-bottom: var(--nav-border-size) solid var(--border-strong);
+  padding: 10px 16px;
+  background-color: var(--nav-bg);
+  backdrop-filter: var(--nav-backdrop);
+  box-shadow: var(--shadow-nav);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-bar a {
+  color: var(--text-secondary);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  font-weight: 500;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-bar a:hover {
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
+}
+
+/* HC themes: nav links use accent colour + underline like all other links */
+[data-theme="hc-dark"] .nav-bar a,
+[data-theme="hc-light"] .nav-bar a {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .nav-bar strong:not(:last-child) {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--border-strong);
   margin-right: 8px;
   padding-right: 8px;
+  color: var(--text-secondary);
 }
 
+.nav-bar strong {
+  color: var(--accent);
+}
+
+.nav-bar span {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+/* -----------------------------------------------------------------------------
+   Layout utilities
+----------------------------------------------------------------------------- */
 .flex-vertical {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 1px;
-  margin: 16px;
+  gap: 2px;
+  margin: 20px;
 }
 
+/* -----------------------------------------------------------------------------
+   Global link styles
+----------------------------------------------------------------------------- */
 a,
 a:visited,
 a:active {
-  color: #000;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  transition: color 0.15s, background 0.15s;
 }
+
+a:hover {
+  color: var(--link-hover-color);
+  background-color: var(--link-hover-bg);
+  text-decoration: none;
+}
+/* =============================================================================
+   FEATURE.CSS  —  feature detail table & category sidebar
+   Requires themes.css to be loaded first.
+============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   Category sidebar
+----------------------------------------------------------------------------- */
 .feature-categories {
-  margin: 16px;
+  margin: 20px;
 }
 
 .feature-categories a {
   cursor: pointer;
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  transition: color 0.15s, background 0.15s;
+}
+
+.feature-categories a:hover {
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
 }
 
 .feature-categories a svg {
   width: 16px;
   vertical-align: bottom;
   margin-right: 8px;
+  fill: var(--accent);
 }
 
 .feature-categories .category-listing-root {
@@ -235,30 +762,63 @@ a:active {
 }
 
 .category-listing-root li a {
-  text-decoration: none;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
 .category-listing-root li a:hover {
-  text-decoration: underline;
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
 }
 
 .category-listing-root li span {
   white-space: nowrap;
+  color: var(--text-muted);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  margin-left: 4px;
 }
 
+/* -----------------------------------------------------------------------------
+   Feature table — base
+----------------------------------------------------------------------------- */
 table.feature {
   border-collapse: collapse;
-  background-color: #fff;
+  background-color: var(--bg-surface);
   margin: 16px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: var(--border-size) solid var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* HC themes: no border-radius, heavier border */
+[data-theme="hc-dark"] table.feature,
+[data-theme="hc-light"] table.feature {
+  border-radius: 0;
+  border-width: 2px;
+  box-shadow: none;
 }
 
 table.feature td.feature-description {
   padding: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 table.feature th.feature-title,
 table.feature tr.totals {
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+[data-theme="hc-dark"] table.feature th.feature-title,
+[data-theme="hc-dark"] table.feature tr.totals,
+[data-theme="hc-light"] table.feature th.feature-title,
+[data-theme="hc-light"] table.feature tr.totals {
+  font-weight: 700;
 }
 
 table.feature.compact th.feature-title {
@@ -267,78 +827,163 @@ table.feature.compact th.feature-title {
 }
 
 table.feature th {
-  font-weight: normal;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 table.feature th.file-name {
-  background-color: #666;
+  background-color: var(--bg-elevated);
   padding: 0 16px;
+  border-bottom: 2px solid var(--accent-soft);
+}
+
+[data-theme="hc-dark"] table.feature th.file-name,
+[data-theme="hc-light"] table.feature th.file-name {
+  border-bottom-color: var(--accent);
 }
 
 table.feature th.file-name a {
-  color: #fff;
+  color: var(--accent);
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
-table.feature th.spec-name {
-  width: 120px;
-}
-
-table.feature th.requirement[colspan="1"] {
-  width: 120px;
-}
-
-table.feature th.requirement[colspan="1"]:last-of-type {
-  width: 200px;
-}
+table.feature th.spec-name    { width: 120px; }
+table.feature th.requirement[colspan="1"] { width: 120px; }
+table.feature th.requirement[colspan="1"]:last-of-type { width: 200px; }
 
 table.feature th,
 table.feature td {
-  height: 24px;
+  height: 26px;
+  border: 1px solid var(--border);
+  padding: 4px 8px;
 }
 
-table.feature th,
-table.feature td {
-  border: 1px solid #ccc;
-  padding: 4px;
+[data-theme="hc-dark"] table.feature th,
+[data-theme="hc-dark"] table.feature td,
+[data-theme="hc-light"] table.feature th,
+[data-theme="hc-light"] table.feature td {
+  border-color: var(--border-strong);
 }
 
-th.spec-count {
-  width: 55px;
-}
-
-td.spec-count {
+th.spec-count  { width: 55px; }
+td.spec-count  {
   text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text-secondary);
 }
 
-table.feature th.spec-name {
-  max-width: 150px;
-}
+table.feature th.spec-name { max-width: 150px; }
 
 table.feature .category-coverage {
   white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* -----------------------------------------------------------------------------
+   Coverage cells
+   Standard themes: coloured dot.
+   HC themes: coloured filled square + text symbol via --cell-covered-symbol /
+   --cell-empty-symbol so meaning is never carried by colour alone.
+----------------------------------------------------------------------------- */
+td.cell.covered {
+  background-color: var(--success-dim);
 }
 
 td.cell.covered .cell-text {
   display: block;
-  font-size: 0px;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   margin: auto;
-  border-radius: 16px;
-  background-color: #000;
+  border-radius: 50%;
+  background-color: var(--success);
+  font-size: 0;        /* hide any text content in standard themes */
+  box-shadow: 0 0 5px color-mix(in srgb, var(--success) 50%, transparent);
 }
 
+td.cell.empty .cell-text {
+  display: block;
+  width: 14px;
+  height: 14px;
+  margin: auto;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1px solid var(--border-strong);
+  font-size: 0;
+}
+
+/* HC overrides: square shape + visible symbol */
+[data-theme="hc-dark"] td.cell.covered .cell-text,
+[data-theme="hc-light"] td.cell.covered .cell-text {
+  border-radius: 3px;
+  box-shadow: none;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 14px;
+  color: var(--text-on-accent);
+  text-align: center;
+}
+
+[data-theme="hc-dark"] td.cell.covered .cell-text::after,
+[data-theme="hc-light"] td.cell.covered .cell-text::after {
+  content: var(--cell-covered-symbol);
+}
+
+[data-theme="hc-dark"] td.cell.empty .cell-text,
+[data-theme="hc-light"] td.cell.empty .cell-text {
+  border-radius: 3px;
+  border-color: var(--border-strong);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 14px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+[data-theme="hc-dark"] td.cell.empty .cell-text::after,
+[data-theme="hc-light"] td.cell.empty .cell-text::after {
+  content: var(--cell-empty-symbol);
+}
+
+/* -----------------------------------------------------------------------------
+   Row striping & totals
+----------------------------------------------------------------------------- */
 tr.result:nth-child(odd) td[rowspan="1"],
 tr.result:nth-child(odd) td:not([rowspan]),
 tr.result:nth-child(odd) th[rowspan="1"],
 tr.result:nth-child(odd) th:not([rowspan]) {
-  background-color: #eee;
+  background-color: var(--bg-elevated);
+}
+
+tr.result.covered td,
+tr.result.covered th {
+  background-color: var(--success-dim) !important;
+}
+
+tr.totals {
+  background-color: var(--bg-elevated);
+  border-top: 2px solid var(--border-strong);
 }
 
 tr.totals td:first-child {
   text-align: right;
+  color: var(--text-secondary);
+  font-style: italic;
 }
 
+tr.totals td {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* -----------------------------------------------------------------------------
+   Category headers (non-compact)
+----------------------------------------------------------------------------- */
 table.feature:not(.compact) th.category {
   vertical-align: top;
 }
@@ -354,45 +999,40 @@ table.feature.compact th.category {
   text-align: left;
 }
 
-table.feature.compact th.category {
-}
-
+/* -----------------------------------------------------------------------------
+   Compact mode — collapsible category hierarchy
+----------------------------------------------------------------------------- */
 table.feature.compact th.category-level-0 {
-  background-color: #666;
+  background-color: var(--bg-elevated);
+  border-left: 3px solid var(--accent);
 }
 
 table.feature.compact th.category-level-0 button.toggle-visibility {
-  fill: #fff;
+  fill: var(--accent);
 }
 
 table.feature.compact th.category-level-0 a {
-  color: #fff;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
 table.feature.compact th.category-level-1,
-table.feature.compact th.requirement-level-1 {
-  padding-left: 20px;
-}
-
+table.feature.compact th.requirement-level-1 { padding-left: 20px; }
 table.feature.compact th.category-level-2,
-table.feature.compact th.requirement-level-2 {
-  padding-left: 40px;
-}
-
+table.feature.compact th.requirement-level-2 { padding-left: 40px; }
 table.feature.compact th.category-level-3,
-table.feature.compact th.requirement-level-3 {
-  padding-left: 60px;
-}
-
+table.feature.compact th.requirement-level-3 { padding-left: 60px; }
 table.feature.compact th.category-level-4,
-table.feature.compact th.requirement-level-4 {
-  padding-left: 80px;
-}
+table.feature.compact th.requirement-level-4 { padding-left: 80px; }
+
 table.feature.compact th.category-level-1,
 table.feature.compact th.category-level-2,
 table.feature.compact th.category-level-3,
 table.feature.compact th.category-level-4 {
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 table.feature.compact button.toggle-visibility {
@@ -400,28 +1040,26 @@ table.feature.compact button.toggle-visibility {
   background: none;
   border: none;
   cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+  padding: 0;
 }
 
-table.feature.compact button.toggle-visibility.expand {
-  display: none;
+table.feature.compact button.toggle-visibility:hover {
+  opacity: 1;
 }
 
-table.feature.compact tr.collapsed button.toggle-visibility.expand {
-  display: unset;
-}
-
-table.feature.compact tr.collapsed button.toggle-visibility.collapse {
-  display: none;
-}
+table.feature.compact button.toggle-visibility.expand        { display: none; }
+table.feature.compact tr.collapsed button.toggle-visibility.expand   { display: unset; }
+table.feature.compact tr.collapsed button.toggle-visibility.collapse { display: none; }
 
 table.feature.compact button.toggle-visibility svg {
   width: 16px;
   vertical-align: bottom;
+  fill: var(--text-primary);
 }
 
-table.feature.compact .hidden {
-  display: none;
-}
+table.feature.compact .hidden { display: none; }
 </style><script>function handleFeatureFilesToggleVisibility(row) {
   const files = row.querySelector(".feature-files-list");
   const categories = row.querySelector(".category-listing-root");
@@ -516,7 +1154,7 @@ function handleFeatureCategoriesToggleVisibility(row) {
     files.classList.remove("visible");
   }
 }
-</script></head><body><div class="nav-bar"><a href="../files.html">Files</a><a href="../features.html" style="margin-right: auto">Features</a><span>Features <strong>16 </strong>Files <strong>12 </strong>Total Specs <strong>72 </strong>Total Requirements <strong>195 </strong>Total Coverage <strong>55% </strong></span><span style="margin-left: auto"></span></div></body>
+</script></head><body><div class="nav-bar"><a href="../files.html">Files</a><a href="../features.html" style="margin-right: auto">Features</a><span>Features <strong>18 </strong>Files <strong>19 </strong>Total Specs <strong>73 </strong>Total Requirements <strong>207 </strong>Total Coverage <strong>49% </strong></span><span style="margin-left: auto"></span></div></body>
 <div class="feature-categories"><a href="" onClick="event.preventDefault(); handleFeatureCategoriesToggleVisibility(this.parentElement)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>Feature Categories</a><ul class="category-listing category-listing-root"><li class="category-listing-item"><a href="#/High">High</a><span>      67%</span><ul class="category-listing "></ul></li><li class="category-listing-item"><a href="#/Low">Low</a><span>      100%</span><ul class="category-listing "><li class="category-listing-item"><a href="#/Low/Sub_category">Sub-category</a><span>      100%</span><ul class="category-listing "></ul></li></ul></li><li class="category-listing-item"><a href="#/Medium">Medium</a><span>      67%</span><ul class="category-listing "><li class="category-listing-item"><a href="#/Medium/Sub_category">Sub-category</a><span>      67%</span><ul class="category-listing "></ul></li></ul></li></ul></div>
 <table class="feature"><tr><td class="feature-description" colspan="10">Testing per Category tracing</td></tr><tr class="file-headers"><th class="feature-title" colspan="3" rowspan="1">Category</th><th class="spec-count" rowspan="2">Spec count</th><th class="file-name" colspan="6" title="categories.cy.js"><a href="../files/coverage_cypress_e2e_cypress_categories.cy.js.html">categories.cy.js</a></th></tr><tr class="specs-headers"><th class="header" title="Main categories">Main categories</th><th class="header" title="Sub categories">Sub categories</th><th class="header" title="Requirements">Requirements</th><th class="spec-name" title="Category &gt; Using a first level category &gt; should allow High category tracing"><span class="spec-name-text">should allow High category tracing</span></th><th class="spec-name" title="Category &gt; Using a first level category &gt; should allow Medium category tracing"><span class="spec-name-text">should allow Medium category tracing</span></th><th class="spec-name" title="Category &gt; Using a second level category &gt; should allow direct tracing"><span class="spec-name-text">should allow direct tracing</span></th><th class="spec-name" title="Category &gt; Using a custom category tracing &gt; should allow direct tracing"><span class="spec-name-text">should allow direct tracing</span></th><th class="spec-name" title="Category &gt; Using a second level category &gt; should allow sub category tracing"><span class="spec-name-text">should allow sub category tracing</span></th><th class="spec-name" title="Category &gt; Using a custom category tracing &gt; should allow sub category tracing"><span class="spec-name-text">should allow sub category tracing</span></th></tr><tr class="result covered"><th class="requirement category" colspan="1" rowspan="3" title="High"><a class="requirement-text" id="/High" name="/High">High  <span class="category-coverage" title="2 Covered Requirements
 3 Category Requirements">(67%)</span></a></th><th class="requirement " colspan="2" rowspan="1" title="Requirement 1"><span class="requirement-text">Requirement 1</span></th><td class="cell spec-count" title="1 specs test this requirement"> <span class="cell-text">1</span></td><td class="cell covered" title="Requirement: Requirement 1

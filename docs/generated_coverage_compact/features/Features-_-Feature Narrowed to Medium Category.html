@@ -1,51 +1,377 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Features / Feature Narrowed to Medium Category</title><style>body {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
-  background-color: #ccc;
-  margin: 0;
-  padding: 0;
+<!DOCTYPE html><html data-theme="dark"><head><meta charset="UTF-8"><title>Features / Feature Narrowed to Medium Category</title><style>/* =============================================================================
+   THEMES.CSS
+   All colour tokens live here. Include this file once before any other CSS.
+   Control the active theme by setting data-theme on <html>, <body>, or any
+   ancestor element:
+
+     data-theme="dark"      → dark
+     data-theme="light"     → light
+     data-theme="hc-dark"   → high-contrast dark  (CVD-safe)
+     data-theme="hc-light"  → high-contrast light (CVD-safe)
+
+   Child elements inherit the nearest ancestor's theme, so you can scope
+   themes to individual components if needed.
+============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+/* -----------------------------------------------------------------------------
+   DARK
+   Deep navy surfaces, indigo accent, emerald success.
+----------------------------------------------------------------------------- */
+[data-theme="dark"] {
+  --bg-base:     #0f1117;
+  --bg-surface:  #1a1d27;
+  --bg-elevated: #22263a;
+  --bg-hover:    #2a2f47;
+
+  --accent:      #6c8ef5;
+  --accent-soft: #3d4f8a;
+  --accent-dim:  rgba(108, 142, 245, 0.15);
+
+  --success:     #34d399;
+  --success-dim: rgba(52, 211, 153, 0.12);
+
+  --warning:     #fbbf24;
+  --danger:      #f87171;
+
+  --text-primary:   #e8eaf0;
+  --text-secondary: #8b90a8;
+  --text-muted:     #555a75;
+  --text-on-accent: #ffffff;
+
+  --border:        #2e3248;
+  --border-strong: #3d4260;
+
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-nav: 0 1px 0 var(--border), 0 4px 24px rgba(0, 0, 0, 0.4);
+
+  --nav-bg:          rgba(26, 29, 39, 0.95);
+  --nav-backdrop:    blur(12px);
+  --nav-border-size: 1px;
+
+  --link-decoration:        none;
+  --link-underline-offset:  unset;
+  --link-hover-bg:          transparent;
+  --link-hover-color:       var(--text-primary);
+
+  --focus-outline:        2px solid var(--accent);
+  --focus-outline-offset: 2px;
+
+  --border-size:   1px;
+  --cell-covered-symbol: '';   /* dot via border-radius, no text symbol */
+  --cell-empty-symbol:   '';
+
+  --bg-gradient:
+    radial-gradient(ellipse at 20% 0%,   rgba(108, 142, 245, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(52,  211, 153, 0.04) 0%, transparent 60%);
 }
 
+/* -----------------------------------------------------------------------------
+   LIGHT
+   Cool off-white base, indigo accent, teal success.
+----------------------------------------------------------------------------- */
+[data-theme="light"] {
+  --bg-base:     #f0f2f7;
+  --bg-surface:  #ffffff;
+  --bg-elevated: #f5f6fa;
+  --bg-hover:    #eaecf4;
+
+  --accent:      #3b5bdb;
+  --accent-soft: #c5d0f5;
+  --accent-dim:  rgba(59, 91, 219, 0.08);
+
+  --success:     #0ca678;
+  --success-dim: rgba(12, 166, 120, 0.09);
+
+  --warning:     #e67700;
+  --danger:      #c92a2a;
+
+  --text-primary:   #1a1d2e;
+  --text-secondary: #4a4f6a;
+  --text-muted:     #9095b0;
+  --text-on-accent: #ffffff;
+
+  --border:        #dde1ef;
+  --border-strong: #c4c9e0;
+
+  --shadow-sm:  0 1px 3px rgba(59, 91, 219, 0.06);
+  --shadow-md:  0 4px 16px rgba(59, 91, 219, 0.08);
+  --shadow-nav: 0 1px 0 var(--border), 0 2px 12px rgba(59, 91, 219, 0.07);
+
+  --nav-bg:          rgba(255, 255, 255, 0.92);
+  --nav-backdrop:    blur(12px);
+  --nav-border-size: 1px;
+
+  --link-decoration:       none;
+  --link-underline-offset: unset;
+  --link-hover-bg:         transparent;
+  --link-hover-color:      var(--text-primary);
+
+  --focus-outline:        2px solid var(--accent);
+  --focus-outline-offset: 2px;
+
+  --border-size:   1px;
+  --cell-covered-symbol: '';
+  --cell-empty-symbol:   '';
+
+  --bg-gradient:
+    radial-gradient(ellipse at 15% 0%,   rgba(59,  91, 219, 0.05) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 100%, rgba(12, 166, 120, 0.04) 0%, transparent 55%);
+}
+
+/* -----------------------------------------------------------------------------
+   HC-DARK  (high-contrast dark, CVD-safe)
+   Pure black base. Yellow accent (safe across all CVD types). Cyan success.
+   Links always underlined. Covered cells use ✓ symbol, not just colour.
+----------------------------------------------------------------------------- */
+[data-theme="hc-dark"] {
+  --bg-base:     #000000;
+  --bg-surface:  #0d0d0d;
+  --bg-elevated: #1a1a1a;
+  --bg-hover:    #252525;
+
+  --accent:      #f5c800;   /* yellow — safe for deuteranopia, protanopia, tritanopia */
+  --accent-soft: #3d3000;
+  --accent-dim:  rgba(245, 200, 0, 0.12);
+
+  --success:     #00d4f5;   /* cyan — replaces green entirely */
+  --success-dim: rgba(0, 212, 245, 0.12);
+
+  --warning:     #ff8c00;   /* orange — distinct from yellow and cyan */
+  --danger:      #ff4fd8;   /* magenta — distinct from all others */
+
+  --text-primary:   #ffffff;
+  --text-secondary: #c8c8c8;
+  --text-muted:     #888888;
+  --text-on-accent: #000000;   /* black on yellow for contrast */
+
+  --border:        #3a3a3a;
+  --border-strong: #606060;
+
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.8);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.9);
+  --shadow-nav: 0 2px 0 var(--border-strong);
+
+  --nav-bg:          #000000;
+  --nav-backdrop:    none;
+  --nav-border-size: 2px;
+
+  --link-decoration:       underline;
+  --link-underline-offset: 3px;
+  --link-hover-bg:         var(--accent);
+  --link-hover-color:      #000000;
+
+  --focus-outline:        3px solid var(--accent);
+  --focus-outline-offset: 2px;
+
+  --border-size:   1px;   /* component overrides below bump headers to 2px */
+  --cell-covered-symbol: '✓';
+  --cell-empty-symbol:   '–';
+
+  --bg-gradient: none;
+}
+
+/* -----------------------------------------------------------------------------
+   HC-LIGHT  (high-contrast light, CVD-safe)
+   Pure white base. Deep navy accent (max contrast on white). Teal success.
+   Links always underlined. Same symbol-based cell indicators as hc-dark.
+----------------------------------------------------------------------------- */
+[data-theme="hc-light"] {
+  --bg-base:     #ffffff;
+  --bg-surface:  #ffffff;
+  --bg-elevated: #f0f0f0;
+  --bg-hover:    #e0e0e0;
+
+  --accent:      #0035a0;   /* deep navy — 9.5:1 on white */
+  --accent-soft: #ccd8f5;
+  --accent-dim:  rgba(0, 53, 160, 0.08);
+
+  --success:     #007a5a;   /* deep teal — 5.5:1 on white, CVD-safe */
+  --success-dim: rgba(0, 122, 90, 0.1);
+
+  --warning:     #7a3a00;   /* dark orange — distinct on white */
+  --danger:      #9a0000;   /* deep red — sufficient contrast on white */
+
+  --text-primary:   #000000;
+  --text-secondary: #1a1a1a;
+  --text-muted:     #555555;
+  --text-on-accent: #ffffff;   /* white on navy */
+
+  --border:        #767676;   /* WCAG AA minimum for UI components */
+  --border-strong: #333333;
+
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.15);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-nav: 0 2px 0 var(--border-strong);
+
+  --nav-bg:          #ffffff;
+  --nav-backdrop:    none;
+  --nav-border-size: 2px;
+
+  --link-decoration:       underline;
+  --link-underline-offset: 3px;
+  --link-hover-bg:         var(--accent);
+  --link-hover-color:      #ffffff;
+
+  --focus-outline:        3px solid var(--accent);
+  --focus-outline-offset: 2px;
+
+  --border-size:   1px;
+  --cell-covered-symbol: '✓';
+  --cell-empty-symbol:   '–';
+
+  --bg-gradient: none;
+}
+
+/* =============================================================================
+   GLOBAL RESETS  (theme-agnostic, applied once)
+============================================================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+*:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+/* =============================================================================
+   PAGE.CSS  —  base layout & global element styles
+   Requires themes.css to be loaded first.
+============================================================================= */
+
+body {
+  font-family: 'IBM Plex Sans', Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  background-color: var(--bg-base);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* -----------------------------------------------------------------------------
+   Navigation bar
+----------------------------------------------------------------------------- */
 .nav-bar {
   display: flex;
   gap: 16px;
-  border-bottom: 1px solid #eee;
-  padding: 8px;
-  background-color: #fff;
-  box-shadow: 0 0 5px 0 #00000033;
+  align-items: center;
+  border-bottom: var(--nav-border-size) solid var(--border-strong);
+  padding: 10px 16px;
+  background-color: var(--nav-bg);
+  backdrop-filter: var(--nav-backdrop);
+  box-shadow: var(--shadow-nav);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-bar a {
+  color: var(--text-secondary);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  font-weight: 500;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-bar a:hover {
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
+}
+
+/* HC themes: nav links use accent colour + underline like all other links */
+[data-theme="hc-dark"] .nav-bar a,
+[data-theme="hc-light"] .nav-bar a {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .nav-bar strong:not(:last-child) {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--border-strong);
   margin-right: 8px;
   padding-right: 8px;
+  color: var(--text-secondary);
 }
 
+.nav-bar strong {
+  color: var(--accent);
+}
+
+.nav-bar span {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+/* -----------------------------------------------------------------------------
+   Layout utilities
+----------------------------------------------------------------------------- */
 .flex-vertical {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 1px;
-  margin: 16px;
+  gap: 2px;
+  margin: 20px;
 }
 
+/* -----------------------------------------------------------------------------
+   Global link styles
+----------------------------------------------------------------------------- */
 a,
 a:visited,
 a:active {
-  color: #000;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  transition: color 0.15s, background 0.15s;
 }
+
+a:hover {
+  color: var(--link-hover-color);
+  background-color: var(--link-hover-bg);
+  text-decoration: none;
+}
+/* =============================================================================
+   FEATURE.CSS  —  feature detail table & category sidebar
+   Requires themes.css to be loaded first.
+============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   Category sidebar
+----------------------------------------------------------------------------- */
 .feature-categories {
-  margin: 16px;
+  margin: 20px;
 }
 
 .feature-categories a {
   cursor: pointer;
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  transition: color 0.15s, background 0.15s;
+}
+
+.feature-categories a:hover {
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
 }
 
 .feature-categories a svg {
   width: 16px;
   vertical-align: bottom;
   margin-right: 8px;
+  fill: var(--accent);
 }
 
 .feature-categories .category-listing-root {
@@ -62,30 +388,63 @@ a:active {
 }
 
 .category-listing-root li a {
-  text-decoration: none;
+  color: var(--accent);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
 .category-listing-root li a:hover {
-  text-decoration: underline;
+  color: var(--link-hover-color);
+  background: var(--link-hover-bg);
+  text-decoration: none;
 }
 
 .category-listing-root li span {
   white-space: nowrap;
+  color: var(--text-muted);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  margin-left: 4px;
 }
 
+/* -----------------------------------------------------------------------------
+   Feature table — base
+----------------------------------------------------------------------------- */
 table.feature {
   border-collapse: collapse;
-  background-color: #fff;
+  background-color: var(--bg-surface);
   margin: 16px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: var(--border-size) solid var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* HC themes: no border-radius, heavier border */
+[data-theme="hc-dark"] table.feature,
+[data-theme="hc-light"] table.feature {
+  border-radius: 0;
+  border-width: 2px;
+  box-shadow: none;
 }
 
 table.feature td.feature-description {
   padding: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 table.feature th.feature-title,
 table.feature tr.totals {
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+[data-theme="hc-dark"] table.feature th.feature-title,
+[data-theme="hc-dark"] table.feature tr.totals,
+[data-theme="hc-light"] table.feature th.feature-title,
+[data-theme="hc-light"] table.feature tr.totals {
+  font-weight: 700;
 }
 
 table.feature.compact th.feature-title {
@@ -94,78 +453,163 @@ table.feature.compact th.feature-title {
 }
 
 table.feature th {
-  font-weight: normal;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 table.feature th.file-name {
-  background-color: #666;
+  background-color: var(--bg-elevated);
   padding: 0 16px;
+  border-bottom: 2px solid var(--accent-soft);
+}
+
+[data-theme="hc-dark"] table.feature th.file-name,
+[data-theme="hc-light"] table.feature th.file-name {
+  border-bottom-color: var(--accent);
 }
 
 table.feature th.file-name a {
-  color: #fff;
+  color: var(--accent);
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
-table.feature th.spec-name {
-  width: 120px;
-}
-
-table.feature th.requirement[colspan="1"] {
-  width: 120px;
-}
-
-table.feature th.requirement[colspan="1"]:last-of-type {
-  width: 200px;
-}
+table.feature th.spec-name    { width: 120px; }
+table.feature th.requirement[colspan="1"] { width: 120px; }
+table.feature th.requirement[colspan="1"]:last-of-type { width: 200px; }
 
 table.feature th,
 table.feature td {
-  height: 24px;
+  height: 26px;
+  border: 1px solid var(--border);
+  padding: 4px 8px;
 }
 
-table.feature th,
-table.feature td {
-  border: 1px solid #ccc;
-  padding: 4px;
+[data-theme="hc-dark"] table.feature th,
+[data-theme="hc-dark"] table.feature td,
+[data-theme="hc-light"] table.feature th,
+[data-theme="hc-light"] table.feature td {
+  border-color: var(--border-strong);
 }
 
-th.spec-count {
-  width: 55px;
-}
-
-td.spec-count {
+th.spec-count  { width: 55px; }
+td.spec-count  {
   text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text-secondary);
 }
 
-table.feature th.spec-name {
-  max-width: 150px;
-}
+table.feature th.spec-name { max-width: 150px; }
 
 table.feature .category-coverage {
   white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* -----------------------------------------------------------------------------
+   Coverage cells
+   Standard themes: coloured dot.
+   HC themes: coloured filled square + text symbol via --cell-covered-symbol /
+   --cell-empty-symbol so meaning is never carried by colour alone.
+----------------------------------------------------------------------------- */
+td.cell.covered {
+  background-color: var(--success-dim);
 }
 
 td.cell.covered .cell-text {
   display: block;
-  font-size: 0px;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   margin: auto;
-  border-radius: 16px;
-  background-color: #000;
+  border-radius: 50%;
+  background-color: var(--success);
+  font-size: 0;        /* hide any text content in standard themes */
+  box-shadow: 0 0 5px color-mix(in srgb, var(--success) 50%, transparent);
 }
 
+td.cell.empty .cell-text {
+  display: block;
+  width: 14px;
+  height: 14px;
+  margin: auto;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1px solid var(--border-strong);
+  font-size: 0;
+}
+
+/* HC overrides: square shape + visible symbol */
+[data-theme="hc-dark"] td.cell.covered .cell-text,
+[data-theme="hc-light"] td.cell.covered .cell-text {
+  border-radius: 3px;
+  box-shadow: none;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 14px;
+  color: var(--text-on-accent);
+  text-align: center;
+}
+
+[data-theme="hc-dark"] td.cell.covered .cell-text::after,
+[data-theme="hc-light"] td.cell.covered .cell-text::after {
+  content: var(--cell-covered-symbol);
+}
+
+[data-theme="hc-dark"] td.cell.empty .cell-text,
+[data-theme="hc-light"] td.cell.empty .cell-text {
+  border-radius: 3px;
+  border-color: var(--border-strong);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 14px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+[data-theme="hc-dark"] td.cell.empty .cell-text::after,
+[data-theme="hc-light"] td.cell.empty .cell-text::after {
+  content: var(--cell-empty-symbol);
+}
+
+/* -----------------------------------------------------------------------------
+   Row striping & totals
+----------------------------------------------------------------------------- */
 tr.result:nth-child(odd) td[rowspan="1"],
 tr.result:nth-child(odd) td:not([rowspan]),
 tr.result:nth-child(odd) th[rowspan="1"],
 tr.result:nth-child(odd) th:not([rowspan]) {
-  background-color: #eee;
+  background-color: var(--bg-elevated);
+}
+
+tr.result.covered td,
+tr.result.covered th {
+  background-color: var(--success-dim) !important;
+}
+
+tr.totals {
+  background-color: var(--bg-elevated);
+  border-top: 2px solid var(--border-strong);
 }
 
 tr.totals td:first-child {
   text-align: right;
+  color: var(--text-secondary);
+  font-style: italic;
 }
 
+tr.totals td {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* -----------------------------------------------------------------------------
+   Category headers (non-compact)
+----------------------------------------------------------------------------- */
 table.feature:not(.compact) th.category {
   vertical-align: top;
 }
@@ -181,45 +625,40 @@ table.feature.compact th.category {
   text-align: left;
 }
 
-table.feature.compact th.category {
-}
-
+/* -----------------------------------------------------------------------------
+   Compact mode — collapsible category hierarchy
+----------------------------------------------------------------------------- */
 table.feature.compact th.category-level-0 {
-  background-color: #666;
+  background-color: var(--bg-elevated);
+  border-left: 3px solid var(--accent);
 }
 
 table.feature.compact th.category-level-0 button.toggle-visibility {
-  fill: #fff;
+  fill: var(--accent);
 }
 
 table.feature.compact th.category-level-0 a {
-  color: #fff;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
 }
 
 table.feature.compact th.category-level-1,
-table.feature.compact th.requirement-level-1 {
-  padding-left: 20px;
-}
-
+table.feature.compact th.requirement-level-1 { padding-left: 20px; }
 table.feature.compact th.category-level-2,
-table.feature.compact th.requirement-level-2 {
-  padding-left: 40px;
-}
-
+table.feature.compact th.requirement-level-2 { padding-left: 40px; }
 table.feature.compact th.category-level-3,
-table.feature.compact th.requirement-level-3 {
-  padding-left: 60px;
-}
-
+table.feature.compact th.requirement-level-3 { padding-left: 60px; }
 table.feature.compact th.category-level-4,
-table.feature.compact th.requirement-level-4 {
-  padding-left: 80px;
-}
+table.feature.compact th.requirement-level-4 { padding-left: 80px; }
+
 table.feature.compact th.category-level-1,
 table.feature.compact th.category-level-2,
 table.feature.compact th.category-level-3,
 table.feature.compact th.category-level-4 {
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 table.feature.compact button.toggle-visibility {
@@ -227,28 +666,26 @@ table.feature.compact button.toggle-visibility {
   background: none;
   border: none;
   cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+  padding: 0;
 }
 
-table.feature.compact button.toggle-visibility.expand {
-  display: none;
+table.feature.compact button.toggle-visibility:hover {
+  opacity: 1;
 }
 
-table.feature.compact tr.collapsed button.toggle-visibility.expand {
-  display: unset;
-}
-
-table.feature.compact tr.collapsed button.toggle-visibility.collapse {
-  display: none;
-}
+table.feature.compact button.toggle-visibility.expand        { display: none; }
+table.feature.compact tr.collapsed button.toggle-visibility.expand   { display: unset; }
+table.feature.compact tr.collapsed button.toggle-visibility.collapse { display: none; }
 
 table.feature.compact button.toggle-visibility svg {
   width: 16px;
   vertical-align: bottom;
+  fill: var(--text-primary);
 }
 
-table.feature.compact .hidden {
-  display: none;
-}
+table.feature.compact .hidden { display: none; }
 </style><script>function handleCompactCategoryCollapse(tr) {
   const categoryLevel = parseInt(tr.dataset.level, 10);
   tr.classList.add("collapsed");
