@@ -956,6 +956,37 @@ describe("JSON", () => {
 });
 ```
 
+## Claude / AI Agent Integration
+
+This package ships a skill file ([SKILL.md](SKILL.md)) formatted to the [agentskills.io](https://agentskills.io/specification) specification. It gives Claude and other compatible AI agents complete context about the library's API, parsers, and CLI commands so you can ask questions or get code generated without pasting docs manually.
+
+The skill consists of:
+- `SKILL.md` — overview, quick start, and key concepts
+- `references/api.md` — full Cypress API reference
+- `references/parsers.md` — file format details for all parsers
+- `references/cli.md` — complete CLI flag reference
+
+### Installing in Claude Code
+
+Copy the skill into your project's Claude skills directory:
+
+```bash
+# project-level (only available in this project)
+mkdir -p .claude/skills/traceability-matrices
+cp node_modules/@actualwave/traceability-matrices/SKILL.md .claude/skills/traceability-matrices/
+cp -r node_modules/@actualwave/traceability-matrices/references .claude/skills/traceability-matrices/
+```
+
+Or install it globally so it's available in every project:
+
+```bash
+mkdir -p ~/.claude/skills/traceability-matrices
+cp node_modules/@actualwave/traceability-matrices/SKILL.md ~/.claude/skills/traceability-matrices/
+cp -r node_modules/@actualwave/traceability-matrices/references ~/.claude/skills/traceability-matrices/
+```
+
+Once installed, Claude Code will automatically use the skill when you ask questions or request code related to traceability matrices.
+
 ## Links
 
 For latest version of reporting UI I've used couple free [FontAwesome icons](https://fontawesome.com/).
