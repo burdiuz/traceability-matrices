@@ -20,6 +20,7 @@ declare global {
   namespace cy {
     const writeFile: (path: string, data: unknown) => Promise<void>;
     const readFile: (path: string) => Promise<string>;
+    const env: (keys: string[]) => Promise<Record<string, any>>
   }
 
   const before: (callback: () => void) => void;

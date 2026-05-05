@@ -12,12 +12,11 @@ describe("Cypress Integration", () => {
   let feature;
 
   beforeEach(async () => {
-    global.Cypress = {
+    globalThis.Cypress = {
       currentTest: {
         title: "Le test",
         titlePath: ["Describe", "Le test"],
       },
-      env: jest.fn(() => "coverage"),
       spec: {
         relative: "source/folder/file.js",
       },
@@ -27,9 +26,9 @@ describe("Cypress Integration", () => {
   });
 
   afterEach(() => {
-    delete global.tm_features;
+    delete globalThis.tm_features;
     jest.resetModules();
-    global.after.mockReset();
+    globalThis.after.mockReset();
   });
 
   beforeEach(() => {
@@ -41,19 +40,22 @@ describe("Cypress Integration", () => {
   });
 
   it("should execute after() hook", () => {
-    expect(global.after).toHaveBeenCalledTimes(1);
-    expect(global.after).toHaveBeenCalledWith(expect.any(Function));
+    expect(globalThis.after).toHaveBeenCalledTimes(1);
+    expect(globalThis.after).toHaveBeenCalledWith(expect.any(Function));
   });
 
   describe("On after()", () => {
     let callback;
 
     beforeEach(() => {
-      global.cy = {
+      globalThis.cy = {
         writeFile: jest.fn(),
+        env: jest.fn(() =>
+          Promise.resolve({ TRACE_RECORDS_DATA_DIR: "coverage" }),
+        ),
       };
 
-      callback = global.after.mock.calls[0][0];
+      callback = globalThis.after.mock.calls[0][0];
     });
 
     describe("When single feature tested within one file", () => {
@@ -74,15 +76,15 @@ describe("Cypress Integration", () => {
       });
 
       it("should request env var for coverage root", () => {
-        expect(Cypress.env).toHaveBeenCalledTimes(1);
-        expect(Cypress.env).toHaveBeenCalledWith("TRACE_RECORDS_DATA_DIR");
+        expect(cy.env).toHaveBeenCalledTimes(1);
+        expect(cy.env).toHaveBeenCalledWith(["TRACE_RECORDS_DATA_DIR"]);
       });
 
       it("should write file with recorded feature", () => {
         expect(cy.writeFile).toHaveBeenCalledTimes(1);
         expect(cy.writeFile).toHaveBeenCalledWith(
           "coverage/source/folder/file.js.json",
-          expect.any(String)
+          expect.any(String),
         );
         expect(cy.writeFile.mock.calls[0][1]).toMatchInlineSnapshot(`
 "[

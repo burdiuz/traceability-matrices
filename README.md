@@ -10,6 +10,10 @@ Integrate requirements into e2e/integration test code and generate [traceability
 
 Examples of generated coverage reports can be viewed here for [default coverage template](https://burdiuz.github.io/traceability-matrices/generated_coverage_default/features.html) and [compact coverage template](https://burdiuz.github.io/traceability-matrices/generated_coverage_compact/features.html).
 
+## Version 1.1.0 breaking change
+This version uses cy.env() instead of Cypress.env() which appeared in Cypress versions 15.10.0 and above.
+So starting from version 1.1.0 this package has cypress >=15.10.0 as a peer dependency.
+
 ## How it works
 
 When creating E2E or integration tests engineers place special tracking commands using `trace()` function, it records which requirements of tested feature were covered and stores this information in JSON files as coverage. After tests run this coverage information can be viewed or used to generate HTML or LCOV coverage reports.

@@ -50,11 +50,13 @@ export const features = (() => {
 export const setupSaveHook = (features: Feature[], path = "") => {
   after(() => {
     const filePath = path || Cypress.spec.relative;
-
-    cy.writeFile(
-      `${Cypress.env("TRACE_RECORDS_DATA_DIR")}/${filePath}.json`,
-      JSON.stringify(features, null, 2)
-    );
+    console.log(cy);
+    cy.env(["TRACE_RECORDS_DATA_DIR"]).then(({ TRACE_RECORDS_DATA_DIR }) => {
+      cy.writeFile(
+        `${TRACE_RECORDS_DATA_DIR}/${filePath}.json`,
+        JSON.stringify(features, null, 2),
+      );
+    });
   });
 };
 
@@ -86,12 +88,12 @@ export type FeatureApi = {
   branch: (
     params: CreateFeatureParams & {
       path: string[];
-    }
+    },
   ) => FeatureApi;
   narrow: (
     params: CreateFeatureParams & {
       path: string[];
-    }
+    },
   ) => FeatureApi;
 };
 

@@ -27,6 +27,6 @@
   "dependencies": {
     "@actualwave/traceability-matrices": "file:../../../",
     "@cypress/webpack-preprocessor": "^7.0.1",
-    "cypress": "^15.0.0"
+    "cypress": "^15.10.0"
   }
 }

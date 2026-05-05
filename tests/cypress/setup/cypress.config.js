@@ -3,6 +3,7 @@ const { defineConfig } = require("cypress");
 const webpackPreprocessor = require("@cypress/webpack-preprocessor");
 
 module.exports = defineConfig({
+  allowCypressEnv: false,
   e2e: {
     setupNodeEvents(on, config) {
       // implement node event listeners here
@@ -15,10 +16,10 @@ module.exports = defineConfig({
           alias: {
             "@actualwave/traceability-matrices/cypress": path.resolve(
               __dirname,
-              "../../../cypress"
+              "../../../cypress",
             ),
           },
-        }
+        },
       );
 
       on("file:preprocessor", webpackPreprocessor(options));

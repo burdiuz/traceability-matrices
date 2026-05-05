@@ -1,6 +1,6 @@
 {
   "name": "@actualwave/traceability-matrices",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "types": "cypress.d.ts",
   "bin": {
     "traceability-matrices": "./cli.js"
@@ -45,6 +45,9 @@
     "test:watch": "jest --watch",
     "build": "rollup --config ./rollup.config.mjs",
     "prepublish": "npm run build"
+  },
+  "peerDependencies": {
+    "cypress": ">=15.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
